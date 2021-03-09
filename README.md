@@ -1,6 +1,6 @@
 # Provenance Frontlib Wallet
 
-
+Library to interface with Provenance browser keychain wallet.
 
 ## Use
 
