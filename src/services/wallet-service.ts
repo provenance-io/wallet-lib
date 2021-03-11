@@ -20,6 +20,7 @@ export type WalletState = {
 export enum ReturnMessage {
   NONE = '',
   DENIED = 'transaction_denied',
+  COMPLETE = 'transaction_complete',
   CONNECTED = 'account_connected',
   CLOSED = 'closed',
 }
@@ -39,6 +40,7 @@ export class WalletService {
   private setWalletState: SetWalletState | undefined = undefined;
   private walletWindow: Window | null = null;
   private apiService: ApiService;
+  private eventListeners: { [key: string]: (state: WalletState) => void } = {};
   state: WalletState = {
     keychainAccountName: '',
     address: '',
@@ -59,7 +61,6 @@ export class WalletService {
             case ReturnMessage.CONNECTED:
               this.state.keychainAccountName = keychainAccountName || '';
               this.state.address = address || '';
-              if (address) await this.getAccount();
               break;
             case ReturnMessage.CLOSED:
               break;
@@ -68,11 +69,16 @@ export class WalletService {
           this.state.walletOpen = false;
           this.walletWindow?.close();
           this.walletWindow = null;
+          if (this.eventListeners[message]) this.eventListeners[message](this.state);
           this.updateState();
         }
       },
       false
     );
+  }
+
+  addEventListener(event: ReturnMessage, cb: (state: WalletState) => void) {
+    this.eventListeners[event] = cb;
   }
 
   updateState(): void {
@@ -87,7 +93,9 @@ export class WalletService {
   }
 
   getAccount(): void {
-    this.apiService.get(`/auth/accounts/${this.state.address}`).finally();
+    if (this.state.address) {
+      this.apiService.get(`/auth/accounts/${this.state.address}`).finally();
+    }
   }
 
   openWallet(isTransaction = false, tx?: IncomingTx): void {
