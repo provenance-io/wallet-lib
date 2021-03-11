@@ -1,38 +1,75 @@
-import type { BroadcastTx } from '@tendermint/sig';
+import type { BroadcastTx, SignMeta } from '@tendermint/sig';
+
 import type { IncomingTx } from '../types';
+import { ApiService } from './api-service';
+
+const MOCKS = {
+  AUTH: `{"height":"6111","result":{"type":"cosmos-sdk/Account","value":{"address":"tp1h2wkmgt3qvvdlpzn66llxwazkpyu5c3pwylxhg","coins":[{"denom":"vspn","amount":"100000"}],"public_key":null,"account_number":"14","sequence":"0"}}}`,
+};
 
 const baseUrl = process.env.REACT_APP_ENV === 'staging' ? 'https://test.provenance.io' : 'http://localhost:3000';
 
 export type WalletState = {
-  account: string;
+  keychainAccountName: string;
   address: string;
+  meta: Partial<SignMeta>;
   walletOpen: boolean;
   transaction: BroadcastTx | undefined;
 };
+
+export enum ReturnMessage {
+  NONE = '',
+  DENIED = 'transaction_denied',
+  CONNECTED = 'account_connected',
+  CLOSED = 'closed',
+}
+
+export type ReturnMessageObject = {
+  message: ReturnMessage;
+  keychainAccountName?: string;
+  address?: string;
+  transaction?: BroadcastTx;
+};
+
+type MessageObject = MessageEvent<ReturnMessageObject>;
 
 type SetWalletState = (state: WalletState) => void;
 
 export class WalletService {
   private setWalletState: SetWalletState | undefined = undefined;
   private walletWindow: Window | null = null;
+  private apiService: ApiService;
   state: WalletState = {
-    account: '',
+    keychainAccountName: '',
     address: '',
+    meta: {},
     walletOpen: false,
     transaction: undefined,
   };
-  constructor() {
+  constructor(url = 'http://localhost:1317', chainId = 'chain-local') {
+    this.state.meta.chain_id = chainId;
+    this.apiService = new ApiService(url);
     window.addEventListener(
       'message',
-      (e) => {
+      async (e: MessageObject) => {
         if (e.origin !== baseUrl) return;
-        if (e.data?.account) this.state.account = e.data?.account;
-        if (e.data?.address) this.state.address = e.data?.address;
-        this.state.transaction = e.data?.transaction;
-        this.state.walletOpen = false;
-        this.walletWindow?.close();
-        this.walletWindow = null;
-        this.updateState();
+        if (e.data.message) {
+          const { message, keychainAccountName, address } = e.data;
+          switch (message) {
+            case ReturnMessage.CONNECTED:
+              this.state.keychainAccountName = keychainAccountName || '';
+              this.state.address = address || '';
+              if (address) await this.getAccount();
+              break;
+            case ReturnMessage.CLOSED:
+              break;
+            default:
+          }
+          this.state.walletOpen = false;
+          this.walletWindow?.close();
+          this.walletWindow = null;
+          this.updateState();
+        }
       },
       false
     );
@@ -49,15 +86,21 @@ export class WalletService {
     this.setWalletState = setWalletState;
   }
 
-  openWallet(transaction = false, tx?: IncomingTx): void {
+  getAccount(): void {
+    this.apiService.get(`/auth/accounts/${this.state.address}`).finally();
+  }
+
+  openWallet(isTransaction = false, tx?: IncomingTx): void {
     this.walletWindow?.close();
     const height = window.top.outerHeight < 750 ? window.top.outerHeight : 750;
     const width = 460;
     const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
     const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
     this.walletWindow = window.open(
-      `${baseUrl}/${transaction ? 'wallet/transaction' : 'wallet/connect'}${
-        transaction && tx && this.state.account ? `?tx=${encodeURIComponent(JSON.stringify(tx))}&account=${this.state.account}` : ''
+      `${baseUrl}/${isTransaction ? 'wallet/transaction' : 'wallet/connect'}${
+        isTransaction && tx && this.state.keychainAccountName
+          ? `?tx=${encodeURIComponent(JSON.stringify(tx))}&account=${this.state.keychainAccountName}`
+          : ''
       }`,
       undefined,
       `resizable=1, scrollbars=1, fullscreen=0, height=${height}, width=${width}, top=${y} left=${x} toolbar=0, menubar=0, status=1`
