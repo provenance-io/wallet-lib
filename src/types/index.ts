@@ -8,6 +8,6 @@ export type GlobalProps = {
 } & AllHTMLAttributes<HTMLElement>;
 
 export type IncomingTx = {
-  tx: Tx;
-  meta: SignMeta;
+  msgBase64: string;
+  typeUrl: string;
 };
