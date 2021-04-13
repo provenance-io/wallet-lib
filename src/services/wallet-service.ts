@@ -49,7 +49,7 @@ export class WalletService {
     window.addEventListener(
       'message',
       async (e: MessageObject) => {
-        if (e.origin !== process.env.PROVENANCE_WALLET_URL) return;
+        if (e.origin !== this.walletUrl) return;
         if (e.data.message) {
           const { message, keychainAccountName, address } = e.data;
           switch (message) {
@@ -99,7 +99,7 @@ export class WalletService {
     const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
     const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
     this.walletWindow = window.open(
-      `${process.env.PROVENANCE_WALLET_URL}/${isTransaction ? 'wallet/transaction' : 'wallet/connect'}${
+      `${this.walletUrl}/${isTransaction ? 'wallet/transaction' : 'wallet/connect'}${
         isTransaction && msgAnyB64 && this.state.keychainAccountName
           ? `?${WALLET_QUERY_PARAMS.msgAnyB64}=${encodeURIComponent(JSON.stringify(msgAnyB64))}&${WALLET_QUERY_PARAMS.account}=${
               this.state.keychainAccountName

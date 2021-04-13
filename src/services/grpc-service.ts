@@ -25,11 +25,13 @@ export class GrpcService {
   broadcastTx(request: BroadcastTxRequest): Promise<{ code: number | undefined }> {
     log('Initiating broadcastTx.simulate');
     return new Promise((resolve, reject) => {
-      this.txClient.broadcastTx(request, (error: ServerError, response: BroadcastTxResponse) => {
+      this.txClient.broadcastTx(request, null, (error: ServerError, response: BroadcastTxResponse) => {
         if (error) reject(new Error(`txClient.simulate error: Code: ${error.code} Message: ${error.message}`));
-        resolve({
-          code: response.getTxResponse()?.getCode(),
-        });
+        else {
+          resolve({
+            code: response.getTxResponse()?.getCode(),
+          });
+        }
       });
     });
   }
@@ -37,12 +39,14 @@ export class GrpcService {
   simulate(request: SimulateRequest): Promise<{ gasUsed: number | undefined; gasWanted: number | undefined }> {
     log('Initiating txClient.simulate');
     return new Promise((resolve, reject) => {
-      this.txClient.simulate(request, (error: ServerError, response: SimulateResponse) => {
+      this.txClient.simulate(request, null, (error: ServerError, response: SimulateResponse) => {
         if (error) reject(new Error(`txClient.simulate error: Code: ${error.code} Message: ${error.message}`));
-        resolve({
-          gasUsed: response.getGasInfo()?.getGasUsed(),
-          gasWanted: response.getGasInfo()?.getGasWanted(),
-        });
+        else {
+          resolve({
+            gasUsed: response.getGasInfo()?.getGasUsed(),
+            gasWanted: response.getGasInfo()?.getGasWanted(),
+          });
+        }
       });
     });
   }
@@ -56,15 +60,18 @@ export class GrpcService {
     const bankRequest = new QueryAllBalancesRequest();
     bankRequest.setAddress(address);
     bankRequest.setPagination(pageRequest);
+    console.log(address);
     return new Promise((resolve, reject) => {
-      this.bankQuery.allBalances(bankRequest, (error: ServerError, response: QueryAllBalancesResponse) => {
+      this.bankQuery.allBalances(bankRequest, null, (error: ServerError, response: QueryAllBalancesResponse) => {
         if (error) reject(new Error(`bankQuery.allBalances error: Code: ${error.code} Message: ${error.message}`));
-        resolve({
-          balancesList: response.getBalancesList().map((coin) => ({
-            denom: coin.getDenom(),
-            amount: Number(coin.getAmount()),
-          })),
-        });
+        else {
+          resolve({
+            balancesList: response.getBalancesList().map((coin) => ({
+              denom: coin.getDenom(),
+              amount: Number(coin.getAmount()),
+            })),
+          });
+        }
       });
     });
   }
@@ -74,19 +81,21 @@ export class GrpcService {
     const accountRequest = new QueryAccountRequest();
     accountRequest.setAddress(address);
     return new Promise((resolve, reject) => {
-      this.authQuery.account(accountRequest, (error: ServerError, response: QueryAccountResponse) => {
+      this.authQuery.account(accountRequest, null, (error: ServerError, response: QueryAccountResponse) => {
         if (error) reject(new Error(`authQuery.account error: Code: ${error.code} Message: ${error.message}`));
-        const accountAny = response.getAccount();
-        if (accountAny) {
-          const baseAccount = accountAny.unpack(BaseAccount.deserializeBinary, accountAny.getTypeName());
-          if (baseAccount) {
-            resolve({
-              baseAccount,
-              accountNumber: baseAccount.getAccountNumber(),
-              sequence: baseAccount.getSequence(),
-            });
-          } else reject(new Error(`authQuery.account message unpacking failure`));
-        } else reject(new Error(`No response from authQuery.account`));
+        else {
+          const accountAny = response.getAccount();
+          if (accountAny) {
+            const baseAccount = accountAny.unpack(BaseAccount.deserializeBinary, accountAny.getTypeName());
+            if (baseAccount) {
+              resolve({
+                baseAccount,
+                accountNumber: baseAccount.getAccountNumber(),
+                sequence: baseAccount.getSequence(),
+              });
+            } else reject(new Error(`authQuery.account message unpacking failure`));
+          } else reject(new Error(`No response from authQuery.account`));
+        }
       });
     });
   }

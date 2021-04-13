@@ -7,7 +7,7 @@ const Wrapper = styled.div``;
 
 type SharedComponentProps = {
   label: string;
-  key: string;
+  dataKey: string;
 };
 
 export type LayoutDisplayComponentProps = {
@@ -29,7 +29,7 @@ type GlobalDisplay = {
 };
 
 type MsgSendLayout = {
-  key: keyof (MsgSendDisplay & GlobalDisplay);
+  dataKey: keyof (MsgSendDisplay & GlobalDisplay);
   displayType: LayoutDisplayTypes;
   label?: string;
 }[];
@@ -37,22 +37,22 @@ type MsgSendLayout = {
 export const LAYOUTS: { [key in ReadableMessageNames]: MsgSendLayout } = {
   MsgSend: [
     {
-      key: 'from',
+      dataKey: 'from',
       displayType: 'Address',
       label: 'From',
     },
     {
-      key: 'to',
+      dataKey: 'to',
       displayType: 'Address',
       label: 'To',
     },
     {
-      key: 'amountList',
+      dataKey: 'amountList',
       displayType: 'Coins',
       label: 'Sending Amount',
     },
     {
-      key: 'fee',
+      dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',
     },
@@ -68,9 +68,11 @@ type MessageLayoutProps = {
 const MessageLayout = ({ typeName, layout, data }: MessageLayoutProps) => (
   <Wrapper>
     {LAYOUTS[typeName] &&
-      LAYOUTS[typeName].map(({ key, displayType, label }) => {
+      LAYOUTS[typeName].map(({ dataKey, displayType, label }) => {
         const Layout = layout[displayType];
-        return Layout && data[key] ? <Layout key={key} label={label} data={data[key]} /> : null;
+        return Layout && data[dataKey] ? (
+          <Layout key={`${dataKey}-${displayType}`} dataKey={dataKey} label={label} data={data[dataKey]} />
+        ) : null;
       })}
   </Wrapper>
 );
