@@ -6,6 +6,7 @@ pipeline {
     agent { label 'autoscale-nodejs' }
     environment {
       NODE_CONTAINER = "node12"
+      PROTOC_ZIP = "protoc-3.15.8-linux-x86_64.zip"
     }
 
     stages {
@@ -15,6 +16,15 @@ pipeline {
                     common = new Common(this)
                 }
                 gitCheckout()
+            }
+        }
+        stage('Install Protoc') {
+            steps {
+                container("${NODE_CONTAINER}") {
+                    sh "curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/${PROTOC_ZIP}"
+                    sh "unzip -o ${PROTOC_ZIP} -d /usr/local bin/protoc"
+                    sh "unzip -o ${PROTOC_ZIP} -d /usr/local 'include/*'"
+                }
             }
         }
         stage('Npm Install') {
