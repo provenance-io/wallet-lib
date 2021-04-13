@@ -1,6 +1,6 @@
 {
   "name": "@provenance/frontlib-wallet",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "Provenance wallet interface library",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -15,10 +15,11 @@
   "scripts": {
     "clean": "rm -rf ./lib ./esm",
     "clean:docs": "rm -rf ./docs",
-    "build": "npm run clean && npm run build:commonjs && npm run build:esm && npm run tsc:esm && npm run tsc:commonjs",
-    "build:esm": "BABEL_ENV=esm babel src -d esm --extensions \".ts,.js,.tsx\" --ignore \"src/**/*.stories.tsx,src/**/*/*.stories.ts\"",
-    "build:commonjs": "BABEL_ENV=cjs babel ./src --extensions \".ts,.js,.tsx\" -d lib --copy-files --ignore \"src/**/*.stories.tsx,src/**/*/*.stories.ts\"",
+    "build": "npm run clean && npm run build-protos && npm run build:commonjs && npm run build:esm && npm run tsc:esm && npm run tsc:commonjs",
+    "build:esm": "BABEL_ENV=esm babel src -d esm --extensions \".ts,.js,.tsx\" --ignore \"src/**/*.stories.tsx,src/proto/*,src/**/*/*.stories.ts\"",
+    "build:commonjs": "BABEL_ENV=cjs babel ./src --extensions \".ts,.js,.tsx\" -d lib --copy-files --ignore \"src/**/*.stories.tsx,src/proto/*,src/**/*/*.stories.ts\"",
     "build:storybook": "mkdir -p public && build-storybook -o docs -s ./public",
+    "build-protos": "sh ./scripts/build-protos.sh",
     "watch": "chokidar \"src/**/*.ts\" \"src/**/*.tsx\" -c \"npm run build:commonjs && npm run build:esm && npm run tsc:esm && npm run tsc:commonjs && npm run lint\"",
     "tsc:esm": "tsc --module es2015 --outDir esm",
     "tsc:commonjs": "tsc --module commonjs --outDir lib",
@@ -67,6 +68,7 @@
     "@storybook/react": "6.1.17",
     "@tendermint/sig": "0.6.0",
     "@types/create-hash": "1.2.2",
+    "@types/google-protobuf": "3.7.4",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
@@ -91,6 +93,7 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "focus-visible": "5.2.0",
+    "google-protobuf": "3.15.8",
     "madge": "3.12.0",
     "prettier": "2.2.1",
     "react": "^17.0.1",
@@ -100,6 +103,10 @@
     "styled-components": "^5.2.1",
     "typescript": "^4.0.3"
   },
-  "peerDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "grpc_tools_node_protoc_ts": "5.1.3",
+    "grpc-tools": "1.11.1",
+    "grpc-web": "1.2.1",
+    "secp256k1": "4.0.2"
+  }
 }

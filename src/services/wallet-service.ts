@@ -1,14 +1,5 @@
 import type { BroadcastTx, SignMeta } from '@tendermint/sig';
 
-import type { IncomingTx } from '../types';
-import { ApiService } from './api-service';
-
-const MOCKS = {
-  AUTH: `{"height":"6111","result":{"type":"cosmos-sdk/Account","value":{"address":"tp1h2wkmgt3qvvdlpzn66llxwazkpyu5c3pwylxhg","coins":[{"denom":"vspn","amount":"100000"}],"public_key":null,"account_number":"14","sequence":"0"}}}`,
-};
-
-const baseUrl = process.env.REACT_APP_ENV === 'staging' ? 'https://test.provenance.io' : 'http://localhost:3000';
-
 export type WalletState = {
   keychainAccountName: string;
   address: string;
@@ -32,6 +23,11 @@ export type ReturnMessageObject = {
   transaction?: BroadcastTx;
 };
 
+export const WALLET_QUERY_PARAMS = {
+  msgAnyB64: 'msgAnyB64',
+  account: 'account',
+};
+
 type MessageObject = MessageEvent<ReturnMessageObject>;
 
 type SetWalletState = (state: WalletState) => void;
@@ -39,8 +35,8 @@ type SetWalletState = (state: WalletState) => void;
 export class WalletService {
   private setWalletState: SetWalletState | undefined = undefined;
   private walletWindow: Window | null = null;
-  private apiService: ApiService;
   private eventListeners: { [key: string]: (state: WalletState) => void } = {};
+  private walletUrl: string | undefined;
   state: WalletState = {
     keychainAccountName: '',
     address: '',
@@ -48,13 +44,12 @@ export class WalletService {
     walletOpen: false,
     transaction: undefined,
   };
-  constructor(url = 'http://localhost:1317', chainId = 'chain-local') {
-    this.state.meta.chain_id = chainId;
-    this.apiService = new ApiService(url);
+  constructor(walletUrl?: string) {
+    if (walletUrl) this.walletUrl = walletUrl;
     window.addEventListener(
       'message',
       async (e: MessageObject) => {
-        if (e.origin !== baseUrl) return;
+        if (e.origin !== process.env.PROVENANCE_WALLET_URL) return;
         if (e.data.message) {
           const { message, keychainAccountName, address } = e.data;
           switch (message) {
@@ -77,6 +72,10 @@ export class WalletService {
     );
   }
 
+  setWalletUrl(url: string) {
+    this.walletUrl = url;
+  }
+
   addEventListener(event: ReturnMessage, cb: (state: WalletState) => void) {
     this.eventListeners[event] = cb;
   }
@@ -92,22 +91,19 @@ export class WalletService {
     this.setWalletState = setWalletState;
   }
 
-  getAccount(): void {
-    if (this.state.address) {
-      this.apiService.get(`/auth/accounts/${this.state.address}`).finally();
-    }
-  }
-
-  openWallet(isTransaction = false, tx?: IncomingTx): void {
+  openWallet(isTransaction = false, msgAnyB64?: string): void {
+    if (!this.walletUrl) throw new Error(`WalletService requires walletUrl to access browser wallet`);
     this.walletWindow?.close();
     const height = window.top.outerHeight < 750 ? window.top.outerHeight : 750;
     const width = 460;
     const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
     const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
     this.walletWindow = window.open(
-      `${baseUrl}/${isTransaction ? 'wallet/transaction' : 'wallet/connect'}${
-        isTransaction && tx && this.state.keychainAccountName
-          ? `?tx=${encodeURIComponent(JSON.stringify(tx))}&account=${this.state.keychainAccountName}`
+      `${process.env.PROVENANCE_WALLET_URL}/${isTransaction ? 'wallet/transaction' : 'wallet/connect'}${
+        isTransaction && msgAnyB64 && this.state.keychainAccountName
+          ? `?${WALLET_QUERY_PARAMS.msgAnyB64}=${encodeURIComponent(JSON.stringify(msgAnyB64))}&${WALLET_QUERY_PARAMS.account}=${
+              this.state.keychainAccountName
+            }`
           : ''
       }`,
       undefined,
