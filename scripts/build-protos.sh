@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# Generate js clients for third party protos
-# Ref: https://github.com/grpc/grpc-web/tree/master/net/grpc/gateway/examples/helloworld#generate-protobuf-messages-and-client-service-stub
+# Transpile protos to js & ts files
 
 echo "Starting protoc gRPC generator"
 set -eo pipefail
