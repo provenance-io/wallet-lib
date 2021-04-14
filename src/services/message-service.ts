@@ -1,17 +1,17 @@
 import type { Wallet } from '@tendermint/sig';
 import type { Bytes } from '@tendermint/types';
 import * as google_protobuf_any_pb from 'google-protobuf/google/protobuf/any_pb';
-import { AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, Tx, TxBody, TxRaw } from 'proto/cosmos/tx/v1beta1/tx_pb';
-import { BroadcastMode, BroadcastTxRequest, SimulateRequest } from 'proto/cosmos/tx/v1beta1/service_pb';
-import { MsgSend } from 'proto/cosmos/bank/v1beta1/tx_pb';
-import { Coin } from 'proto/cosmos/base/v1beta1/coin_pb';
-import { SignMode } from 'proto/cosmos/tx/signing/v1beta1/signing_pb';
-import { BaseAccount } from 'proto/cosmos/auth/v1beta1/auth_pb';
-import { PubKey } from 'proto/cosmos/crypto/secp256k1/keys_pb';
 import { Message } from 'google-protobuf';
 import { ecdsaSign as secp256k1EcdsaSign } from 'secp256k1';
 import { createHash } from 'crypto';
 import { base64ToBytes, bufferToBytes, bytesToBase64 } from '@tendermint/belt';
+import { AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, Tx, TxBody, TxRaw } from '../proto/cosmos/tx/v1beta1/tx_pb';
+import { BroadcastMode, BroadcastTxRequest, SimulateRequest } from '../proto/cosmos/tx/v1beta1/service_pb';
+import { MsgSend } from '../proto/cosmos/bank/v1beta1/tx_pb';
+import { Coin } from '../proto/cosmos/base/v1beta1/coin_pb';
+import { SignMode } from '../proto/cosmos/tx/signing/v1beta1/signing_pb';
+import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
+import { PubKey } from '../proto/cosmos/crypto/secp256k1/keys_pb';
 import { log } from '../utils';
 import { CoinAsObject, SupportedDenoms } from '../types';
 

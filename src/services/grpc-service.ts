@@ -1,12 +1,12 @@
-import { ServiceClient as TxServiceClient } from 'proto/cosmos/tx/v1beta1/service_grpc_web_pb';
-import { QueryClient as AuthQueryClient } from 'proto/cosmos/auth/v1beta1/query_grpc_web_pb';
-import { QueryClient as BankQueryClient } from 'proto/cosmos/bank/v1beta1/query_grpc_web_pb';
-import { QueryAccountRequest, QueryAccountResponse } from 'proto/cosmos/auth/v1beta1/query_pb';
-import { BaseAccount } from 'proto/cosmos/auth/v1beta1/auth_pb';
-import { QueryAllBalancesRequest, QueryAllBalancesResponse } from 'proto/cosmos/bank/v1beta1/query_pb';
-import { PageRequest } from 'proto/cosmos/base/query/v1beta1/pagination_pb';
-import { BroadcastTxRequest, BroadcastTxResponse, SimulateRequest, SimulateResponse } from 'proto/cosmos/tx/v1beta1/service_pb';
 import { Error as ServerError } from 'grpc-web';
+import { ServiceClient as TxServiceClient } from '../proto/cosmos/tx/v1beta1/service_grpc_web_pb';
+import { QueryClient as AuthQueryClient } from '../proto/cosmos/auth/v1beta1/query_grpc_web_pb';
+import { QueryClient as BankQueryClient } from '../proto/cosmos/bank/v1beta1/query_grpc_web_pb';
+import { QueryAccountRequest, QueryAccountResponse } from '../proto/cosmos/auth/v1beta1/query_pb';
+import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
+import { QueryAllBalancesRequest, QueryAllBalancesResponse } from '../proto/cosmos/bank/v1beta1/query_pb';
+import { PageRequest } from '../proto/cosmos/base/query/v1beta1/pagination_pb';
+import { BroadcastTxRequest, BroadcastTxResponse, SimulateRequest, SimulateResponse } from '../proto/cosmos/tx/v1beta1/service_pb';
 import { log } from '../utils';
 import { CoinAsObject } from '../types';
 
