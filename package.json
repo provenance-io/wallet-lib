@@ -1,6 +1,6 @@
 {
   "name": "@provenance/frontlib-wallet",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Provenance wallet interface library",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -16,7 +16,7 @@
     "clean": "rm -rf ./lib ./esm",
     "clean:docs": "rm -rf ./docs",
     "build": "npm run clean && npm run build-protos && npm run build:commonjs && npm run build:esm && npm run tsc:esm && npm run tsc:commonjs",
-    "build:esm": "BABEL_ENV=esm babel src -d esm --extensions \".ts,.js,.tsx\" --ignore \"src/**/*.stories.tsx,src/proto/*,src/**/*/*.stories.ts\"",
+    "build:esm": "BABEL_ENV=esm babel src -d esm --extensions \".ts,.js,.tsx\" --copy-files --ignore \"src/**/*.stories.tsx,src/proto/*,src/**/*/*.stories.ts\"",
     "build:commonjs": "BABEL_ENV=cjs babel ./src --extensions \".ts,.js,.tsx\" -d lib --copy-files --ignore \"src/**/*.stories.tsx,src/proto/*,src/**/*/*.stories.ts\"",
     "build:storybook": "mkdir -p public && build-storybook -o docs -s ./public",
     "build-protos": "bash ./scripts/build-protos.sh",
