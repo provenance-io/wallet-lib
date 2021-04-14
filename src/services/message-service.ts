@@ -99,6 +99,7 @@ export class MessageService {
     msgAny: google_protobuf_any_pb.Any,
     feeDenom: SupportedDenoms,
     account: BaseAccount,
+    chainId: string,
     wallet: Wallet
   ): SimulateRequest {
     log(`Building simulated request.`);
@@ -108,7 +109,7 @@ export class MessageService {
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
     txRaw.setAuthInfoBytes(authInfo.serializeBinary());
-    const signDoc = this.buildSignDoc(account.getAccountNumber(), txRaw);
+    const signDoc = this.buildSignDoc(account.getAccountNumber(), chainId, txRaw);
     const signature = this.signBytes(signDoc.serializeBinary(), wallet.privateKey);
     txRaw.setSignaturesList([signature]);
     const tx = new Tx();
@@ -123,6 +124,7 @@ export class MessageService {
   buildBroadcastTxRequest(
     msgAny: google_protobuf_any_pb.Any,
     account: BaseAccount,
+    chainId: string,
     wallet: Wallet,
     fee: number,
     feeDenom: SupportedDenoms,
@@ -135,7 +137,7 @@ export class MessageService {
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
     txRaw.setAuthInfoBytes(authInfo.serializeBinary());
-    const signDoc = this.buildSignDoc(account.getAccountNumber(), txRaw);
+    const signDoc = this.buildSignDoc(account.getAccountNumber(), chainId, txRaw);
     const signature = this.signBytes(signDoc.serializeBinary(), wallet.privateKey);
     // const verified = chainService.verifyTx(signDocBinary, bytesToBase64(wallet.publicKey), signature);
     txRaw.setSignaturesList([signature]);
@@ -189,11 +191,11 @@ export class MessageService {
     return txBody;
   }
 
-  buildSignDoc(accNumber: number, txRaw: TxRaw): SignDoc {
+  buildSignDoc(accNumber: number, chainId: string, txRaw: TxRaw): SignDoc {
     const signDoc = new SignDoc();
     signDoc.setAccountNumber(accNumber);
     signDoc.setAuthInfoBytes(txRaw.getAuthInfoBytes());
-    signDoc.setChainId('testing');
+    signDoc.setChainId(chainId);
     signDoc.setBodyBytes(txRaw.getBodyBytes());
     return signDoc;
   }
