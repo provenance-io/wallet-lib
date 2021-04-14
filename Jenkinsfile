@@ -7,6 +7,7 @@ pipeline {
     environment {
       NODE_CONTAINER = "node12"
       PROTOC_ZIP = "protoc-3.15.8-linux-x86_64.zip"
+      GRPC_WEB = "protoc-gen-grpc-web-1.2.1-linux-x86_64"
     }
 
     stages {
@@ -24,6 +25,10 @@ pipeline {
                     sh "curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/${PROTOC_ZIP}"
                     sh "unzip -o ${PROTOC_ZIP} -d /usr/local bin/protoc"
                     sh "unzip -o ${PROTOC_ZIP} -d /usr/local 'include/*'"
+
+                    sh "curl -OL https://github.com/grpc/grpc-web/releases/download/1.2.1/${GRPC_WEB}"
+                    sh "mv ${GRPC_WEB} /usr/local/bin/protoc-gen-grpc-web"
+                    sh "chmod +x /usr/local/bin/protoc-gen-grpc-web"
                 }
             }
         }
