@@ -99,7 +99,7 @@ export class WalletService {
     const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
     const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
     this.walletWindow = window.open(
-      `${this.walletUrl}/${isTransaction ? 'wallet/transaction' : 'wallet/connect'}${
+      `${this.walletUrl}/${isTransaction ? 'transaction' : 'connect'}${
         isTransaction && msgAnyB64 && this.state.keychainAccountName
           ? `?${WALLET_QUERY_PARAMS.msgAnyB64}=${encodeURIComponent(JSON.stringify(msgAnyB64))}&${WALLET_QUERY_PARAMS.account}=${
               this.state.keychainAccountName
