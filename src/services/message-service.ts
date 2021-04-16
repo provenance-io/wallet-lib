@@ -12,6 +12,7 @@ import { Coin } from '../proto/cosmos/base/v1beta1/coin_pb';
 import { SignMode } from '../proto/cosmos/tx/signing/v1beta1/signing_pb';
 import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
 import { PubKey } from '../proto/cosmos/crypto/secp256k1/keys_pb';
+import { MsgExecuteContract } from '../proto/x/wasm/internal/types/tx_pb';
 import { log } from '../utils';
 import { CoinAsObject, SupportedDenoms } from '../types';
 

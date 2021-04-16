@@ -26,6 +26,7 @@ export type LayoutDisplayTypes = keyof LayoutDisplayComponentProps;
 
 type GlobalDisplay = {
   fee: CoinAsObject;
+  balance: CoinAsObject;
 };
 
 type MsgSendLayout = {
@@ -55,6 +56,11 @@ export const LAYOUTS: { [key in ReadableMessageNames]: MsgSendLayout } = {
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',
+    },
+    {
+      dataKey: 'balance',
+      displayType: 'Coins',
+      label: 'Account Balance',
     },
   ],
 };
