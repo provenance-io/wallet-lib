@@ -32,6 +32,8 @@ type MessageObject = MessageEvent<ReturnMessageObject>;
 
 type SetWalletState = (state: WalletState) => void;
 
+const SESSION_STORAGE_PARAMS: Array<keyof WalletState> = ['keychainAccountName', 'address'];
+
 export class WalletService {
   private setWalletState: SetWalletState | undefined = undefined;
   private walletWindow: Window | null = null;
@@ -46,6 +48,11 @@ export class WalletService {
   };
   constructor(walletUrl?: string) {
     if (walletUrl) this.walletUrl = walletUrl;
+    SESSION_STORAGE_PARAMS.forEach((key) => {
+      if (typeof window !== 'undefined') {
+        if (sessionStorage.getItem(key)) (this.state as any)[key] = sessionStorage.getItem(key);
+      }
+    });
     window.addEventListener(
       'message',
       async (e: MessageObject) => {
@@ -56,6 +63,8 @@ export class WalletService {
             case ReturnMessage.CONNECTED:
               this.state.keychainAccountName = keychainAccountName || '';
               this.state.address = address || '';
+              sessionStorage.setItem('keychainAccountName', keychainAccountName || '');
+              sessionStorage.setItem('address', address || '');
               break;
             case ReturnMessage.CLOSED:
               break;
