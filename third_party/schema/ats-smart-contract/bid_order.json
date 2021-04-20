@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BidOrder",
+  "type": "object",
+  "required": [
+    "base",
+    "id",
+    "owner",
+    "price",
+    "quote",
+    "size"
+  ],
+  "properties": {
+    "base": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "owner": {
+      "$ref": "#/definitions/HumanAddr"
+    },
+    "price": {
+      "$ref": "#/definitions/Uint128"
+    },
+    "quote": {
+      "$ref": "#/definitions/Coin"
+    },
+    "size": {
+      "$ref": "#/definitions/Uint128"
+    }
+  },
+  "definitions": {
+    "Coin": {
+      "type": "object",
+      "required": [
+        "amount",
+        "denom"
+      ],
+      "properties": {
+        "amount": {
+          "$ref": "#/definitions/Uint128"
+        },
+        "denom": {
+          "type": "string"
+        }
+      }
+    },
+    "HumanAddr": {
+      "type": "string"
+    },
+    "Uint128": {
+      "type": "string"
+    }
+  }
+}

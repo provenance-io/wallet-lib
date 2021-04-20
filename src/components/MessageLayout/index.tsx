@@ -36,6 +36,7 @@ type MsgSendLayout = {
 }[];
 
 export const LAYOUTS: { [key in ReadableMessageNames]: MsgSendLayout } = {
+  MsgExecuteContract: [],
   MsgSend: [
     {
       dataKey: 'from',

@@ -15,17 +15,20 @@ import { PubKey } from '../proto/cosmos/crypto/secp256k1/keys_pb';
 import { MsgExecuteContract } from '../proto/x/wasm/internal/types/tx_pb';
 import { log } from '../utils';
 import { CoinAsObject, SupportedDenoms } from '../types';
+import type { ExecuteMsg } from '../types/schema/ats-smart-contract/execute_msg';
 
-type SupportedMessageTypeNames = 'cosmos.bank.v1beta1.MsgSend';
+type SupportedMessageTypeNames = 'cosmos.bank.v1beta1.MsgSend' | 'cosmwasm.wasm.v1beta1.MsgExecuteContract';
 
-export type ReadableMessageNames = 'MsgSend';
+export type ReadableMessageNames = 'MsgSend' | 'MsgExecuteContract';
 
 const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessageTypeNames } = {
   MsgSend: 'cosmos.bank.v1beta1.MsgSend',
+  MsgExecuteContract: 'cosmwasm.wasm.v1beta1.MsgExecuteContract',
 };
 
 const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.bank.v1beta1.MsgSend': MsgSend,
+  'cosmwasm.wasm.v1beta1.MsgExecuteContract': MsgExecuteContract,
 };
 
 export type MsgSendParams = {
@@ -33,6 +36,13 @@ export type MsgSendParams = {
   to: string;
   denom: SupportedDenoms;
   amount: string | number;
+};
+
+export type MsgExecuteContractParams = {
+  sender: string;
+  contract: string;
+  msg: ExecuteMsg;
+  funds?: CoinAsObject[];
 };
 
 export type MsgSendDisplay = {
@@ -46,10 +56,10 @@ export class MessageService {
     return google_protobuf_any_pb.Any.deserializeBinary(base64ToBytes(msgAnyB64));
   }
 
-  buildMessage(type: ReadableMessageNames, params: MsgSendParams): Message {
+  buildMessage(type: ReadableMessageNames, params: MsgSendParams | MsgExecuteContractParams): Message {
     switch (type) {
       case 'MsgSend': {
-        const { from, to, amount, denom } = params;
+        const { from, to, amount, denom } = params as MsgSendParams;
         log(`Building MsgSend: ${from} to ${to} ${amount}${denom}`);
         const txCoin = new Coin();
         txCoin.setDenom(denom);
@@ -60,12 +70,22 @@ export class MessageService {
         msgSend.addAmount(txCoin);
         return msgSend;
       }
+      case 'MsgExecuteContract': {
+        const { sender, contract, msg, funds } = params as MsgExecuteContractParams;
+        log(`Building MsgExecuteContract: Sender: ${sender} Contract: ${contract}`);
+        const msgExecuteContract = new MsgExecuteContract().setContract(contract).setSender(sender).setMsg(JSON.stringify(msg));
+        if (funds)
+          funds.forEach(({ denom, amount }) => {
+            msgExecuteContract.addFunds(new Coin().setAmount(`${amount}`).setDenom(denom));
+          });
+        return msgExecuteContract;
+      }
       default:
         throw new Error(`Message type: ${type} is not supported.`);
     }
   }
 
-  createAnyMessageBase64(msg: Message, type: ReadableMessageNames): string {
+  createAnyMessageBase64(type: ReadableMessageNames, msg: Message): string {
     log(`Creating Any message`);
     const msgAny = new google_protobuf_any_pb.Any();
     msgAny.pack(msg.serializeBinary(), TYPE_NAMES_READABLE_MAP[type], '/');
