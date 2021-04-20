@@ -16,6 +16,8 @@ import { MsgExecuteContract } from '../proto/x/wasm/internal/types/tx_pb';
 import { log } from '../utils';
 import { CoinAsObject, SupportedDenoms } from '../types';
 import type { ExecuteMsg } from '../types/schema/ats-smart-contract/execute_msg';
+import type { BidOrder } from '../types/schema/ats-smart-contract/bid_order';
+import type { AskOrder } from '../types/schema/ats-smart-contract/ask_order';
 
 type SupportedMessageTypeNames = 'cosmos.bank.v1beta1.MsgSend' | 'cosmwasm.wasm.v1beta1.MsgExecuteContract';
 
@@ -41,7 +43,7 @@ export type MsgSendParams = {
 export type MsgExecuteContractParams = {
   sender: string;
   contract: string;
-  msg: ExecuteMsg;
+  msg: ExecuteMsg | BidOrder | AskOrder;
   funds?: CoinAsObject[];
 };
 
