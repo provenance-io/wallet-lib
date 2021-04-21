@@ -14,10 +14,7 @@ import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
 import { PubKey } from '../proto/cosmos/crypto/secp256k1/keys_pb';
 import { MsgExecuteContract } from '../proto/x/wasm/internal/types/tx_pb';
 import { log } from '../utils';
-import { CoinAsObject, SupportedDenoms } from '../types';
-import type { ExecuteMsg } from '../types/schema/ats-smart-contract/execute_msg';
-import type { BidOrder } from '../types/schema/ats-smart-contract/bid_order';
-import type { AskOrder } from '../types/schema/ats-smart-contract/ask_order';
+import { AtsMessage, CoinAsObject, SupportedDenoms } from '../types';
 
 type SupportedMessageTypeNames = 'cosmos.bank.v1beta1.MsgSend' | 'cosmwasm.wasm.v1beta1.MsgExecuteContract';
 
@@ -40,17 +37,28 @@ export type MsgSendParams = {
   amount: string | number;
 };
 
-export type MsgExecuteContractParams = {
-  sender: string;
-  contract: string;
-  msg: ExecuteMsg | BidOrder | AskOrder;
-  funds?: CoinAsObject[];
-};
-
 export type MsgSendDisplay = {
   from: string;
   to: string;
   amountList: CoinAsObject[];
+};
+
+type UnknownContract = {
+  msg: any;
+};
+
+type ContractParams = {
+  sender: string;
+  contract: string;
+  funds?: CoinAsObject[];
+};
+
+export type MsgExecuteContractParams = (ContractParams & UnknownContract) | (ContractParams & AtsMessage);
+
+export type MsgExecuteContractDisplay = {
+  sender: string;
+  msg: any;
+  funds: CoinAsObject[];
 };
 
 export class MessageService {
@@ -94,7 +102,9 @@ export class MessageService {
     return bytesToBase64(msgAny.serializeBinary());
   }
 
-  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): MsgSendDisplay & { typeName: ReadableMessageNames } {
+  unpackDisplayObjectFromWalletMessage(
+    anyMsgBase64: string
+  ): (MsgSendDisplay | MsgExecuteContractDisplay) & { typeName: ReadableMessageNames } {
     const msgBytes = base64ToBytes(anyMsgBase64);
     const msgAny = google_protobuf_any_pb.Any.deserializeBinary(msgBytes);
     const typeName = msgAny.getTypeName() as SupportedMessageTypeNames;
@@ -107,6 +117,16 @@ export class MessageService {
             from: (message as MsgSend).getFromAddress(),
             to: (message as MsgSend).getToAddress(),
             amountList: (message as MsgSend).getAmountList().map((coin) => ({
+              denom: coin.getDenom(),
+              amount: Number(coin.getAmount()),
+            })),
+          };
+        case 'cosmwasm.wasm.v1beta1.MsgExecuteContract':
+          return {
+            typeName: 'MsgExecuteContract',
+            sender: (message as MsgExecuteContract).getSender(),
+            msg: JSON.parse((message as MsgExecuteContract).getMsg() as string),
+            funds: (message as MsgExecuteContract).getFundsList().map((coin) => ({
               denom: coin.getDenom(),
               amount: Number(coin.getAmount()),
             })),
