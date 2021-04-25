@@ -1,0 +1,4 @@
+export enum IFRAME_MESSAGES {
+  REPORT_HEIGHT = 'REPORT_HEIGHT',
+  CLOSE = 'CLOSE',
+}

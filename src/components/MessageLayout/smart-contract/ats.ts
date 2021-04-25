@@ -10,7 +10,7 @@ const READABLE_TYPE_NAMES = {
   create_bid: 'Buy',
 };
 
-export const getAtsLayoutTypeName = (msg: ExecuteMsg) => `MsgExecuteContract.ExecuteMsg.${Object.keys(msg)[0]}`;
+export const getAtsLayoutTypeName = ({ msg }: MsgExecuteContractDisplay) => `MsgExecuteContract.ExecuteMsg.${Object.keys(msg)[0]}`;
 
 export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
   const type = Object.keys(msg)[0];
@@ -64,13 +64,13 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Price Per Unit', // Price in quote
     },
     {
-      dataKey: 'total',
+      dataKey: 'totalPrice',
       displayType: 'String',
       label: 'Total Sale Price', // Total quote
     },
     {
       dataKey: 'fee',
-      displayType: 'Coin',
+      displayType: 'String',
       label: 'Fee',
     },
   ],
@@ -96,13 +96,13 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Price Per Unit', // Price base
     },
     {
-      dataKey: 'total',
+      dataKey: 'totalPrice',
       displayType: 'String',
       label: 'Total Purchase Price', // Total base
     },
     {
       dataKey: 'fee',
-      displayType: 'Coin',
+      displayType: 'String',
       label: 'Fee',
     },
   ],
