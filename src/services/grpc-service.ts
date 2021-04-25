@@ -60,7 +60,6 @@ export class GrpcService {
     const bankRequest = new QueryAllBalancesRequest();
     bankRequest.setAddress(address);
     bankRequest.setPagination(pageRequest);
-    console.log(address);
     return new Promise((resolve, reject) => {
       this.bankQuery.allBalances(bankRequest, null, (error: ServerError, response: QueryAllBalancesResponse) => {
         if (error) reject(new Error(`bankQuery.allBalances error: Code: ${error.code} Message: ${error.message}`));

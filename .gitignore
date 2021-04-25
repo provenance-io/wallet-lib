@@ -6,6 +6,7 @@
 .pnp.js
 /src/proto/**/*.ts
 /src/proto/**/*.js
+/src/types/schema/**/*.ts
 
 # testing
 /coverage
