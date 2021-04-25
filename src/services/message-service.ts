@@ -62,6 +62,9 @@ export type MsgExecuteContractDisplay = {
 };
 
 export class MessageService {
+  encoder = new TextEncoder();
+  decoder = new TextDecoder('utf-8');
+
   msgAnyB64toAny(msgAnyB64: string): google_protobuf_any_pb.Any {
     return google_protobuf_any_pb.Any.deserializeBinary(base64ToBytes(msgAnyB64));
   }
@@ -83,7 +86,10 @@ export class MessageService {
       case 'MsgExecuteContract': {
         const { sender, contract, msg, funds } = params as MsgExecuteContractParams;
         log(`Building MsgExecuteContract: Sender: ${sender} Contract: ${contract}`);
-        const msgExecuteContract = new MsgExecuteContract().setContract(contract).setSender(sender).setMsg(JSON.stringify(msg));
+        const msgExecuteContract = new MsgExecuteContract()
+          .setContract(contract)
+          .setSender(sender)
+          .setMsg(this.encoder.encode(JSON.stringify(msg)));
         if (funds)
           funds.forEach(({ denom, amount }) => {
             msgExecuteContract.addFunds(new Coin().setAmount(`${amount}`).setDenom(denom));
@@ -125,7 +131,7 @@ export class MessageService {
           return {
             typeName: 'MsgExecuteContract',
             sender: (message as MsgExecuteContract).getSender(),
-            msg: JSON.parse((message as MsgExecuteContract).getMsg() as string),
+            msg: JSON.parse(this.decoder.decode((message as MsgExecuteContract).getMsg() as Uint8Array)),
             funds: (message as MsgExecuteContract).getFundsList().map((coin) => ({
               denom: coin.getDenom(),
               amount: Number(coin.getAmount()),
