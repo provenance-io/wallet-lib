@@ -2,6 +2,7 @@ import { ExecuteMsg } from '../../../types/schema/ats-smart-contract/execute_msg
 import { MsgExecuteContractDisplay } from '../../../services';
 import { GlobalDisplay, LayoutDisplayTypes } from '../../../types';
 import { getReadableDenom } from '../../../constants';
+import { coinDecimalConvert } from '../../../utils';
 
 export type AtsLayoutNames = 'MsgExecuteContract.ExecuteMsg.create_ask' | 'MsgExecuteContract.ExecuteMsg.create_bid';
 
@@ -19,13 +20,22 @@ export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
   const isBid = orderType === READABLE_TYPE_NAMES.create_bid;
   if (!orderType || !funds[0]) return {};
   const { amount, denom } = funds[0];
-  const base = isBid ? getReadableDenom(msgData.base) : getReadableDenom(denom);
-  const quote = isBid ? getReadableDenom(denom) : getReadableDenom(msgData.quote);
+  const baseDenom = isBid ? msgData.base : denom;
+  const quoteDenom = isBid ? denom : msgData.quote;
+  const quantityRaw = isBid ? { amount: msgData.size, denom: baseDenom } : { amount, denom: baseDenom };
+  const quantity = coinDecimalConvert(quantityRaw);
+  const pricePerUnitRaw = { amount: msgData.price, denom: quoteDenom };
+  const pricePerUnit = coinDecimalConvert(pricePerUnitRaw);
+  const totalPriceRaw = isBid ? { amount, denom: quoteDenom } : { amount: amount * Number(msgData.price), denom: quoteDenom };
+  const totalPrice = coinDecimalConvert(totalPriceRaw);
   return {
     orderType,
-    quantity: isBid ? `${msgData.size} ${base}` : `${amount} ${base}`,
-    pricePerUnit: `${msgData.price} ${quote}`,
-    totalPrice: isBid ? `${amount} ${quote}` : `${amount * Number(msgData.price)} ${quote}`,
+    quantityRaw,
+    pricePerUnitRaw,
+    totalPriceRaw,
+    quantity: `${quantity.amount} ${getReadableDenom(quantity.denom)}`,
+    pricePerUnit: `${pricePerUnit.amount} ${getReadableDenom(pricePerUnit.denom)}`,
+    totalPrice: `${totalPrice.amount} ${getReadableDenom(totalPrice.denom)}`,
   };
 };
 
