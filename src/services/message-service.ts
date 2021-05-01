@@ -5,6 +5,10 @@ import { Message } from 'google-protobuf';
 import { ecdsaSign as secp256k1EcdsaSign } from 'secp256k1';
 import { createHash } from 'crypto';
 import { base64ToBytes, bufferToBytes, bytesToBase64 } from '@tendermint/belt';
+
+import { log } from '../utils';
+import { AtsMessage, CoinAsObject, SupportedDenoms } from '../types';
+
 import { AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, Tx, TxBody, TxRaw } from '../proto/cosmos/tx/v1beta1/tx_pb';
 import { BroadcastMode, BroadcastTxRequest, SimulateRequest } from '../proto/cosmos/tx/v1beta1/service_pb';
 import { MsgSend } from '../proto/cosmos/bank/v1beta1/tx_pb';
@@ -13,21 +17,74 @@ import { SignMode } from '../proto/cosmos/tx/signing/v1beta1/signing_pb';
 import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
 import { PubKey } from '../proto/cosmos/crypto/secp256k1/keys_pb';
 import { MsgExecuteContract } from '../proto/x/wasm/internal/types/tx_pb';
-import { log } from '../utils';
-import { AtsMessage, CoinAsObject, SupportedDenoms } from '../types';
+import { MsgVerifyInvariant } from '../proto/cosmos/crisis/v1beta1/tx_pb';
+import {
+  MsgSetWithdrawAddress,
+  MsgWithdrawDelegatorReward,
+  MsgWithdrawValidatorCommission,
+  MsgFundCommunityPool,
+} from '../proto/cosmos/distribution/v1beta1/tx_pb';
+import { MsgSubmitEvidence } from '../proto/cosmos/evidence/v1beta1/tx_pb';
+import { MsgSubmitProposal, MsgVote, MsgDeposit } from '../proto/cosmos/gov/v1beta1/tx_pb';
+import { MsgUnjail } from '../proto/cosmos/slashing/v1beta1/tx_pb';
+import {
+  MsgCreateValidator,
+  MsgEditValidator,
+  MsgDelegate,
+  MsgBeginRedelegate,
+  MsgUndelegate,
+} from '../proto/cosmos/staking/v1beta1/tx_pb';
+import { MsgCreateVestingAccount } from '../proto/cosmos/vesting/v1beta1/tx_pb';
 
-type SupportedMessageTypeNames = 'cosmos.bank.v1beta1.MsgSend' | 'cosmwasm.wasm.v1beta1.MsgExecuteContract';
+type SupportedMessageTypeNames =
+  | 'cosmos.bank.v1beta1.MsgSend'
+  | 'cosmwasm.wasm.v1beta1.MsgExecuteContract'
+  | 'cosmos.crisis.v1beta1.MsgVerifyInvariant'
+  | 'cosmos.distribution.v1beta1.MsgSetWithdrawAddress'
+  | 'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
+  | 'cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission'
+  | 'cosmos.distribution.v1beta1.MsgFundCommunityPool'
+  | 'cosmos.evidence.v1beta1.MsgSubmitEvidence'
+  | 'cosmos.gov.v1beta1.MsgSubmitProposal'
+  | 'cosmos.gov.v1beta1.MsgVote'
+  | 'cosmos.gov.v1beta1.MsgDeposit'
+  | 'cosmos.slashing.v1beta1.MsgUnjail'
+  | 'cosmos.staking.v1beta1.MsgCreateValidator'
+  | 'cosmos.staking.v1beta1.MsgEditValidator'
+  | 'cosmos.staking.v1beta1.MsgDelegate'
+  | 'cosmos.staking.v1beta1.MsgBeginRedelegate'
+  | 'cosmos.staking.v1beta1.MsgUndelegate'
+  | 'cosmos.vesting.v1beta1.MsgCreateVestingAccount';
 
-export type ReadableMessageNames = 'MsgSend' | 'MsgExecuteContract';
+export type ReadableMessageNames = 'MsgSend' | 'MsgExecuteContract' | 'MsgSetWithdrawAddress';
+
+export type FallbackGenericMessageName = 'MsgGeneric' | 'MsgExecuteContractGeneric';
 
 const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessageTypeNames } = {
   MsgSend: 'cosmos.bank.v1beta1.MsgSend',
   MsgExecuteContract: 'cosmwasm.wasm.v1beta1.MsgExecuteContract',
+  MsgSetWithdrawAddress: 'cosmos.distribution.v1beta1.MsgSetWithdrawAddress',
 };
 
 const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.bank.v1beta1.MsgSend': MsgSend,
   'cosmwasm.wasm.v1beta1.MsgExecuteContract': MsgExecuteContract,
+  'cosmos.crisis.v1beta1.MsgVerifyInvariant': MsgVerifyInvariant,
+  'cosmos.distribution.v1beta1.MsgSetWithdrawAddress': MsgSetWithdrawAddress,
+  'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward': MsgWithdrawDelegatorReward,
+  'cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission': MsgWithdrawValidatorCommission,
+  'cosmos.distribution.v1beta1.MsgFundCommunityPool': MsgFundCommunityPool,
+  'cosmos.evidence.v1beta1.MsgSubmitEvidence': MsgSubmitEvidence,
+  'cosmos.gov.v1beta1.MsgSubmitProposal': MsgSubmitProposal,
+  'cosmos.gov.v1beta1.MsgVote': MsgVote,
+  'cosmos.gov.v1beta1.MsgDeposit': MsgDeposit,
+  'cosmos.slashing.v1beta1.MsgUnjail': MsgUnjail,
+  'cosmos.staking.v1beta1.MsgCreateValidator': MsgCreateValidator,
+  'cosmos.staking.v1beta1.MsgEditValidator': MsgEditValidator,
+  'cosmos.staking.v1beta1.MsgDelegate': MsgDelegate,
+  'cosmos.staking.v1beta1.MsgBeginRedelegate': MsgBeginRedelegate,
+  'cosmos.staking.v1beta1.MsgUndelegate': MsgUndelegate,
+  'cosmos.vesting.v1beta1.MsgCreateVestingAccount': MsgCreateVestingAccount,
 };
 
 export type MsgSendParams = {
@@ -41,6 +98,11 @@ export type MsgSendDisplay = {
   from: string;
   to: string;
   amountList: CoinAsObject[];
+};
+
+export type MsgSetWithdrawAddressParams = {
+  delegatorAddress: string;
+  withdrawAddress: string;
 };
 
 type UnknownContract = {
@@ -61,6 +123,8 @@ export type MsgExecuteContractDisplay = {
   funds: CoinAsObject[];
 };
 
+export type GenericDisplay = { [key: string]: any };
+
 export class MessageService {
   encoder = new TextEncoder();
   decoder = new TextDecoder('utf-8');
@@ -69,7 +133,7 @@ export class MessageService {
     return google_protobuf_any_pb.Any.deserializeBinary(base64ToBytes(msgAnyB64));
   }
 
-  buildMessage(type: ReadableMessageNames, params: MsgSendParams | MsgExecuteContractParams): Message {
+  buildMessage(type: ReadableMessageNames, params: MsgSendParams | MsgExecuteContractParams | MsgSetWithdrawAddressParams): Message {
     switch (type) {
       case 'MsgSend': {
         const { from, to, amount, denom } = params as MsgSendParams;
@@ -96,6 +160,10 @@ export class MessageService {
           });
         return msgExecuteContract;
       }
+      case 'MsgSetWithdrawAddress': {
+        const { delegatorAddress, withdrawAddress } = params as MsgSetWithdrawAddressParams;
+        return new MsgSetWithdrawAddress().setWithdrawAddress(withdrawAddress).setDelegatorAddress(delegatorAddress);
+      }
       default:
         throw new Error(`Message type: ${type} is not supported.`);
     }
@@ -110,7 +178,7 @@ export class MessageService {
 
   unpackDisplayObjectFromWalletMessage(
     anyMsgBase64: string
-  ): (MsgSendDisplay | MsgExecuteContractDisplay) & { typeName: ReadableMessageNames } {
+  ): (MsgSendDisplay | MsgExecuteContractDisplay | GenericDisplay) & { typeName: ReadableMessageNames | FallbackGenericMessageName } {
     const msgBytes = base64ToBytes(anyMsgBase64);
     const msgAny = google_protobuf_any_pb.Any.deserializeBinary(msgBytes);
     const typeName = msgAny.getTypeName() as SupportedMessageTypeNames;
@@ -129,7 +197,7 @@ export class MessageService {
           };
         case 'cosmwasm.wasm.v1beta1.MsgExecuteContract':
           return {
-            typeName: 'MsgExecuteContract',
+            typeName: 'MsgExecuteContractGeneric',
             sender: (message as MsgExecuteContract).getSender(),
             msg: JSON.parse(this.decoder.decode((message as MsgExecuteContract).getMsg() as Uint8Array)),
             funds: (message as MsgExecuteContract).getFundsList().map((coin) => ({
@@ -138,7 +206,10 @@ export class MessageService {
             })),
           };
         default:
-          throw new Error(`Message type: ${typeName} is not supported.`);
+          return {
+            typeName: 'MsgGeneric',
+            ...(message as Message).toObject(),
+          };
       }
     }
     throw new Error(`Message type: ${typeName} is not supported.`);
