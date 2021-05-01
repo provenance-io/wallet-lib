@@ -2,13 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { GlobalProps, LayoutDisplayTypes } from '../../types';
 import { MSG_SEND_LAYOUT } from './MsgSend';
-import { ATS_LAYOUT } from './smart-contract';
+import { ATS_LAYOUT } from './MsgExecuteContract';
+import { MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT } from './MsgExecuteContract/generic';
+import { MSG_GENERIC_LAYOUT } from './generic';
 
 const Wrapper = styled.div``;
 
 export const LAYOUTS = {
   ...ATS_LAYOUT,
   ...MSG_SEND_LAYOUT,
+  ...MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT,
+  ...MSG_GENERIC_LAYOUT,
 };
 
 type MessageLayoutProps = {
@@ -24,8 +28,13 @@ const MessageLayout = ({ typeName, layout, data }: MessageLayoutProps) => (
         (layoutItem: { dataKey: string; displayType: LayoutDisplayTypes; label: string }) => {
           const { dataKey, displayType, label } = layoutItem;
           const Layout = layout[displayType];
-          return Layout && data[dataKey] ? (
-            <Layout key={`${dataKey}-${displayType}`} dataKey={dataKey} label={label} data={data[dataKey]} />
+          let displayData: any;
+          if (dataKey === '*') {
+            displayData = { ...data };
+            delete displayData.typeName;
+          } else displayData = data[dataKey];
+          return Layout && displayData ? (
+            <Layout key={`${dataKey}-${displayType}`} dataKey={dataKey} label={label} data={displayData} />
           ) : null;
         }
       )}

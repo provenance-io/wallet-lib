@@ -1,6 +1,6 @@
 import { ExecuteMsg } from '../../../types/schema/ats-smart-contract/execute_msg';
 import { MsgExecuteContractDisplay } from '../../../services';
-import { GlobalDisplay, LayoutDisplayTypes } from '../../../types';
+import { GlobalDisplay, LayoutDisplayTypes, SupportedDenoms } from '../../../types';
 import { getReadableDenom } from '../../../constants';
 import { coinDecimalConvert } from '../../../utils';
 
@@ -11,7 +11,12 @@ const READABLE_TYPE_NAMES = {
   create_bid: 'Buy',
 };
 
-export const getAtsLayoutTypeName = ({ msg }: MsgExecuteContractDisplay) => `MsgExecuteContract.ExecuteMsg.${Object.keys(msg)[0]}`;
+export const getAtsLayoutTypeName = ({ msg }: MsgExecuteContractDisplay) => {
+  const type = Object.keys(msg)[0];
+  return READABLE_TYPE_NAMES[type as keyof typeof READABLE_TYPE_NAMES]
+    ? `MsgExecuteContract.ExecuteMsg.${Object.keys(msg)[0]}`
+    : 'MsgExecuteContractGeneric';
+};
 
 export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
   const type = Object.keys(msg)[0];
@@ -20,8 +25,8 @@ export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
   const isBid = orderType === READABLE_TYPE_NAMES.create_bid;
   if (!orderType || !funds[0]) return {};
   const { amount, denom } = funds[0];
-  const baseDenom = isBid ? msgData.base : denom;
-  const quoteDenom = isBid ? denom : msgData.quote;
+  const baseDenom: SupportedDenoms = isBid ? msgData.base : denom;
+  const quoteDenom: SupportedDenoms = isBid ? denom : msgData.quote;
   const quantityRaw = isBid ? { amount: msgData.size, denom: baseDenom } : { amount, denom: baseDenom };
   const quantity = coinDecimalConvert(quantityRaw);
   const pricePerUnitRaw = { amount: msgData.price, denom: quoteDenom };
@@ -29,6 +34,8 @@ export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
   const totalPriceRaw = isBid ? { amount, denom: quoteDenom } : { amount: amount * Number(msgData.price), denom: quoteDenom };
   const totalPrice = coinDecimalConvert(totalPriceRaw);
   return {
+    baseDenom,
+    quoteDenom,
     orderType,
     quantityRaw,
     pricePerUnitRaw,
@@ -64,23 +71,23 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Order Type', // Sell
     },
     {
-      dataKey: 'quantity',
-      displayType: 'String',
+      dataKey: 'quantityRaw',
+      displayType: 'Coin',
       label: 'Amount', // Amount base
     },
     {
-      dataKey: 'pricePerUnit',
-      displayType: 'String',
+      dataKey: 'pricePerUnitRaw',
+      displayType: 'Coin',
       label: 'Price Per Unit', // Price in quote
     },
     {
-      dataKey: 'totalPrice',
-      displayType: 'String',
+      dataKey: 'totalPriceRaw',
+      displayType: 'Coin',
       label: 'Total Sale Price', // Total quote
     },
     {
       dataKey: 'fee',
-      displayType: 'String',
+      displayType: 'Coin',
       label: 'Fee',
     },
   ],
@@ -96,23 +103,23 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Order Type', // Buy
     },
     {
-      dataKey: 'quantity',
-      displayType: 'String',
+      dataKey: 'quantityRaw',
+      displayType: 'Coin',
       label: 'Amount', // Amount quote
     },
     {
-      dataKey: 'pricePerUnit',
-      displayType: 'String',
+      dataKey: 'pricePerUnitRaw',
+      displayType: 'Coin',
       label: 'Price Per Unit', // Price base
     },
     {
-      dataKey: 'totalPrice',
-      displayType: 'String',
+      dataKey: 'totalPriceRaw',
+      displayType: 'Coin',
       label: 'Total Purchase Price', // Total base
     },
     {
       dataKey: 'fee',
-      displayType: 'String',
+      displayType: 'Coin',
       label: 'Fee',
     },
   ],
