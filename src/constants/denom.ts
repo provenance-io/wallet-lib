@@ -3,7 +3,8 @@ import { SupportedDenoms } from '../types';
 export const DENOM_TO_DISPLAY_MAP: { [key in SupportedDenoms]: string } = {
   nhash: 'Nano Hash',
   hash: 'Hash',
-  exchangesc: 'USD',
+  exchangesc: 'exchangesc',
+  usd: 'USD',
 };
 
 export const getReadableDenom = (denom: SupportedDenoms | string) => {

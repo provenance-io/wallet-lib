@@ -12,6 +12,11 @@ const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
     decimal: 1e9,
     decimalPlaces: 9,
   },
+  exchangesc: {
+    denom: 'usd',
+    decimal: 1e2,
+    decimalPlaces: 2,
+  },
 };
 
 export const coinDecimalConvert = (coin: CoinAsObject): { denom: CoinAsObject['denom']; amount: string | number } => {

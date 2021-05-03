@@ -1,1 +1,1 @@
-export type SupportedDenoms = 'hash' | 'nhash' | 'exchangesc';
+export type SupportedDenoms = 'hash' | 'nhash' | 'exchangesc' | 'usd';
