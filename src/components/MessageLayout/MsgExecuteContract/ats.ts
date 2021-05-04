@@ -3,11 +3,17 @@ import { MsgExecuteContractDisplay } from '../../../services';
 import { GlobalDisplay, LayoutDisplayTypes, SupportedDenoms } from '../../../types';
 import { decimalCoinConvert } from '../../../utils';
 
-export type AtsLayoutNames = 'MsgExecuteContract.ExecuteMsg.create_ask' | 'MsgExecuteContract.ExecuteMsg.create_bid';
+export type AtsLayoutNames =
+  | 'MsgExecuteContract.ExecuteMsg.create_ask'
+  | 'MsgExecuteContract.ExecuteMsg.create_bid'
+  | 'MsgExecuteContract.ExecuteMsg.cancel_bid'
+  | 'MsgExecuteContract.ExecuteMsg.cancel_ask';
 
 const READABLE_TYPE_NAMES = {
   create_ask: 'Sell',
   create_bid: 'Buy',
+  cancel_bid: 'Cancel Buy',
+  cancel_ask: 'Cancel Sell',
 };
 
 export const getAtsLayoutTypeName = ({ msg }: MsgExecuteContractDisplay) => {
@@ -21,6 +27,11 @@ export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
   const type = Object.keys(msg)[0];
   const orderType = READABLE_TYPE_NAMES[type as keyof typeof READABLE_TYPE_NAMES] || '';
   const msgData = msg[type];
+  if (['cancel_ask', 'cancel_bid'].includes(type))
+    return {
+      orderType,
+      id: msgData.id,
+    };
   const isBid = orderType === READABLE_TYPE_NAMES.create_bid;
   if (!orderType || !funds[0]) return {};
   const { amount, denom } = funds[0];
@@ -112,6 +123,50 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       dataKey: 'totalPriceRaw',
       displayType: 'Coin',
       label: 'Total Purchase Price', // Total base
+    },
+    {
+      dataKey: 'fee',
+      displayType: 'Coin',
+      label: 'Fee',
+    },
+  ],
+  'MsgExecuteContract.ExecuteMsg.cancel_bid': [
+    {
+      dataKey: 'status',
+      displayType: 'String',
+      label: 'Status',
+    },
+    {
+      dataKey: 'orderType',
+      displayType: 'String',
+      label: 'Order Type', // Buy
+    },
+    {
+      dataKey: 'id',
+      displayType: 'String',
+      label: 'Order ID', // Buy
+    },
+    {
+      dataKey: 'fee',
+      displayType: 'Coin',
+      label: 'Fee',
+    },
+  ],
+  'MsgExecuteContract.ExecuteMsg.cancel_ask': [
+    {
+      dataKey: 'status',
+      displayType: 'String',
+      label: 'Status',
+    },
+    {
+      dataKey: 'orderType',
+      displayType: 'String',
+      label: 'Order Type', // Buy
+    },
+    {
+      dataKey: 'id',
+      displayType: 'String',
+      label: 'Order ID', // Buy
     },
     {
       dataKey: 'fee',
