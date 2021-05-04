@@ -31,6 +31,18 @@ export const coinDecimalConvert = (coin: CoinAsObject): { denom: CoinAsObject['d
   return coin;
 };
 
+export const decimalCoinConvert = (coin: CoinAsObject): { denom: CoinAsObject['denom']; amount: number } => {
+  const { denom, amount } = coin;
+  const map = COIN_DECIMAL_MAP[denom as keyof typeof COIN_DECIMAL_MAP];
+  if (map) {
+    return {
+      denom: map.denom,
+      amount: amount * map.decimal,
+    };
+  }
+  return coin;
+};
+
 export const coinListToDenomKeyObj = (list: CoinAsObject[]) =>
   list.reduce((keyObj, coin) => {
     if (keyObj[coin.denom]) {
