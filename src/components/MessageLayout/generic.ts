@@ -10,7 +10,7 @@ export const MSG_GENERIC_LAYOUT: { MsgGeneric: MsgGenericLayout } = {
   MsgGeneric: [
     {
       dataKey: 'balance',
-      displayType: 'Coin',
+      displayType: 'Coins',
       label: 'Account Balance',
     },
     { dataKey: '*', displayType: 'Json', label: 'Message' },

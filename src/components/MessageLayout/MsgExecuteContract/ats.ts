@@ -19,7 +19,7 @@ const READABLE_TYPE_NAMES = {
 export const getAtsLayoutTypeName = ({ msg }: MsgExecuteContractDisplay) => {
   const type = Object.keys(msg)[0];
   return READABLE_TYPE_NAMES[type as keyof typeof READABLE_TYPE_NAMES]
-    ? `MsgExecuteContract.ExecuteMsg.${Object.keys(msg)[0]}`
+    ? (`MsgExecuteContract.ExecuteMsg.${Object.keys(msg)[0]}` as AtsLayoutNames)
     : 'MsgExecuteContractGeneric';
 };
 
@@ -68,6 +68,11 @@ type CreateBidLayout = {
 export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidLayout } = {
   'MsgExecuteContract.ExecuteMsg.create_ask': [
     {
+      dataKey: 'balance',
+      displayType: 'Coins',
+      label: 'Hash Balance',
+    },
+    {
       dataKey: 'status',
       displayType: 'String',
       label: 'Status',
@@ -99,6 +104,11 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
     },
   ],
   'MsgExecuteContract.ExecuteMsg.create_bid': [
+    {
+      dataKey: 'balance',
+      displayType: 'Coins',
+      label: 'Hash Balance',
+    },
     {
       dataKey: 'status',
       displayType: 'String',

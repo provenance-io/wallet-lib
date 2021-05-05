@@ -1,2 +1,2 @@
 export * from './denom';
-export * from './iframe';
+export * from './window-message';

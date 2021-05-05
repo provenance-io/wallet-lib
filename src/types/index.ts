@@ -4,4 +4,4 @@ export * from './denoms';
 export * from './layout';
 export * from './props';
 export * from './smart-contract';
-export * from './iframe';
+export * from './window-message';

@@ -1,34 +1,16 @@
-import type { BroadcastTx, SignMeta } from '@tendermint/sig';
+import { QueryParams, WindowMessage } from '../types';
+import { WINDOW_MESSAGES } from '../constants';
 
 export type WalletState = {
   keychainAccountName: string;
   address: string;
-  meta: Partial<SignMeta>;
+  randomB64: string;
+  signedB64: string;
+  publicKeyB64: string;
   walletOpen: boolean;
-  transaction: BroadcastTx | undefined;
 };
 
-export enum ReturnMessage {
-  NONE = '',
-  DENIED = 'transaction_denied',
-  COMPLETE = 'transaction_complete',
-  CONNECTED = 'account_connected',
-  CLOSED = 'closed',
-}
-
-export type ReturnMessageObject = {
-  message: ReturnMessage;
-  keychainAccountName?: string;
-  address?: string;
-  transaction?: BroadcastTx;
-};
-
-export const WALLET_QUERY_PARAMS = {
-  msgAnyB64: 'msgAnyB64',
-  account: 'account',
-};
-
-type MessageObject = MessageEvent<ReturnMessageObject>;
+type MessageObject = MessageEvent<WindowMessage>;
 
 type SetWalletState = (state: WalletState) => void;
 
@@ -42,9 +24,10 @@ export class WalletService {
   state: WalletState = {
     keychainAccountName: '',
     address: '',
-    meta: {},
+    randomB64: '',
+    signedB64: '',
+    publicKeyB64: '',
     walletOpen: false,
-    transaction: undefined,
   };
   constructor(walletUrl?: string) {
     if (walletUrl) this.walletUrl = walletUrl;
@@ -58,22 +41,30 @@ export class WalletService {
       async (e: MessageObject) => {
         if (e.origin !== this.walletUrl) return;
         if (e.data.message) {
-          const { message, keychainAccountName, address } = e.data;
-          switch (message) {
-            case ReturnMessage.CONNECTED:
-              this.state.keychainAccountName = keychainAccountName || '';
-              this.state.address = address || '';
-              sessionStorage.setItem('keychainAccountName', keychainAccountName || '');
-              sessionStorage.setItem('address', address || '');
+          switch (e.data.message) {
+            case WINDOW_MESSAGES.CONNECTED: {
+              const { keychainAccountName = '', address = '', randomB64 = '', signedB64 = '', publicKeyB64 = '' } = e.data;
+              this.state = {
+                ...this.state,
+                keychainAccountName,
+                address,
+                randomB64,
+                signedB64,
+                publicKeyB64,
+              };
+              sessionStorage.setItem('keychainAccountName', keychainAccountName);
+              sessionStorage.setItem('address', address);
+              sessionStorage.setItem('randomB64', randomB64);
+              sessionStorage.setItem('signedB64', signedB64);
+              sessionStorage.setItem('publicKeyB64', publicKeyB64);
               break;
-            case ReturnMessage.CLOSED:
-              break;
+            }
             default:
           }
           this.state.walletOpen = false;
           this.walletWindow?.close();
           this.walletWindow = null;
-          if (this.eventListeners[message]) this.eventListeners[message](this.state);
+          if (this.eventListeners[e.data.message]) this.eventListeners[e.data.message](this.state);
           this.updateState();
         }
       },
@@ -85,7 +76,7 @@ export class WalletService {
     this.walletUrl = url;
   }
 
-  addEventListener(event: ReturnMessage, cb: (state: WalletState) => void) {
+  addEventListener(event: WINDOW_MESSAGES, cb: (state: WalletState) => void) {
     this.eventListeners[event] = cb;
   }
 
@@ -100,7 +91,25 @@ export class WalletService {
     this.setWalletState = setWalletState;
   }
 
-  openWallet(isTransaction = false, msgAnyB64?: string): void {
+  connect() {
+    this.openWallet(
+      `/connect?${new URLSearchParams({
+        isWindow: 'true',
+      }).toString()}`
+    );
+  }
+
+  transaction(tx: QueryParams) {
+    this.openWallet(
+      `/transaction?${new URLSearchParams({
+        ...tx,
+        keychainAccountName: this.state.keychainAccountName,
+        isWindow: 'true',
+      }).toString()}`
+    );
+  }
+
+  openWallet(url: string): void {
     if (!this.walletUrl) throw new Error(`WalletService requires walletUrl to access browser wallet`);
     this.walletWindow?.close();
     const height = window.top.outerHeight < 750 ? window.top.outerHeight : 750;
@@ -108,13 +117,7 @@ export class WalletService {
     const y = window.top.outerHeight / 2 + window.top.screenY - height / 2;
     const x = window.top.outerWidth / 2 + window.top.screenX - width / 2;
     this.walletWindow = window.open(
-      `${this.walletUrl}/${isTransaction ? 'transaction' : 'connect'}${
-        isTransaction && msgAnyB64 && this.state.keychainAccountName
-          ? `?${WALLET_QUERY_PARAMS.msgAnyB64}=${encodeURIComponent(JSON.stringify(msgAnyB64))}&${WALLET_QUERY_PARAMS.account}=${
-              this.state.keychainAccountName
-            }`
-          : ''
-      }`,
+      `${this.walletUrl}${url}`,
       undefined,
       `resizable=1, scrollbars=1, fullscreen=0, height=${height}, width=${width}, top=${y} left=${x} toolbar=0, menubar=0, status=1`
     );
