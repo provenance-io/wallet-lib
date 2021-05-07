@@ -7,6 +7,16 @@ export type QueryParams = {
   address?: string;
 };
 
+export type ConnectedMessageData = {
+  address: string;
+  keychainAccountName?: string;
+  publicKeyB64?: string;
+  randomB64?: string;
+  signedB64?: string;
+  walletType?: string;
+  txCallbackUrl?: string;
+};
+
 export type WindowMessage =
   | {
       message: WINDOW_MESSAGES.TRANSACTION_COMPLETE;
@@ -22,13 +32,6 @@ export type WindowMessage =
       message: WINDOW_MESSAGES.REPORT_HEIGHT;
       height: number;
     }
-  | {
+  | ({
       message: WINDOW_MESSAGES.CONNECTED;
-      address: string;
-      keychainAccountName?: string;
-      publicKeyB64?: string;
-      randomB64?: string;
-      signedB64?: string;
-      walletType?: string;
-      txCallbackUrl?: string;
-    };
+    } & ConnectedMessageData);

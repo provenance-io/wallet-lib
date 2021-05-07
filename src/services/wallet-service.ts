@@ -1,12 +1,7 @@
-import { QueryParams, WindowMessage } from '../types';
+import { ConnectedMessageData, QueryParams, WindowMessage } from '../types';
 import { WINDOW_MESSAGES } from '../constants';
 
-export type WalletState = {
-  keychainAccountName: string;
-  address: string;
-  randomB64: string;
-  signedB64: string;
-  publicKeyB64: string;
+export type WalletState = Required<ConnectedMessageData> & {
   walletOpen: boolean;
 };
 
@@ -14,7 +9,15 @@ type MessageObject = MessageEvent<WindowMessage>;
 
 type SetWalletState = (state: WalletState) => void;
 
-const SESSION_STORAGE_PARAMS: Array<keyof WalletState> = ['keychainAccountName', 'address'];
+const WALLET_KEYS: Array<keyof ConnectedMessageData> = [
+  'keychainAccountName',
+  'address',
+  'randomB64',
+  'signedB64',
+  'publicKeyB64',
+  'walletType',
+  'txCallbackUrl',
+];
 
 const initialState: WalletState = {
   keychainAccountName: '',
@@ -22,6 +25,8 @@ const initialState: WalletState = {
   randomB64: '',
   signedB64: '',
   publicKeyB64: '',
+  walletType: '',
+  txCallbackUrl: '',
   walletOpen: false,
 };
 
@@ -33,7 +38,7 @@ export class WalletService {
   state: WalletState = { ...initialState };
   constructor(walletUrl?: string) {
     if (walletUrl) this.walletUrl = walletUrl;
-    SESSION_STORAGE_PARAMS.forEach((key) => {
+    WALLET_KEYS.forEach((key) => {
       if (typeof window !== 'undefined') {
         if (sessionStorage.getItem(key)) (this.state as any)[key] = sessionStorage.getItem(key);
       }
@@ -45,20 +50,11 @@ export class WalletService {
         if (e.data.message) {
           switch (e.data.message) {
             case WINDOW_MESSAGES.CONNECTED: {
-              const { keychainAccountName = '', address = '', randomB64 = '', signedB64 = '', publicKeyB64 = '' } = e.data;
-              this.state = {
-                ...this.state,
-                keychainAccountName,
-                address,
-                randomB64,
-                signedB64,
-                publicKeyB64,
-              };
-              sessionStorage.setItem('keychainAccountName', keychainAccountName);
-              sessionStorage.setItem('address', address);
-              sessionStorage.setItem('randomB64', randomB64);
-              sessionStorage.setItem('signedB64', signedB64);
-              sessionStorage.setItem('publicKeyB64', publicKeyB64);
+              WALLET_KEYS.forEach((key) => {
+                const val = (e.data as any)[key] || '';
+                this.state[key] = val;
+                sessionStorage.setItem(key, val);
+              });
               break;
             }
             default:
@@ -95,6 +91,9 @@ export class WalletService {
 
   connect() {
     this.state = { ...initialState };
+    WALLET_KEYS.forEach((key) => {
+      sessionStorage.removeItem(key);
+    });
     this.openWallet(
       `/connect?${new URLSearchParams({
         isWindow: 'true',
