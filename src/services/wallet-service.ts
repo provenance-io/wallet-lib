@@ -30,7 +30,7 @@ export class WalletService {
   private walletWindow: Window | null = null;
   private eventListeners: { [key: string]: (state: WalletState) => void } = {};
   private walletUrl: string | undefined;
-  state: WalletState = initialState;
+  state: WalletState = { ...initialState };
   constructor(walletUrl?: string) {
     if (walletUrl) this.walletUrl = walletUrl;
     SESSION_STORAGE_PARAMS.forEach((key) => {
@@ -94,10 +94,7 @@ export class WalletService {
   }
 
   connect() {
-    this.state = {
-      ...initialState,
-      walletOpen: true,
-    };
+    this.state = { ...initialState };
     this.openWallet(
       `/connect?${new URLSearchParams({
         isWindow: 'true',
