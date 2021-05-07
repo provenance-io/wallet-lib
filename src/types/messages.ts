@@ -7,7 +7,7 @@ import type {
   MsgFundCommunityPool,
 } from '../proto/cosmos/distribution/v1beta1/tx_pb';
 
-export type MsgSendDisplay = MsgSend.AsObject;
+export type MsgSendDisplay = import('../proto/cosmos/bank/v1beta1/tx_pb').MsgSend.AsObject;
 export type MsgVerifyInvariantDisplay = MsgVerifyInvariant.AsObject;
 export type MsgSetWithdrawAddressDisplay = MsgSetWithdrawAddress.AsObject;
 export type MsgWithdrawDelegatorRewardDisplay = MsgWithdrawDelegatorReward.AsObject;
