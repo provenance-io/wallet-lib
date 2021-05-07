@@ -29,4 +29,6 @@ export type WindowMessage =
       publicKeyB64?: string;
       randomB64?: string;
       signedB64?: string;
+      walletType?: string;
+      txCallbackUrl?: string;
     };
