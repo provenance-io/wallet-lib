@@ -16,19 +16,21 @@ type SetWalletState = (state: WalletState) => void;
 
 const SESSION_STORAGE_PARAMS: Array<keyof WalletState> = ['keychainAccountName', 'address'];
 
+const initialState: WalletState = {
+  keychainAccountName: '',
+  address: '',
+  randomB64: '',
+  signedB64: '',
+  publicKeyB64: '',
+  walletOpen: false,
+};
+
 export class WalletService {
   private setWalletState: SetWalletState | undefined = undefined;
   private walletWindow: Window | null = null;
   private eventListeners: { [key: string]: (state: WalletState) => void } = {};
   private walletUrl: string | undefined;
-  state: WalletState = {
-    keychainAccountName: '',
-    address: '',
-    randomB64: '',
-    signedB64: '',
-    publicKeyB64: '',
-    walletOpen: false,
-  };
+  state: WalletState = initialState;
   constructor(walletUrl?: string) {
     if (walletUrl) this.walletUrl = walletUrl;
     SESSION_STORAGE_PARAMS.forEach((key) => {
@@ -92,6 +94,10 @@ export class WalletService {
   }
 
   connect() {
+    this.state = {
+      ...initialState,
+      walletOpen: true,
+    };
     this.openWallet(
       `/connect?${new URLSearchParams({
         isWindow: 'true',

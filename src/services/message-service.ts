@@ -7,7 +7,7 @@ import { createHash } from 'crypto';
 import { base64ToBytes, bufferToBytes, bytesToBase64 } from '@tendermint/belt';
 
 import { log } from '../utils';
-import { AtsMessage, CoinAsObject, SupportedDenoms } from '../types';
+import { AtsMessage, CoinAsObject, MsgSendDisplay, MsgSetWithdrawAddressDisplay, SupportedDenoms } from '../types';
 
 import { AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, Tx, TxBody, TxRaw } from '../proto/cosmos/tx/v1beta1/tx_pb';
 import { BroadcastMode, BroadcastTxRequest, SimulateRequest } from '../proto/cosmos/tx/v1beta1/service_pb';
@@ -87,40 +87,16 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.vesting.v1beta1.MsgCreateVestingAccount': MsgCreateVestingAccount,
 };
 
-export type MsgSendParams = {
-  from: string;
-  to: string;
-  denom: SupportedDenoms;
-  amount: string | number;
-};
-
-export type MsgSendDisplay = {
-  from: string;
-  to: string;
-  amountList: CoinAsObject[];
-};
-
-export type MsgSetWithdrawAddressParams = {
-  delegatorAddress: string;
-  withdrawAddress: string;
-};
-
 type UnknownContract = {
   msg: any;
 };
 
-type ContractParams = {
-  sender: string;
-  contract: string;
-  funds?: CoinAsObject[];
-};
-
-export type MsgExecuteContractParams = (ContractParams & UnknownContract) | (ContractParams & AtsMessage);
+export type MsgExecuteContractParams = (MsgExecuteContract.AsObject & UnknownContract) | (MsgExecuteContract.AsObject & AtsMessage);
 
 export type MsgExecuteContractDisplay = {
   sender: string;
   msg: any;
-  funds: CoinAsObject[];
+  fundsList: CoinAsObject[];
 };
 
 export type GenericDisplay = { [key: string]: any };
@@ -133,35 +109,32 @@ export class MessageService {
     return google_protobuf_any_pb.Any.deserializeBinary(base64ToBytes(msgAnyB64));
   }
 
-  buildMessage(type: ReadableMessageNames, params: MsgSendParams | MsgExecuteContractParams | MsgSetWithdrawAddressParams): Message {
+  buildMessage(type: ReadableMessageNames, params: MsgSendDisplay | MsgExecuteContractParams | MsgSetWithdrawAddressDisplay): Message {
     switch (type) {
       case 'MsgSend': {
-        const { from, to, amount, denom } = params as MsgSendParams;
-        log(`Building MsgSend: ${from} to ${to} ${amount}${denom}`);
-        const txCoin = new Coin();
-        txCoin.setDenom(denom);
-        txCoin.setAmount(`${amount}`);
-        const msgSend = new MsgSend();
-        msgSend.setFromAddress(from);
-        msgSend.setToAddress(to);
-        msgSend.addAmount(txCoin);
+        const { fromAddress, toAddress, amountList } = params as MsgSendDisplay;
+        log(`Building MsgSend: ${fromAddress} to ${toAddress}`);
+        const msgSend = new MsgSend().setFromAddress(fromAddress).setToAddress(toAddress);
+        amountList.forEach(({ denom, amount }) => {
+          msgSend.addAmount(new Coin().setAmount(`${amount}`).setDenom(denom));
+        });
         return msgSend;
       }
       case 'MsgExecuteContract': {
-        const { sender, contract, msg, funds } = params as MsgExecuteContractParams;
+        const { sender, contract, msg, fundsList } = params as MsgExecuteContractParams;
         log(`Building MsgExecuteContract: Sender: ${sender} Contract: ${contract}`);
         const msgExecuteContract = new MsgExecuteContract()
           .setContract(contract)
           .setSender(sender)
           .setMsg(this.encoder.encode(JSON.stringify(msg)));
-        if (funds)
-          funds.forEach(({ denom, amount }) => {
+        if (fundsList)
+          fundsList.forEach(({ denom, amount }) => {
             msgExecuteContract.addFunds(new Coin().setAmount(`${amount}`).setDenom(denom));
           });
         return msgExecuteContract;
       }
       case 'MsgSetWithdrawAddress': {
-        const { delegatorAddress, withdrawAddress } = params as MsgSetWithdrawAddressParams;
+        const { delegatorAddress, withdrawAddress } = params as MsgSetWithdrawAddressDisplay;
         return new MsgSetWithdrawAddress().setWithdrawAddress(withdrawAddress).setDelegatorAddress(delegatorAddress);
       }
       default:
@@ -178,7 +151,9 @@ export class MessageService {
 
   unpackDisplayObjectFromWalletMessage(
     anyMsgBase64: string
-  ): (MsgSendDisplay | MsgExecuteContractDisplay | GenericDisplay) & { typeName: ReadableMessageNames | FallbackGenericMessageName } {
+  ): (MsgSendDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
+    typeName: ReadableMessageNames | FallbackGenericMessageName;
+  } {
     const msgBytes = base64ToBytes(anyMsgBase64);
     const msgAny = google_protobuf_any_pb.Any.deserializeBinary(msgBytes);
     const typeName = msgAny.getTypeName() as SupportedMessageTypeNames;
@@ -188,8 +163,8 @@ export class MessageService {
         case 'cosmos.bank.v1beta1.MsgSend':
           return {
             typeName: 'MsgSend',
-            from: (message as MsgSend).getFromAddress(),
-            to: (message as MsgSend).getToAddress(),
+            fromAddress: (message as MsgSend).getFromAddress(),
+            toAddress: (message as MsgSend).getToAddress(),
             amountList: (message as MsgSend).getAmountList().map((coin) => ({
               denom: coin.getDenom(),
               amount: Number(coin.getAmount()),
@@ -200,7 +175,7 @@ export class MessageService {
             typeName: 'MsgExecuteContractGeneric',
             sender: (message as MsgExecuteContract).getSender(),
             msg: JSON.parse(this.decoder.decode((message as MsgExecuteContract).getMsg() as Uint8Array)),
-            funds: (message as MsgExecuteContract).getFundsList().map((coin) => ({
+            fundsList: (message as MsgExecuteContract).getFundsList().map((coin) => ({
               denom: coin.getDenom(),
               amount: Number(coin.getAmount()),
             })),

@@ -1,5 +1,5 @@
-import { MsgSendDisplay } from '../../services';
 import { GlobalDisplay, LayoutDisplayTypes } from '../../types';
+import { MsgSendDisplay } from '../../types/messages';
 
 export type MsgSendLayout = {
   dataKey: keyof (MsgSendDisplay & GlobalDisplay);
@@ -10,12 +10,12 @@ export type MsgSendLayout = {
 export const MSG_SEND_LAYOUT: { MsgSend: MsgSendLayout } = {
   MsgSend: [
     {
-      dataKey: 'from',
+      dataKey: 'fromAddress',
       displayType: 'String',
       label: 'From',
     },
     {
-      dataKey: 'to',
+      dataKey: 'toAddress',
       displayType: 'String',
       label: 'To',
     },
