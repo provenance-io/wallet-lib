@@ -4,6 +4,7 @@ export type QueryParams = {
   msgAnyB64: string;
   keychainAccountName?: string;
   isWindow?: string;
+  address?: string;
 };
 
 export type WindowMessage =
