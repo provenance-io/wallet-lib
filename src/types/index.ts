@@ -5,3 +5,4 @@ export * from './layout';
 export * from './props';
 export * from './smart-contract';
 export * from './window-message';
+export * from './messages';

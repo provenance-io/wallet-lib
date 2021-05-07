@@ -23,7 +23,7 @@ export const getAtsLayoutTypeName = ({ msg }: MsgExecuteContractDisplay) => {
     : 'MsgExecuteContractGeneric';
 };
 
-export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
+export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay) => {
   const type = Object.keys(msg)[0];
   const orderType = READABLE_TYPE_NAMES[type as keyof typeof READABLE_TYPE_NAMES] || '';
   const msgData = msg[type];
@@ -33,8 +33,8 @@ export const parseAtsData = ({ msg, funds }: MsgExecuteContractDisplay) => {
       id: msgData.id,
     };
   const isBid = orderType === READABLE_TYPE_NAMES.create_bid;
-  if (!orderType || !funds[0]) return {};
-  const { amount, denom } = funds[0];
+  if (!orderType || !fundsList[0]) return {};
+  const { amount, denom } = fundsList[0];
   const baseDenom: SupportedDenoms = isBid ? msgData.base : denom;
   const quoteDenom: SupportedDenoms = isBid ? denom : msgData.quote;
   const quantityRaw = isBid ? { amount: msgData.size, denom: baseDenom } : { amount, denom: baseDenom };
