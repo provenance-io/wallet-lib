@@ -91,7 +91,9 @@ type UnknownContract = {
   msg: any;
 };
 
-export type MsgExecuteContractParams = (MsgExecuteContract.AsObject & UnknownContract) | (MsgExecuteContract.AsObject & AtsMessage);
+export type MsgExecuteContractParams =
+  | (Omit<MsgExecuteContract.AsObject, 'msg'> & UnknownContract)
+  | (Omit<MsgExecuteContract.AsObject, 'msg'> & AtsMessage);
 
 export type MsgExecuteContractDisplay = {
   sender: string;

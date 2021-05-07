@@ -19,25 +19,25 @@ const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
   },
 };
 
-export const coinDecimalConvert = (coin: CoinAsObject): { denom: CoinAsObject['denom']; amount: string | number } => {
+export const coinDecimalConvert = (coin: CoinAsObject): CoinAsObject => {
   const { denom, amount } = coin;
   const map = COIN_DECIMAL_MAP[denom as keyof typeof COIN_DECIMAL_MAP];
   if (map) {
     return {
       denom: map.denom,
-      amount: (amount / map.decimal).toFixed(map.decimalPlaces),
+      amount: (Number(amount) / map.decimal).toFixed(map.decimalPlaces),
     };
   }
   return coin;
 };
 
-export const decimalCoinConvert = (coin: CoinAsObject): { denom: CoinAsObject['denom']; amount: number } => {
+export const decimalCoinConvert = (coin: CoinAsObject): CoinAsObject => {
   const { denom, amount } = coin;
   const map = COIN_DECIMAL_MAP[denom as keyof typeof COIN_DECIMAL_MAP];
   if (map) {
     return {
       denom: map.denom,
-      amount: amount * map.decimal,
+      amount: `${Number(amount) * map.decimal}`,
     };
   }
   return coin;
@@ -47,8 +47,8 @@ export const coinListToDenomKeyObj = (list: CoinAsObject[]) =>
   list.reduce((keyObj, coin) => {
     if (keyObj[coin.denom]) {
       // eslint-disable-next-line
-      keyObj[coin.denom] += coin.amount;
+      keyObj[coin.denom] = Number(coin.amount) + Number(keyObj[coin.denom]);
       return keyObj;
     }
-    return { ...keyObj, [coin.denom]: coin.amount };
+    return { ...keyObj, [coin.denom]: Number(coin.amount) };
   }, {} as DenomKeyObj);

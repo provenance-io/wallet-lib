@@ -1,4 +1,4 @@
-import { MsgSend } from '../proto/cosmos/bank/v1beta1/tx_pb';
+import type { MsgSend } from '../proto/cosmos/bank/v1beta1/tx_pb';
 import type { MsgVerifyInvariant } from '../proto/cosmos/crisis/v1beta1/tx_pb';
 import type {
   MsgSetWithdrawAddress,

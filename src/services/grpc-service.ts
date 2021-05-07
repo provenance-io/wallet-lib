@@ -67,7 +67,7 @@ export class GrpcService {
           resolve({
             balancesList: response.getBalancesList().map((coin) => ({
               denom: coin.getDenom(),
-              amount: Number(coin.getAmount()),
+              amount: coin.getAmount(),
             })),
           });
         }

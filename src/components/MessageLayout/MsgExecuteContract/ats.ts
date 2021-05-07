@@ -41,7 +41,7 @@ export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay) => {
   const pricePerUnitRaw = { amount: msgData.price, denom: quoteDenom };
   const { amount: pricePerDisplayedUnitAmount } = decimalCoinConvert({ amount: msgData.price, denom: baseDenom });
   const pricePerDisplayedUnitRaw = { amount: pricePerDisplayedUnitAmount, denom: quoteDenom };
-  const totalPriceRaw = isBid ? { amount, denom: quoteDenom } : { amount: amount * Number(msgData.price), denom: quoteDenom };
+  const totalPriceRaw = isBid ? { amount, denom: quoteDenom } : { amount: Number(amount) * Number(msgData.price), denom: quoteDenom };
   return {
     baseDenom,
     quoteDenom,

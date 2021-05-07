@@ -1,9 +1,4 @@
-import { SupportedDenoms } from './denoms';
-
-export type CoinAsObject = {
-  denom: SupportedDenoms | string;
-  amount: number;
-};
+export type CoinAsObject = { denom: string; amount: string | number };
 
 type SharedComponentProps = {
   label: string;
