@@ -165,12 +165,7 @@ export class MessageService {
         case 'cosmos.bank.v1beta1.MsgSend':
           return {
             typeName: 'MsgSend',
-            fromAddress: (message as MsgSend).getFromAddress(),
-            toAddress: (message as MsgSend).getToAddress(),
-            amountList: (message as MsgSend).getAmountList().map((coin) => ({
-              denom: coin.getDenom(),
-              amount: Number(coin.getAmount()),
-            })),
+            ...(message as MsgSend).toObject(),
           };
         case 'cosmwasm.wasm.v1beta1.MsgExecuteContract':
           return {
