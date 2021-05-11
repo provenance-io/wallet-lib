@@ -1,0 +1,34 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+
+      - name: Use Node.js 14.6.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.6.0'
+
+      - name: Install Protoc
+        run: |
+          curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/${PROTOC_ZIP}
+          unzip -o ${PROTOC_ZIP} -d /usr/local bin/protoc
+          unzip -o ${PROTOC_ZIP} -d /usr/local 'include/*'
+
+      - name: Install npm packages
+        run: |
+          npm i
+        env:
+          CI: true
+
+      - name: NPM Publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
