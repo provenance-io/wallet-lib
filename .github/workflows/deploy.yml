@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - aj/1/fix-build
 
 jobs:
   build:
@@ -32,3 +31,4 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{secrets.NPM_TOKEN}}
+          access: 'public'
