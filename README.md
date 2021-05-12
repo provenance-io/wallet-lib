@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/logo.svg" alt="Provenance Wallet Lib"/>
+  <img src="./src/logo.svg" alt="Provenance Wallet Lib"/>
 </div>
 <br/><br/>
 
@@ -19,12 +19,6 @@ Import the dependency
 npm install @provenaceio/wallet-lib --save
 ```
 
-## Storybook
-
-```bash
-npm run start
-```
-
 ## Watch for changes and run build
 
 ```bash
@@ -32,6 +26,7 @@ npm run watch
 ```
 
 ## Status
+
 [![Latest Release][release-badge]][release-latest]
 [![Apache 2.0 License][license-badge]][license-url]
 [![LOC][loc-badge]][loc-report]

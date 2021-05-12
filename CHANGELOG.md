@@ -1,12 +1,17 @@
-# Unreleased
+# CHANGELOG
 
-### Added 
+## Unreleased
+
+## 0.2.0
+
+### Added
 
 - `useWalletService` hook to support multiple wallets
 
 ### Changed
 
 - `walletService` postMessage origin check now supports origin with path suffix
+- Updates to the README
 
 ### Fixed
 
