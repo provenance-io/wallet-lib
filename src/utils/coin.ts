@@ -6,7 +6,7 @@ type DenomKeyObj = {
 
 type CoinDecimal = { denom: SupportedDenoms; decimal: number; decimalPlaces: number };
 
-const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
+export const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
   nhash: {
     denom: 'hash',
     decimal: 1e9,
@@ -15,7 +15,7 @@ const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
   exchangesc: {
     denom: 'usd',
     decimal: 1e2,
-    decimalPlaces: 2,
+    decimalPlaces: 3,
   },
 };
 

@@ -46,7 +46,7 @@ export class WalletService {
     window.addEventListener(
       'message',
       async (e: MessageObject) => {
-        if (e.origin !== this.walletUrl) return;
+        if (!this.walletUrl?.includes(e.origin)) return;
         if (e.data.message) {
           switch (e.data.message) {
             case WINDOW_MESSAGES.CONNECTED: {
@@ -106,6 +106,7 @@ export class WalletService {
       `/transaction?${new URLSearchParams({
         ...tx,
         keychainAccountName: this.state.keychainAccountName,
+        address: this.state.address,
         isWindow: 'true',
       }).toString()}`
     );
