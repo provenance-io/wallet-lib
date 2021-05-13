@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## 0.3.0
+
+### Added
+
+- More logging in `develop` mode
+- `logOnStaging` for logs in `staging` mode
+
+### Changed
+
+- `buildAuthInfo` now has `gasPrice` and `feeBuffer` parameters
+- loose option on babel plugins removed
+
+### Fixed
+
+- `useWalletService` will now instantiate its own `WalletService` instance
+
 ## 0.2.0
 
 ### Added

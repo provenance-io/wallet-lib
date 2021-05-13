@@ -20,4 +20,6 @@ export const log = (message: string | Error, level = LEVELS.LOG, writeLog = proc
   else if (level === LEVELS.ERROR) console.error(message);
 };
 
+export const logOnStaging: typeof log = (...[message, level]) => log(message, level, process.env.REACT_APP_ENV === 'staging');
+
 export default log;

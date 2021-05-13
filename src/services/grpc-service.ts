@@ -22,14 +22,16 @@ export class GrpcService {
     this.bankQuery = new BankQueryClient(serviceAddress, null);
   }
 
-  broadcastTx(request: BroadcastTxRequest): Promise<{ code: number | undefined }> {
+  broadcastTx(request: BroadcastTxRequest): Promise<{ code: number | undefined; rawLog: string | undefined }> {
     log('Initiating broadcastTx.simulate');
     return new Promise((resolve, reject) => {
       this.txClient.broadcastTx(request, null, (error: ServerError, response: BroadcastTxResponse) => {
         if (error) reject(new Error(`txClient.simulate error: Code: ${error.code} Message: ${error.message}`));
         else {
+          log(JSON.stringify(response.toObject()));
           resolve({
             code: response.getTxResponse()?.getCode(),
+            rawLog: response.getTxResponse()?.getRawLog(),
           });
         }
       });
@@ -42,6 +44,7 @@ export class GrpcService {
       this.txClient.simulate(request, null, (error: ServerError, response: SimulateResponse) => {
         if (error) reject(new Error(`txClient.simulate error: Code: ${error.code} Message: ${error.message}`));
         else {
+          log(JSON.stringify(response.toObject()));
           resolve({
             gasUsed: response.getGasInfo()?.getGasUsed(),
             gasWanted: response.getGasInfo()?.getGasWanted(),
@@ -64,6 +67,7 @@ export class GrpcService {
       this.bankQuery.allBalances(bankRequest, null, (error: ServerError, response: QueryAllBalancesResponse) => {
         if (error) reject(new Error(`bankQuery.allBalances error: Code: ${error.code} Message: ${error.message}`));
         else {
+          log(JSON.stringify(response.toObject()));
           resolve({
             balancesList: response.getBalancesList().map((coin) => ({
               denom: coin.getDenom(),
@@ -83,6 +87,7 @@ export class GrpcService {
       this.authQuery.account(accountRequest, null, (error: ServerError, response: QueryAccountResponse) => {
         if (error) reject(new Error(`authQuery.account error: Code: ${error.code} Message: ${error.message}`));
         else {
+          log(JSON.stringify(response.toObject()));
           const accountAny = response.getAccount();
           if (accountAny) {
             const baseAccount = accountAny.unpack(BaseAccount.deserializeBinary, accountAny.getTypeName());
