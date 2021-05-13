@@ -78,6 +78,14 @@ export class WalletService {
     this.eventListeners[event] = cb;
   }
 
+  removeEventListener(event: WINDOW_MESSAGES) {
+    if (this.eventListeners[event]) delete this.eventListeners[event];
+  }
+
+  removeAllEventListeners() {
+    this.eventListeners = {};
+  }
+
   updateState(): void {
     if (this.setWalletState)
       this.setWalletState({
@@ -99,6 +107,13 @@ export class WalletService {
         isWindow: 'true',
       }).toString()}`
     );
+  }
+
+  disconnect() {
+    this.state = { ...initialState };
+    WALLET_KEYS.forEach((key) => {
+      sessionStorage.removeItem(key);
+    });
   }
 
   transaction(tx: QueryParams) {

@@ -29,6 +29,7 @@ const WalletContextProvider = ({
   useEffect(() => {
     walletService.setStateUpdater(setWalletState);
     if (walletUrl) walletService.setWalletUrl(walletUrl);
+    return () => walletService.removeAllEventListeners();
     // eslint-disable-next-line
   }, []);
   return (

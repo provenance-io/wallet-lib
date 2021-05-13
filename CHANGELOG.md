@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.4.0
+
+### Added
+
+- `walletService.removeEventListener` and `walletService.removeAllEventListeners` for event listener cleanup
+- `walletService.disconnect` for clean wallet disconnect
+- `walletService.removeAllEventListeners` will run automatically when hook or context unmounts
+
 ## 0.3.0
 
 ### Added
