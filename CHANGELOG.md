@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0
+
 ### Added
 
 - More logging in `develop` mode
@@ -10,6 +12,7 @@
 ### Changed
 
 - `buildAuthInfo` now has `gasPrice` and `feeBuffer` parameters
+- loose option on babel plugins removed
 
 ### Fixed
 
