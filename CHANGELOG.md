@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.0
+
 ### Added
 
 - `walletService.removeEventListener` and `walletService.removeAllEventListeners` for event listener cleanup
