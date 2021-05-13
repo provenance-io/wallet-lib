@@ -7,6 +7,7 @@ export const useWalletService = (walletUrl: string) => {
   useEffect(() => {
     walletService.setStateUpdater(setWalletState);
     walletService.setWalletUrl(walletUrl);
+    return () => walletService.removeAllEventListeners();
     // eslint-disable-next-line
   }, []);
   return { walletState, walletService };
