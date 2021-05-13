@@ -449,7 +449,7 @@ export class MessageService {
   ): SimulateRequest {
     log(`Building simulated request.`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
-    const authInfo = this.buildAuthInfo(signerInfo, 0, feeDenom);
+    const authInfo = this.buildAuthInfo(signerInfo, feeDenom);
     const txBody = this.buildTxBody(msgAny, 'simulation');
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
@@ -471,13 +471,13 @@ export class MessageService {
     account: BaseAccount,
     chainId: string,
     wallet: Wallet,
-    fee: number,
+    feeEstimate: number,
     feeDenom: SupportedDenoms,
     memo: string
   ): BroadcastTxRequest {
     log(`Building tx request for broadcast`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
-    const authInfo = this.buildAuthInfo(signerInfo, fee, feeDenom);
+    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, feeEstimate);
     const txBody = this.buildTxBody(msgAny, memo);
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
@@ -510,14 +510,21 @@ export class MessageService {
     return signerInfo;
   }
 
-  buildAuthInfo(signerInfo: SignerInfo, feeAmount: number, feeDenom: SupportedDenoms): AuthInfo {
+  buildAuthInfo(
+    signerInfo: SignerInfo,
+    feeDenom: SupportedDenoms,
+    feeAmount = 0,
+    feeAdjustment = 1.25,
+    gasPrice = 1905,
+    feeBuffer = 0.1
+  ): AuthInfo {
     log('Building AuthInfo');
     const feeCoin = new Coin();
     feeCoin.setDenom(feeDenom);
-    feeCoin.setAmount(feeAmount.toString());
+    feeCoin.setAmount(`${Math.ceil(feeAmount * (feeAdjustment + feeBuffer) * gasPrice)}`);
     const fee = new Fee();
     fee.setAmountList([feeCoin]);
-    const feeLimit = Number((feeAmount.valueOf() * 1.25).toFixed());
+    const feeLimit = Math.ceil(feeAmount * feeAdjustment);
     fee.setGasLimit(feeLimit);
     log(`feeLimit string: ${feeLimit.toString()} - number: ${feeLimit.valueOf()}`);
     const authInfo = new AuthInfo();

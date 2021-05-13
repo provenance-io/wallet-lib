@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Added
+
+- More logging in `develop` mode
+- `logOnStaging` for logs in `staging` mode
+
+### Changed
+
+- `buildAuthInfo` now has `gasPrice` and `feeBuffer` parameters
+
+### Fixed
+
+- `useWalletService` will now instantiate its own `WalletService` instance
+
 ## 0.2.0
 
 ### Added
