@@ -1,10 +1,7 @@
 import { SupportedDenoms } from '../types';
 
-export const DENOM_TO_DISPLAY_MAP: { [key in SupportedDenoms]: string } = {
-  nhash: 'Nano Hash',
+export const DENOM_TO_DISPLAY_MAP: { [key in SupportedDenoms]?: string } = {
   hash: 'Hash',
-  exchangesc: 'exchangesc',
-  cfigureomni: 'cfigureomni',
   usd: 'USD',
 };
 
