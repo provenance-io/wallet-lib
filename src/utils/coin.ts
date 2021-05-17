@@ -17,6 +17,16 @@ export const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
     decimal: 1e2,
     decimalPlaces: 3,
   },
+  cfigureomni: {
+    denom: 'usd',
+    decimal: 1e2,
+    decimalPlaces: 3,
+  },
+  cfigure: {
+    denom: 'usd',
+    decimal: 1e2,
+    decimalPlaces: 3,
+  },
 };
 
 export const coinDecimalConvert = (coin: CoinAsObject): CoinAsObject => {
