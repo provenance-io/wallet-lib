@@ -294,15 +294,8 @@ export class MessageService {
         return new MsgUnjail().setValidatorAddr(validatorAddr);
       }
       case 'MsgCreateValidator': {
-        const {
-          pubkey,
-          value,
-          validatorAddress,
-          delegatorAddress,
-          commission,
-          minSelfDelegation,
-          description,
-        } = params as MsgCreateValidatorDisplay;
+        const { pubkey, value, validatorAddress, delegatorAddress, commission, minSelfDelegation, description } =
+          params as MsgCreateValidatorDisplay;
         const msgCreateValidator = new MsgCreateValidator()
           .setValidatorAddress(validatorAddress)
           .setDelegatorAddress(delegatorAddress)
@@ -404,9 +397,7 @@ export class MessageService {
     return bytesToBase64(msgAny.serializeBinary());
   }
 
-  unpackDisplayObjectFromWalletMessage(
-    anyMsgBase64: string
-  ): (MsgSendDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
+  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
     typeName: ReadableMessageNames | FallbackGenericMessageName;
   } {
     const msgBytes = base64ToBytes(anyMsgBase64);
@@ -510,21 +501,14 @@ export class MessageService {
     return signerInfo;
   }
 
-  buildAuthInfo(
-    signerInfo: SignerInfo,
-    feeDenom: SupportedDenoms,
-    feeAmount = 0,
-    feeAdjustment = 1.25,
-    gasPrice = 1905,
-    feeBuffer = 0.1
-  ): AuthInfo {
+  buildAuthInfo(signerInfo: SignerInfo, feeDenom: SupportedDenoms, feeAmount = 0, feeAdjustment = 1.25, gasPrice = 1905.0): AuthInfo {
     log('Building AuthInfo');
     const feeCoin = new Coin();
     feeCoin.setDenom(feeDenom);
-    feeCoin.setAmount(`${Math.ceil(feeAmount * (feeAdjustment + feeBuffer) * gasPrice)}`);
+    feeCoin.setAmount(`${Math.ceil(feeAmount * feeAdjustment * gasPrice)}`);
     const fee = new Fee();
     fee.setAmountList([feeCoin]);
-    const feeLimit = Math.ceil(feeAmount * feeAdjustment);
+    const feeLimit = Math.floor(feeAmount * feeAdjustment);
     fee.setGasLimit(feeLimit);
     log(`feeLimit string: ${feeLimit.toString()} - number: ${feeLimit.valueOf()}`);
     const authInfo = new AuthInfo();

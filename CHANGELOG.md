@@ -9,6 +9,7 @@
 ### Fixed
 
 - Eslint config updated per https://github.com/prettier/eslint-config-prettier/blob/main/CHANGELOG.md#version-800-2021-02-21
+- `feeBuffer` removed, `gasPrice` rounding error fixed.
 
 ## 0.4.0
 
