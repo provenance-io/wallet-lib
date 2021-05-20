@@ -17,6 +17,11 @@ export const MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT: { MsgExecuteContractGeneric: M
     },
     { dataKey: '*', displayType: 'Json', label: 'Message' },
     {
+      dataKey: 'memo',
+      displayType: 'String',
+      label: 'Memo',
+    },
+    {
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',

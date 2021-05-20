@@ -25,6 +25,11 @@ export const MSG_SEND_LAYOUT: { MsgSend: MsgSendLayout } = {
       label: 'Sending Amount',
     },
     {
+      dataKey: 'memo',
+      displayType: 'String',
+      label: 'Memo',
+    },
+    {
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',

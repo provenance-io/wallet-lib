@@ -98,6 +98,11 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Total Sale Price', // Total quote
     },
     {
+      dataKey: 'memo',
+      displayType: 'String',
+      label: 'Memo',
+    },
+    {
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',
@@ -135,6 +140,11 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Total Purchase Price', // Total base
     },
     {
+      dataKey: 'memo',
+      displayType: 'String',
+      label: 'Memo',
+    },
+    {
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',
@@ -157,6 +167,11 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Order ID', // Buy
     },
     {
+      dataKey: 'memo',
+      displayType: 'String',
+      label: 'Memo',
+    },
+    {
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',
@@ -177,6 +192,11 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       dataKey: 'id',
       displayType: 'String',
       label: 'Order ID', // Buy
+    },
+    {
+      dataKey: 'memo',
+      displayType: 'String',
+      label: 'Memo',
     },
     {
       dataKey: 'fee',

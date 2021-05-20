@@ -25,6 +25,7 @@ export type LayoutDisplayTypes = keyof LayoutDisplayComponentProps;
 export type GlobalDisplay = {
   '*': any;
   status: string;
+  memo: string;
   fee: CoinAsObject;
   balance: CoinAsObject;
 };
