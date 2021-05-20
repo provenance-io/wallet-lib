@@ -15,6 +15,11 @@ export const MSG_GENERIC_LAYOUT: { MsgGeneric: MsgGenericLayout } = {
     },
     { dataKey: '*', displayType: 'Json', label: 'Message' },
     {
+      dataKey: 'memo',
+      displayType: 'String',
+      label: 'Memo',
+    },
+    {
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',

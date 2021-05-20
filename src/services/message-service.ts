@@ -433,15 +433,16 @@ export class MessageService {
 
   buildSimulateRequest(
     msgAny: google_protobuf_any_pb.Any,
-    feeDenom: SupportedDenoms,
     account: BaseAccount,
     chainId: string,
-    wallet: Wallet
+    wallet: Wallet,
+    memo = '',
+    feeDenom: SupportedDenoms = 'nhash'
   ): SimulateRequest {
     log(`Building simulated request.`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
     const authInfo = this.buildAuthInfo(signerInfo, feeDenom);
-    const txBody = this.buildTxBody(msgAny, 'simulation');
+    const txBody = this.buildTxBody(msgAny, memo);
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
     txRaw.setAuthInfoBytes(authInfo.serializeBinary());
@@ -463,8 +464,8 @@ export class MessageService {
     chainId: string,
     wallet: Wallet,
     feeEstimate: number,
-    feeDenom: SupportedDenoms,
-    memo: string
+    memo = '',
+    feeDenom: SupportedDenoms = 'nhash'
   ): BroadcastTxRequest {
     log(`Building tx request for broadcast`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);

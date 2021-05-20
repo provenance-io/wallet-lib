@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Support for memos in transactions and message layouts.
+
 ## 0.5.0
 
 ### Added

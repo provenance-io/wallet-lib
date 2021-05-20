@@ -5,6 +5,7 @@ export type QueryParams = {
   keychainAccountName?: string;
   isWindow?: string;
   address?: string;
+  memo?: string;
 };
 
 export type ConnectedMessageData = {
