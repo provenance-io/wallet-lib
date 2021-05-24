@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.7.0
+
 ### Added
 
 - `GrpcService.getTx`, the tx service endpoint to query for existence of tx after broadcasting transaction
