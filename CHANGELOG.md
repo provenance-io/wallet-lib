@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Added
+
+- `GrpcService.getTx`, the tx service endpoint to query for existence of tx after broadcasting transaction
+
+### Changed
+
+- `GrpcService.broadcastTx`, `GrpcService.simulate` and `GrpcService.getBalancesList` now return their corresponding response as `response.AsObject`
+
 ## 0.6.0
 
 ### Added
