@@ -6,9 +6,15 @@ import { QueryAccountRequest, QueryAccountResponse } from '../proto/cosmos/auth/
 import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
 import { QueryAllBalancesRequest, QueryAllBalancesResponse } from '../proto/cosmos/bank/v1beta1/query_pb';
 import { PageRequest } from '../proto/cosmos/base/query/v1beta1/pagination_pb';
-import { BroadcastTxRequest, BroadcastTxResponse, SimulateRequest, SimulateResponse } from '../proto/cosmos/tx/v1beta1/service_pb';
+import {
+  BroadcastTxRequest,
+  BroadcastTxResponse,
+  SimulateRequest,
+  SimulateResponse,
+  GetTxRequest,
+  GetTxResponse,
+} from '../proto/cosmos/tx/v1beta1/service_pb';
 import { log } from '../utils';
-import { CoinAsObject } from '../types';
 
 export class GrpcService {
   private txClient: TxServiceClient;
@@ -22,39 +28,47 @@ export class GrpcService {
     this.bankQuery = new BankQueryClient(serviceAddress, null);
   }
 
-  broadcastTx(request: BroadcastTxRequest): Promise<{ code: number | undefined; rawLog: string | undefined }> {
-    log('Initiating broadcastTx.simulate');
+  getTx(txHash: string): Promise<GetTxResponse.AsObject> {
+    log('Initiating txClient.getTx');
+    const request = new GetTxRequest().setHash(txHash);
     return new Promise((resolve, reject) => {
-      this.txClient.broadcastTx(request, null, (error: ServerError, response: BroadcastTxResponse) => {
-        if (error) reject(new Error(`txClient.simulate error: Code: ${error.code} Message: ${error.message}`));
+      this.txClient.getTx(request, null, (error: ServerError, response: BroadcastTxResponse) => {
+        if (error) reject(new Error(`txClient.getTx error: Code: ${error.code} Message: ${error.message}`));
         else {
           log(JSON.stringify(response.toObject()));
-          resolve({
-            code: response.getTxResponse()?.getCode(),
-            rawLog: response.getTxResponse()?.getRawLog(),
-          });
+          resolve(response.toObject());
         }
       });
     });
   }
 
-  simulate(request: SimulateRequest): Promise<{ gasUsed: number | undefined; gasWanted: number | undefined }> {
+  broadcastTx(request: BroadcastTxRequest): Promise<BroadcastTxResponse.AsObject> {
+    log('Initiating txClient.broadcastTx');
+    return new Promise((resolve, reject) => {
+      this.txClient.broadcastTx(request, null, (error: ServerError, response: BroadcastTxResponse) => {
+        if (error) reject(new Error(`txClient.broadcastTx error: Code: ${error.code} Message: ${error.message}`));
+        else {
+          log(JSON.stringify(response.toObject()));
+          resolve(response.toObject());
+        }
+      });
+    });
+  }
+
+  simulate(request: SimulateRequest): Promise<SimulateResponse.AsObject> {
     log('Initiating txClient.simulate');
     return new Promise((resolve, reject) => {
       this.txClient.simulate(request, null, (error: ServerError, response: SimulateResponse) => {
         if (error) reject(new Error(`txClient.simulate error: Code: ${error.code} Message: ${error.message}`));
         else {
           log(JSON.stringify(response.toObject()));
-          resolve({
-            gasUsed: response.getGasInfo()?.getGasUsed(),
-            gasWanted: response.getGasInfo()?.getGasWanted(),
-          });
+          resolve(response.toObject());
         }
       });
     });
   }
 
-  getBalancesList(address: string): Promise<{ balancesList: CoinAsObject[] }> {
+  getBalancesList(address: string): Promise<QueryAllBalancesResponse.AsObject> {
     log('Initiating bankQuery.allBalances');
     const pageRequest = new PageRequest();
     pageRequest.setOffset(0);
@@ -68,12 +82,7 @@ export class GrpcService {
         if (error) reject(new Error(`bankQuery.allBalances error: Code: ${error.code} Message: ${error.message}`));
         else {
           log(JSON.stringify(response.toObject()));
-          resolve({
-            balancesList: response.getBalancesList().map((coin) => ({
-              denom: coin.getDenom(),
-              amount: coin.getAmount(),
-            })),
-          });
+          resolve(response.toObject());
         }
       });
     });
