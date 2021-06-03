@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.8.0
+
 ### Added
 
 - `WalletService` now implements `initialize` to allow wallets to be initialized manually
