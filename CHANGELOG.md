@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Added
+
+- `WalletService` now implements `initialize` to allow wallets to be initialized manually
+
+### Changed
+
+- `WINDOW_MESSAGES.TRANSACTION_COMPLETE` now expects `txhash` to be returned
+
+### Fixed
+
+- `WalletService` will now call `updateState` on `disconnect`
+
 ## 0.7.0
 
 ### Added

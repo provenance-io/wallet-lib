@@ -109,11 +109,21 @@ export class WalletService {
     );
   }
 
+  initialize({ keychainAccountName = '', address }: { keychainAccountName?: string; address: string }): void {
+    this.state = {
+      ...this.state,
+      address,
+      keychainAccountName,
+    };
+    this.updateState();
+  }
+
   disconnect() {
     this.state = { ...initialState };
     WALLET_KEYS.forEach((key) => {
       sessionStorage.removeItem(key);
     });
+    this.updateState();
   }
 
   transaction(tx: QueryParams) {

@@ -21,6 +21,7 @@ export type ConnectedMessageData = {
 export type WindowMessage =
   | {
       message: WINDOW_MESSAGES.TRANSACTION_COMPLETE;
+      txhash: string;
     }
   | {
       message: WINDOW_MESSAGES.TRANSACTION_FAILED;
