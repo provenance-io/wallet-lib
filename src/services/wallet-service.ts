@@ -33,7 +33,7 @@ const initialState: WalletState = {
 export class WalletService {
   private setWalletState: SetWalletState | undefined = undefined;
   private walletWindow: Window | null = null;
-  private eventListeners: { [key: string]: (state: WalletState) => void } = {};
+  private eventListeners: { [key: string]: (state: WalletState & { message: WindowMessage }) => void } = {};
   private walletUrl: string | undefined;
   state: WalletState = { ...initialState };
   constructor(walletUrl?: string) {
@@ -62,7 +62,7 @@ export class WalletService {
           this.state.walletOpen = false;
           this.walletWindow?.close();
           this.walletWindow = null;
-          if (this.eventListeners[e.data.message]) this.eventListeners[e.data.message](this.state);
+          if (this.eventListeners[e.data.message]) this.eventListeners[e.data.message]({ ...this.state, message: e.data });
           this.updateState();
         }
       },
@@ -74,7 +74,7 @@ export class WalletService {
     this.walletUrl = url;
   }
 
-  addEventListener(event: WINDOW_MESSAGES, cb: (state: WalletState) => void) {
+  addEventListener(event: WINDOW_MESSAGES, cb: (state: WalletState & { message: WindowMessage }) => void) {
     this.eventListeners[event] = cb;
   }
 
