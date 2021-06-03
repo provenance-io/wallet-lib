@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.8.1
+
+### Changed
+
+- `WalletService` will pass through messages to event listeners as `message` in the callback data
+
 ## 0.8.0
 
 ### Added
