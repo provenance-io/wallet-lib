@@ -8,6 +8,15 @@ export type QueryParams = {
   memo?: string;
 };
 
+export type SignQueryParams = {
+  payload: string;
+  description: string;
+  title?: string;
+  keychainAccountName?: string;
+  isWindow?: string;
+  address?: string;
+};
+
 export type ConnectedMessageData = {
   address: string;
   keychainAccountName?: string;
@@ -25,6 +34,10 @@ export type WindowMessage =
     }
   | {
       message: WINDOW_MESSAGES.TRANSACTION_FAILED;
+    }
+  | {
+      message: WINDOW_MESSAGES.SIGNATURE_COMPLETE;
+      signedPayload: string;
     }
   | {
       message: WINDOW_MESSAGES.CLOSE;
