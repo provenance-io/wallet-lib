@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.9.0
+
 ### Added
 
 - `WalletService.sign` for signing of generic Base64 string.
