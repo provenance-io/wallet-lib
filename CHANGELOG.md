@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.9.0
+
+### Added
+
+- `WalletService.sign` for signing of generic Base64 string.
+
+### Changed
+
+- `WalletService` will now add and remove the `onmessage` handler before and after each wallet interaction. `WalletService.disconnect` will also remove the handler.
+
 ## 0.8.1
 
 ### Changed

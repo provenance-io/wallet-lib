@@ -1,4 +1,4 @@
-import { ConnectedMessageData, QueryParams, WindowMessage } from '../types';
+import { ConnectedMessageData, QueryParams, SignQueryParams, WindowMessage } from '../types';
 import { WINDOW_MESSAGES } from '../constants';
 
 export type WalletState = Required<ConnectedMessageData> & {
@@ -30,11 +30,15 @@ const initialState: WalletState = {
   walletOpen: false,
 };
 
+type MessageListener = (e: MessageObject) => Promise<void>;
+
 export class WalletService {
   private setWalletState: SetWalletState | undefined = undefined;
   private walletWindow: Window | null = null;
   private eventListeners: { [key: string]: (state: WalletState & { message: WindowMessage }) => void } = {};
   private walletUrl: string | undefined;
+  private messageListener: MessageListener;
+  private boundMessageListener: MessageListener;
   state: WalletState = { ...initialState };
   constructor(walletUrl?: string) {
     if (walletUrl) this.walletUrl = walletUrl;
@@ -43,31 +47,29 @@ export class WalletService {
         if (sessionStorage.getItem(key)) (this.state as any)[key] = sessionStorage.getItem(key);
       }
     });
-    window.addEventListener(
-      'message',
-      async (e: MessageObject) => {
-        if (!this.walletUrl?.includes(e.origin)) return;
-        if (e.data.message) {
-          switch (e.data.message) {
-            case WINDOW_MESSAGES.CONNECTED: {
-              WALLET_KEYS.forEach((key) => {
-                const val = (e.data as any)[key] || '';
-                this.state[key] = val;
-                sessionStorage.setItem(key, val);
-              });
-              break;
-            }
-            default:
+    this.messageListener = async (e: MessageObject) => {
+      if (!this.walletUrl?.includes(e.origin)) return;
+      if (e.data.message) {
+        switch (e.data.message) {
+          case WINDOW_MESSAGES.CONNECTED: {
+            WALLET_KEYS.forEach((key) => {
+              const val = (e.data as any)[key] || '';
+              this.state[key] = val;
+              sessionStorage.setItem(key, val);
+            });
+            break;
           }
-          this.state.walletOpen = false;
-          this.walletWindow?.close();
-          this.walletWindow = null;
-          if (this.eventListeners[e.data.message]) this.eventListeners[e.data.message]({ ...this.state, message: e.data });
-          this.updateState();
+          default:
         }
-      },
-      false
-    );
+        this.state.walletOpen = false;
+        this.walletWindow?.close();
+        this.walletWindow = null;
+        window.removeEventListener('message', this.boundMessageListener, false);
+        if (this.eventListeners[e.data.message]) this.eventListeners[e.data.message]({ ...this.state, message: e.data });
+        this.updateState();
+      }
+    };
+    this.boundMessageListener = this.messageListener.bind(this);
   }
 
   setWalletUrl(url: string) {
@@ -123,12 +125,24 @@ export class WalletService {
     WALLET_KEYS.forEach((key) => {
       sessionStorage.removeItem(key);
     });
+    window.addEventListener('message', this.boundMessageListener, false);
     this.updateState();
   }
 
   transaction(tx: QueryParams) {
     this.openWallet(
       `/transaction?${new URLSearchParams({
+        ...tx,
+        keychainAccountName: this.state.keychainAccountName,
+        address: this.state.address,
+        isWindow: 'true',
+      }).toString()}`
+    );
+  }
+
+  sign(tx: SignQueryParams) {
+    this.openWallet(
+      `/sign?${new URLSearchParams({
         ...tx,
         keychainAccountName: this.state.keychainAccountName,
         address: this.state.address,
@@ -149,6 +163,7 @@ export class WalletService {
       undefined,
       `resizable=1, scrollbars=1, fullscreen=0, height=${height}, width=${width}, top=${y} left=${x} toolbar=0, menubar=0, status=1`
     );
+    window.addEventListener('message', this.boundMessageListener, false);
     this.state.walletOpen = true;
     this.updateState();
   }
