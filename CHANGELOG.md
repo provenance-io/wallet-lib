@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.9.1
+
+### Changed
+
+- `WalletService.sign` now uses `postMessage` instead of query param to transfer data. Data can now be string or byte array. Will return the type that was passed in.
+
 ## 0.9.0
 
 ### Added
