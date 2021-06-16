@@ -1,4 +1,4 @@
-import { WINDOW_MESSAGES } from '../constants/window-message';
+import { WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants/window-message';
 
 export type QueryParams = {
   msgAnyB64: string;
@@ -9,8 +9,9 @@ export type QueryParams = {
 };
 
 export type SignQueryParams = {
-  payload: string;
+  payload: string | Uint8Array;
   description: string;
+  origin: string;
   title?: string;
   keychainAccountName?: string;
   isWindow?: string;
@@ -27,6 +28,11 @@ export type ConnectedMessageData = {
   txCallbackUrl?: string;
 };
 
+export type WalletMessage = {
+  message: WALLET_MESSAGES.PAYLOAD;
+  payload: string | Uint8Array;
+};
+
 export type WindowMessage =
   | {
       message: WINDOW_MESSAGES.TRANSACTION_COMPLETE;
@@ -37,7 +43,7 @@ export type WindowMessage =
     }
   | {
       message: WINDOW_MESSAGES.SIGNATURE_COMPLETE;
-      signedPayload: string;
+      signedPayload: string | Uint8Array;
     }
   | {
       message: WINDOW_MESSAGES.CLOSE;

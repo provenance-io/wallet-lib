@@ -1,5 +1,5 @@
 import { ConnectedMessageData, QueryParams, SignQueryParams, WindowMessage } from '../types';
-import { WINDOW_MESSAGES } from '../constants';
+import { WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants';
 
 export type WalletState = Required<ConnectedMessageData> & {
   walletOpen: boolean;
@@ -140,18 +140,20 @@ export class WalletService {
     );
   }
 
-  sign(tx: SignQueryParams) {
+  sign({ payload, ...tx }: Partial<SignQueryParams>) {
     this.openWallet(
       `/sign?${new URLSearchParams({
         ...tx,
         keychainAccountName: this.state.keychainAccountName,
         address: this.state.address,
         isWindow: 'true',
-      }).toString()}`
+        origin: window.location.origin,
+      }).toString()}`,
+      payload
     );
   }
 
-  openWallet(url: string): void {
+  openWallet(url: string, payload?: string | Uint8Array): void {
     if (!this.walletUrl) throw new Error(`WalletService requires walletUrl to access browser wallet`);
     this.walletWindow?.close();
     const height = window.top.outerHeight < 750 ? window.top.outerHeight : 750;
@@ -164,6 +166,17 @@ export class WalletService {
       `resizable=1, scrollbars=1, fullscreen=0, height=${height}, width=${width}, top=${y} left=${x} toolbar=0, menubar=0, status=1`
     );
     window.addEventListener('message', this.boundMessageListener, false);
+    if (payload) {
+      setTimeout(() => {
+        this.walletWindow?.postMessage(
+          {
+            message: WALLET_MESSAGES.PAYLOAD,
+            payload,
+          },
+          '*'
+        );
+      }, 300);
+    }
     this.state.walletOpen = true;
     this.updateState();
   }
