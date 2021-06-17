@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.9.2
+
 ### Changed
 
 - `WalletService` now sends `window.location.origin` to wallet windows via query param `origin`. Used in wallet side for added security in `postMessage`
