@@ -1,5 +1,9 @@
 import { WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants/window-message';
 
+export type MessageParams = {
+  origin: string;
+};
+
 export type QueryParams = {
   msgAnyB64: string;
   keychainAccountName?: string;
@@ -11,11 +15,11 @@ export type QueryParams = {
 export type SignQueryParams = {
   payload: string | Uint8Array;
   description: string;
-  origin: string;
   title?: string;
   keychainAccountName?: string;
   isWindow?: string;
   address?: string;
+  id?: string;
 };
 
 export type ConnectedMessageData = {
@@ -42,8 +46,12 @@ export type WindowMessage =
       message: WINDOW_MESSAGES.TRANSACTION_FAILED;
     }
   | {
+      message: WINDOW_MESSAGES.READY_FOR_POST_MESSAGE;
+    }
+  | {
       message: WINDOW_MESSAGES.SIGNATURE_COMPLETE;
       signedPayload: string | Uint8Array;
+      id?: string;
     }
   | {
       message: WINDOW_MESSAGES.CLOSE;

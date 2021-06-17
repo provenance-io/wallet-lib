@@ -51,6 +51,8 @@ export class WalletService {
       if (!this.walletUrl?.includes(e.origin)) return;
       if (e.data.message) {
         switch (e.data.message) {
+          case WINDOW_MESSAGES.READY_FOR_POST_MESSAGE:
+            return;
           case WINDOW_MESSAGES.CONNECTED: {
             WALLET_KEYS.forEach((key) => {
               const val = (e.data as any)[key] || '';
@@ -107,6 +109,7 @@ export class WalletService {
     this.openWallet(
       `/connect?${new URLSearchParams({
         isWindow: 'true',
+        origin: window.location.origin,
       }).toString()}`
     );
   }
@@ -136,11 +139,12 @@ export class WalletService {
         keychainAccountName: this.state.keychainAccountName,
         address: this.state.address,
         isWindow: 'true',
+        origin: window.location.origin,
       }).toString()}`
     );
   }
 
-  sign({ payload, ...tx }: Partial<SignQueryParams>) {
+  sign({ payload, ...tx }: SignQueryParams) {
     this.openWallet(
       `/sign?${new URLSearchParams({
         ...tx,
@@ -166,19 +170,25 @@ export class WalletService {
       `resizable=1, scrollbars=1, fullscreen=0, height=${height}, width=${width}, top=${y} left=${x} toolbar=0, menubar=0, status=1`
     );
     window.addEventListener('message', this.boundMessageListener, false);
-    if (payload) {
-      setTimeout(() => {
-        this.walletWindow?.postMessage(
-          {
-            message: WALLET_MESSAGES.PAYLOAD,
-            payload,
-          },
-          '*'
-        );
-      }, 300);
-    }
     this.state.walletOpen = true;
     this.updateState();
+    if (payload) {
+      const { origin } = new URL(this.walletUrl);
+      const listener = (e: MessageObject) => {
+        if (e.origin !== origin) return;
+        if (e.data.message === WINDOW_MESSAGES.READY_FOR_POST_MESSAGE) {
+          this.walletWindow?.postMessage(
+            {
+              message: WALLET_MESSAGES.PAYLOAD,
+              payload,
+            },
+            origin
+          );
+          window.removeEventListener('message', listener, false);
+        }
+      };
+      window.addEventListener('message', listener, false);
+    }
   }
 }
 
