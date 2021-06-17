@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Changed
+
+- `WalletService` now sends `window.location.origin` to wallet windows via query param `origin`. Used in wallet side for added security in `postMessage`
+- `WINDOW_MESSAGES.READY_FOR_POST_MESSAGE` event added, wallets should send this message when they need to receive a `postMessage`, and are ready to do so.
+- `WalletService.sign` now waits for `READY_FOR_POST_MESSAGE` event before sending the payload message.
+
 ## 0.9.1
 
 ### Changed
