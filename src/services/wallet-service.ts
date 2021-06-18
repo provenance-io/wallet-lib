@@ -53,11 +53,14 @@ export class WalletService {
         switch (e.data.message) {
           case WINDOW_MESSAGES.READY_FOR_POST_MESSAGE:
             return;
+          case WINDOW_MESSAGES.SIGNATURE_COMPLETE:
+          case WINDOW_MESSAGES.TRANSACTION_COMPLETE:
           case WINDOW_MESSAGES.CONNECTED: {
             WALLET_KEYS.forEach((key) => {
               const val = (e.data as any)[key] || '';
               this.state[key] = val;
               sessionStorage.setItem(key, val);
+              delete (e.data as any)[key];
             });
             break;
           }
