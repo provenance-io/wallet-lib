@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- `WalletService` will now update state on both `SIGNATURE_COMPLETE` and `TRANSACTION_COMPLETE`. Previously state was only updated on `CONNECTED`.
+
 ## 0.9.2
 
 ### Changed
