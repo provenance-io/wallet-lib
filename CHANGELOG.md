@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.11.0
+
+### Changed
+
+- `MsgExecuteContract` `ats` layout now supports versioning to handle new ATS smart contract format concurrently with old format.
+- Wallet recognition of contract version is handled via `atsVersion` query param in `transaction` window
+- Wallet windows will now poll for manual window close via `pollForOpenWindow` in `WalletService`
+
 ## 0.10.0
 
 ### Changed

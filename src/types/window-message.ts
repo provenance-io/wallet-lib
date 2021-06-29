@@ -4,7 +4,12 @@ export type MessageParams = {
   origin: string;
 };
 
+export type AtsQueryParams = {
+  atsVersion?: string;
+};
+
 export type QueryParams = {
+  [key: string]: string | undefined;
   msgAnyB64: string;
   keychainAccountName?: string;
   isWindow?: string;

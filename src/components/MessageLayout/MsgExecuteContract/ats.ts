@@ -23,7 +23,7 @@ export const getAtsLayoutTypeName = ({ msg }: MsgExecuteContractDisplay) => {
     : 'MsgExecuteContractGeneric';
 };
 
-export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay) => {
+export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay, version = 1) => {
   const type = Object.keys(msg)[0];
   const orderType = READABLE_TYPE_NAMES[type as keyof typeof READABLE_TYPE_NAMES] || '';
   const msgData = msg[type];
@@ -33,24 +33,52 @@ export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay) => {
       id: msgData.id,
     };
   const isBid = orderType === READABLE_TYPE_NAMES.create_bid;
-  if (!orderType || !fundsList[0]) return {};
-  const { amount, denom } = fundsList[0];
-  const baseDenom: SupportedDenoms = isBid ? msgData.base : denom;
-  const quoteDenom: SupportedDenoms = isBid ? denom : msgData.quote;
-  const quantityRaw = isBid ? { amount: msgData.size, denom: baseDenom } : { amount, denom: baseDenom };
-  const pricePerUnitRaw = { amount: msgData.price, denom: quoteDenom };
-  const { amount: pricePerDisplayedUnitAmount } = decimalCoinConvert({ amount: msgData.price, denom: baseDenom });
-  const pricePerDisplayedUnitRaw = { amount: pricePerDisplayedUnitAmount, denom: quoteDenom };
-  const totalPriceRaw = isBid ? { amount, denom: quoteDenom } : { amount: Number(amount) * Number(msgData.price), denom: quoteDenom };
-  return {
-    baseDenom,
-    quoteDenom,
-    orderType,
-    quantityRaw,
-    pricePerUnitRaw,
-    pricePerDisplayedUnitRaw,
-    totalPriceRaw,
-  };
+  if (!orderType) return {};
+  switch (version) {
+    case 1: {
+      if (!fundsList[0]) return {};
+      const { amount, denom } = fundsList[0];
+      const baseDenom: SupportedDenoms = isBid ? msgData.base : denom;
+      const quoteDenom: SupportedDenoms = isBid ? denom : msgData.quote;
+      const quantityRaw = isBid ? { amount: msgData.size, denom: baseDenom } : { amount, denom: baseDenom };
+      const pricePerUnitRaw = { amount: msgData.price, denom: quoteDenom };
+      const { amount: pricePerDisplayedUnitAmount } = decimalCoinConvert({ amount: msgData.price, denom: baseDenom });
+      const pricePerDisplayedUnitRaw = { amount: pricePerDisplayedUnitAmount, denom: quoteDenom };
+      const totalPriceRaw = isBid
+        ? { amount, denom: quoteDenom }
+        : { amount: Number(amount) * Number(msgData.price), denom: quoteDenom };
+      return {
+        baseDenom,
+        quoteDenom,
+        orderType,
+        quantityRaw,
+        pricePerUnitRaw,
+        pricePerDisplayedUnitRaw,
+        totalPriceRaw,
+      };
+    }
+    case 2: {
+      const baseDenom: SupportedDenoms = msgData.base;
+      const quoteDenom: SupportedDenoms = msgData.quote;
+      const quantityRaw = isBid ? { amount: msgData.size, denom: baseDenom } : { amount: msgData.size, denom: baseDenom };
+      const pricePerDisplayedUnitRaw = isBid
+        ? { amount: msgData.price, denom: quoteDenom }
+        : { amount: msgData.price, denom: quoteDenom };
+      const totalPriceRaw = isBid
+        ? { amount: Number(msgData.size) * Number(msgData.price), denom: quoteDenom }
+        : { amount: Number(msgData.size) * Number(msgData.price), denom: quoteDenom };
+      return {
+        baseDenom,
+        quoteDenom,
+        orderType,
+        quantityRaw,
+        pricePerDisplayedUnitRaw,
+        totalPriceRaw,
+      };
+    }
+    default:
+      return {};
+  }
 };
 
 type CreateAskLayout = {
