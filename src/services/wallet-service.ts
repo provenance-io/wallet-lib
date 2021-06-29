@@ -209,6 +209,13 @@ export class WalletService {
       }
       if (this.state.walletWindowActive) {
         if (!this.walletWindow || this.walletWindow.closed) {
+          if (this.eventListeners[WINDOW_MESSAGES.CLOSE])
+            this.eventListeners[WINDOW_MESSAGES.CLOSE]({
+              ...this.state,
+              message: {
+                message: WINDOW_MESSAGES.CLOSE,
+              },
+            });
           this.closeWindow();
           return;
         }

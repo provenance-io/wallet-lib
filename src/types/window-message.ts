@@ -5,6 +5,7 @@ export type MessageParams = {
 };
 
 export type QueryParams = {
+  [key: string]: string | undefined;
   msgAnyB64: string;
   keychainAccountName?: string;
   isWindow?: string;
