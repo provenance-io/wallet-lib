@@ -8,6 +8,12 @@
 - Wallet recognition of contract version is handled via `atsVersion` query param in `transaction` window
 - Wallet windows will now poll for manual window close via `pollForOpenWindow` in `WalletService`
 
+## 0.10.0
+
+### Changed
+
+- `WalletService` will now update state on both `SIGNATURE_COMPLETE` and `TRANSACTION_COMPLETE`. Previously state was only updated on `CONNECTED`.
+
 ## 0.9.2
 
 ### Changed
