@@ -3,6 +3,7 @@ import { WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants';
 
 export type WalletState = Required<ConnectedMessageData> & {
   walletOpen: boolean;
+  walletWindowActive: boolean;
 };
 
 type MessageObject = MessageEvent<WindowMessage>;
@@ -28,6 +29,7 @@ const initialState: WalletState = {
   walletType: '',
   txCallbackUrl: '',
   walletOpen: false,
+  walletWindowActive: false,
 };
 
 type MessageListener = (e: MessageObject) => Promise<void>;
@@ -63,15 +65,20 @@ export class WalletService {
           }
           default:
         }
-        this.state.walletOpen = false;
-        this.walletWindow?.close();
-        this.walletWindow = null;
-        window.removeEventListener('message', this.boundMessageListener, false);
         if (this.eventListeners[e.data.message]) this.eventListeners[e.data.message]({ ...this.state, message: e.data });
-        this.updateState();
+        this.closeWindow();
       }
     };
     this.boundMessageListener = this.messageListener.bind(this);
+  }
+
+  closeWindow() {
+    this.state.walletOpen = false;
+    this.state.walletWindowActive = false;
+    this.walletWindow?.close();
+    this.walletWindow = null;
+    window.removeEventListener('message', this.boundMessageListener, false);
+    this.updateState();
   }
 
   setWalletUrl(url: string) {
@@ -172,6 +179,7 @@ export class WalletService {
     window.addEventListener('message', this.boundMessageListener, false);
     this.state.walletOpen = true;
     this.updateState();
+    this.pollForOpenWindow();
     if (payload) {
       const { origin } = new URL(this.walletUrl);
       const listener = (e: MessageObject) => {
@@ -188,6 +196,24 @@ export class WalletService {
         }
       };
       window.addEventListener('message', listener, false);
+    }
+  }
+
+  pollForOpenWindow(): void {
+    if (this.state.walletOpen) {
+      if (!this.state.walletWindowActive) {
+        // have to check for actual open walletWindow here because popup blocker could cause it to be null until actually opened
+        if (this.walletWindow) {
+          this.state.walletWindowActive = true;
+        }
+      }
+      if (this.state.walletWindowActive) {
+        if (!this.walletWindow || this.walletWindow.closed) {
+          this.closeWindow();
+          return;
+        }
+      }
+      setTimeout(() => this.pollForOpenWindow(), 100);
     }
   }
 }
