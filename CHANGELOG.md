@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Check for values in return message before updating state in `WalletService.messageListener`. Due to a previous update wallet state was being overwritten with empty values after transaction.
+
 ## 0.11.0
 
 ### Changed
