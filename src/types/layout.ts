@@ -28,4 +28,5 @@ export type GlobalDisplay = {
   memo: string;
   fee: CoinAsObject;
   balance: CoinAsObject;
+  estimatedValue: CoinAsObject;
 };

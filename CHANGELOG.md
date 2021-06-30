@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.12.0
+
+### Added
+
+- `estimatedValue` shows the total estimated value of the coin in a transaction and can be passed as a stringified CoinAsObject in the query param to be displayed in the layout
+
 ## 0.11.0
 
 ### Changed

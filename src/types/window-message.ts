@@ -15,6 +15,7 @@ export type QueryParams = {
   isWindow?: string;
   address?: string;
   memo?: string;
+  estimatedValue?: string;
 };
 
 export type SignQueryParams = {
