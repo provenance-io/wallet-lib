@@ -41,7 +41,7 @@ export const MSG_SEND_LAYOUT: { MsgSend: MsgSendLayout } = {
     },
     {
       dataKey: 'estimatedValue',
-      displayType: 'String',
+      displayType: 'Coin',
       label: 'Estimated Value',
     },
   ],
