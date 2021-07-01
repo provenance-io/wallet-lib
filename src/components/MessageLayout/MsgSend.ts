@@ -25,6 +25,11 @@ export const MSG_SEND_LAYOUT: { MsgSend: MsgSendLayout } = {
       label: 'Sending Amount',
     },
     {
+      dataKey: 'estimatedValue',
+      displayType: 'Coin',
+      label: 'Estimated Value',
+    },
+    {
       dataKey: 'memo',
       displayType: 'String',
       label: 'Memo',
@@ -38,11 +43,6 @@ export const MSG_SEND_LAYOUT: { MsgSend: MsgSendLayout } = {
       dataKey: 'balance',
       displayType: 'Coins',
       label: 'Account Balance',
-    },
-    {
-      dataKey: 'estimatedValue',
-      displayType: 'Coin',
-      label: 'Estimated Value',
     },
   ],
 };
