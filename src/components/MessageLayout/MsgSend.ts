@@ -39,5 +39,10 @@ export const MSG_SEND_LAYOUT: { MsgSend: MsgSendLayout } = {
       displayType: 'Coins',
       label: 'Account Balance',
     },
+    {
+      dataKey: 'estimatedValue',
+      displayType: 'Coin',
+      label: 'Estimated Value',
+    },
   ],
 };
