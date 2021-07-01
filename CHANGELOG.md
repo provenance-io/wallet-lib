@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.12.2
+
+### Fixed
+
+- MsgSend layout fix to reorder `estimatedValue` after `amountList`
+
 ## 0.12.1
 
 ### Fixed
