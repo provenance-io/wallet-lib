@@ -60,8 +60,10 @@ export class WalletService {
           case WINDOW_MESSAGES.CONNECTED: {
             WALLET_KEYS.forEach((key) => {
               const val = (e.data as any)[key] || '';
-              this.state[key] = val;
-              sessionStorage.setItem(key, val);
+              if (val) {
+                this.state[key] = val;
+                sessionStorage.setItem(key, val);
+              }
               delete (e.data as any)[key];
             });
             break;
