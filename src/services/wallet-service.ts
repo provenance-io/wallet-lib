@@ -156,6 +156,13 @@ export class WalletService {
     );
   }
 
+  /**
+   * Send a payload to the wallet to be signed
+   *
+   * @remarks
+   * After signing, the signed payload can be accessed by subscribing to the {@link WINDOW_MESSAGES.SIGNATURE_COMPLETE} event
+   *
+   */
   sign({ payload, ...tx }: SignQueryParams) {
     this.openWallet(
       `/sign?${new URLSearchParams({
