@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Autogenerate docs whenever code is merged to main [#25](https://github.com/provenance-io/wallet-lib/issues/25)
+
 ## 0.12.2
 
 ### Fixed
