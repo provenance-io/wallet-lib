@@ -17,6 +17,7 @@
     "build:esm": "BABEL_ENV=esm babel src -d esm --extensions \".ts,.js,.tsx\" --copy-files --ignore \"src/**/*.stories.tsx,src/**/*.d.ts,src/**/*/*.stories.ts\"",
     "build:commonjs": "BABEL_ENV=cjs babel ./src --extensions \".ts,.js,.tsx\" -d lib --copy-files --ignore \"src/**/*.stories.tsx,src/**/*.d.ts,src/**/*/*.stories.ts\"",
     "build-protos": "bash ./scripts/build-protos.sh",
+    "docs": "npx typedoc src/index.ts",
     "schema-to-ts": "json2ts -i third_party/schema -o src/types/schema/",
     "watch": "chokidar \"src/**/*.ts\" \"src/**/*.tsx\" -c \"npm run build:commonjs && npm run build:esm && npm run tsc:esm && npm run tsc:commonjs && npm run lint\"",
     "tsc:esm": "tsc --module es2015 --outDir esm",
@@ -100,6 +101,7 @@
     "google-protobuf": "3.16.0",
     "grpc-tools": "1.11.1",
     "grpc-web": "1.2.1",
-    "secp256k1": "4.0.2"
+    "secp256k1": "4.0.2",
+    "typedoc": "0.21.4"
   }
 }
