@@ -1,0 +1,596 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>MessageService | @provenanceio/wallet-lib</title>
+	<meta name="description" content="Documentation for @provenanceio/wallet-lib">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@provenanceio/wallet-lib</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">@provenanceio/wallet-lib</a>
+				</li>
+				<li>
+					<a href="MessageService.html">MessageService</a>
+				</li>
+			</ul>
+			<h1>Class MessageService</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">MessageService</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="MessageService.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="MessageService.html#decoder" class="tsd-kind-icon">decoder</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="MessageService.html#encoder" class="tsd-kind-icon">encoder</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#buildAuthInfo" class="tsd-kind-icon">build<wbr>Auth<wbr>Info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#buildBroadcastTxRequest" class="tsd-kind-icon">build<wbr>Broadcast<wbr>TxRequest</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#buildMessage" class="tsd-kind-icon">build<wbr>Message</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#buildSignDoc" class="tsd-kind-icon">build<wbr>Sign<wbr>Doc</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#buildSignerInfo" class="tsd-kind-icon">build<wbr>Signer<wbr>Info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#buildSimulateRequest" class="tsd-kind-icon">build<wbr>Simulate<wbr>Request</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#buildTxBody" class="tsd-kind-icon">build<wbr>TxBody</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#createAnyMessageBase64" class="tsd-kind-icon">create<wbr>Any<wbr>Message<wbr>Base64</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#msgAnyB64toAny" class="tsd-kind-icon">msg<wbr>Any<wbr>B64to<wbr>Any</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#sha256" class="tsd-kind-icon">sha256</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#signBytes" class="tsd-kind-icon">sign<wbr>Bytes</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="MessageService.html#unpackDisplayObjectFromWalletMessage" class="tsd-kind-icon">unpack<wbr>Display<wbr>Object<wbr>From<wbr>Wallet<wbr>Message</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Message<wbr>Service<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="MessageService.html" class="tsd-signature-type" data-tsd-kind="Class">MessageService</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="MessageService.html" class="tsd-signature-type" data-tsd-kind="Class">MessageService</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="decoder" class="tsd-anchor"></a>
+					<h3>decoder</h3>
+					<div class="tsd-signature tsd-kind-icon">decoder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TextDecoder</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L185">src/services/message-service.ts:185</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="encoder" class="tsd-anchor"></a>
+					<h3>encoder</h3>
+					<div class="tsd-signature tsd-kind-icon">encoder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TextEncoder</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L184">src/services/message-service.ts:184</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="buildAuthInfo" class="tsd-anchor"></a>
+					<h3>build<wbr>Auth<wbr>Info</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Auth<wbr>Info<span class="tsd-signature-symbol">(</span>signerInfo<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignerInfo</span>, feeDenom<span class="tsd-signature-symbol">: </span><a href="../modules.html#SupportedDenoms" class="tsd-signature-type" data-tsd-kind="Type alias">SupportedDenoms</a>, feeAmount<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, feeAdjustment<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, gasPrice<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AuthInfo</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L505">src/services/message-service.ts:505</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>signerInfo: <span class="tsd-signature-type">SignerInfo</span></h5>
+								</li>
+								<li>
+									<h5>feeDenom: <a href="../modules.html#SupportedDenoms" class="tsd-signature-type" data-tsd-kind="Type alias">SupportedDenoms</a></h5>
+								</li>
+								<li>
+									<h5>feeAmount: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
+								</li>
+								<li>
+									<h5>feeAdjustment: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1.25</span></h5>
+								</li>
+								<li>
+									<h5>gasPrice: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1905.0</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">AuthInfo</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="buildBroadcastTxRequest" class="tsd-anchor"></a>
+					<h3>build<wbr>Broadcast<wbr>TxRequest</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Broadcast<wbr>TxRequest<span class="tsd-signature-symbol">(</span>msgAny<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Any</span>, account<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BaseAccount</span>, chainId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, wallet<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Wallet</span>, feeEstimate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, memo<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, feeDenom<span class="tsd-signature-symbol">?: </span><a href="../modules.html#SupportedDenoms" class="tsd-signature-type" data-tsd-kind="Type alias">SupportedDenoms</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="BroadcastTxRequest.html" class="tsd-signature-type" data-tsd-kind="Class">BroadcastTxRequest</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L461">src/services/message-service.ts:461</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>msgAny: <span class="tsd-signature-type">Any</span></h5>
+								</li>
+								<li>
+									<h5>account: <span class="tsd-signature-type">BaseAccount</span></h5>
+								</li>
+								<li>
+									<h5>chainId: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>wallet: <span class="tsd-signature-type">Wallet</span></h5>
+								</li>
+								<li>
+									<h5>feeEstimate: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>memo: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &#x27;&#x27;</span></h5>
+								</li>
+								<li>
+									<h5>feeDenom: <a href="../modules.html#SupportedDenoms" class="tsd-signature-type" data-tsd-kind="Type alias">SupportedDenoms</a><span class="tsd-signature-symbol"> = &#x27;nhash&#x27;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="BroadcastTxRequest.html" class="tsd-signature-type" data-tsd-kind="Class">BroadcastTxRequest</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="buildMessage" class="tsd-anchor"></a>
+					<h3>build<wbr>Message</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Message<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a>, params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><a href="../modules.html#MsgExecuteContractParams" class="tsd-signature-type" data-tsd-kind="Type alias">MsgExecuteContractParams</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#MsgSubmitEvidenceDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">MsgSubmitEvidenceDisplay</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#MsgCreateValidatorDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">MsgCreateValidatorDisplay</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L191">src/services/message-service.ts:191</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a></h5>
+								</li>
+								<li>
+									<h5>params: <span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> | </span><a href="../modules.html#MsgExecuteContractParams" class="tsd-signature-type" data-tsd-kind="Type alias">MsgExecuteContractParams</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#MsgSubmitEvidenceDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">MsgSubmitEvidenceDisplay</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#MsgCreateValidatorDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">MsgCreateValidatorDisplay</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Message</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="buildSignDoc" class="tsd-anchor"></a>
+					<h3>build<wbr>Sign<wbr>Doc</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Sign<wbr>Doc<span class="tsd-signature-symbol">(</span>accNumber<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, chainId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, txRaw<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxRaw</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignDoc</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L531">src/services/message-service.ts:531</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>accNumber: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>chainId: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>txRaw: <span class="tsd-signature-type">TxRaw</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SignDoc</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="buildSignerInfo" class="tsd-anchor"></a>
+					<h3>build<wbr>Signer<wbr>Info</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Signer<wbr>Info<span class="tsd-signature-symbol">(</span>baseAccount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BaseAccount</span>, pubKeyBytes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignerInfo</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L487">src/services/message-service.ts:487</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>baseAccount: <span class="tsd-signature-type">BaseAccount</span></h5>
+								</li>
+								<li>
+									<h5>pubKeyBytes: <span class="tsd-signature-type">Uint8Array</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SignerInfo</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="buildSimulateRequest" class="tsd-anchor"></a>
+					<h3>build<wbr>Simulate<wbr>Request</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Simulate<wbr>Request<span class="tsd-signature-symbol">(</span>msgAny<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Any</span>, account<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">BaseAccount</span>, chainId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, wallet<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Wallet</span>, memo<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, feeDenom<span class="tsd-signature-symbol">?: </span><a href="../modules.html#SupportedDenoms" class="tsd-signature-type" data-tsd-kind="Type alias">SupportedDenoms</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="SimulateRequest.html" class="tsd-signature-type" data-tsd-kind="Class">SimulateRequest</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L434">src/services/message-service.ts:434</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>msgAny: <span class="tsd-signature-type">Any</span></h5>
+								</li>
+								<li>
+									<h5>account: <span class="tsd-signature-type">BaseAccount</span></h5>
+								</li>
+								<li>
+									<h5>chainId: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>wallet: <span class="tsd-signature-type">Wallet</span></h5>
+								</li>
+								<li>
+									<h5>memo: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &#x27;&#x27;</span></h5>
+								</li>
+								<li>
+									<h5>feeDenom: <a href="../modules.html#SupportedDenoms" class="tsd-signature-type" data-tsd-kind="Type alias">SupportedDenoms</a><span class="tsd-signature-symbol"> = &#x27;nhash&#x27;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="SimulateRequest.html" class="tsd-signature-type" data-tsd-kind="Class">SimulateRequest</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="buildTxBody" class="tsd-anchor"></a>
+					<h3>build<wbr>TxBody</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">build<wbr>TxBody<span class="tsd-signature-symbol">(</span>msgAny<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Any</span>, memo<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TxBody</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L522">src/services/message-service.ts:522</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>msgAny: <span class="tsd-signature-type">Any</span></h5>
+								</li>
+								<li>
+									<h5>memo: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TxBody</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="createAnyMessageBase64" class="tsd-anchor"></a>
+					<h3>create<wbr>Any<wbr>Message<wbr>Base64</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Any<wbr>Message<wbr>Base64<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a>, msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L393">src/services/message-service.ts:393</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a></h5>
+								</li>
+								<li>
+									<h5>msg: <span class="tsd-signature-type">Message</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="msgAnyB64toAny" class="tsd-anchor"></a>
+					<h3>msg<wbr>Any<wbr>B64to<wbr>Any</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">msg<wbr>Any<wbr>B64to<wbr>Any<span class="tsd-signature-symbol">(</span>msgAnyB64<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L187">src/services/message-service.ts:187</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>msgAnyB64: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="sha256" class="tsd-anchor"></a>
+					<h3>sha256</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">sha256<span class="tsd-signature-symbol">(</span>bytes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L547">src/services/message-service.ts:547</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>bytes: <span class="tsd-signature-type">Uint8Array</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="signBytes" class="tsd-anchor"></a>
+					<h3>sign<wbr>Bytes</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">sign<wbr>Bytes<span class="tsd-signature-symbol">(</span>bytes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span>, privateKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L540">src/services/message-service.ts:540</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>bytes: <span class="tsd-signature-type">Uint8Array</span></h5>
+								</li>
+								<li>
+									<h5>privateKey: <span class="tsd-signature-type">Uint8Array</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="unpackDisplayObjectFromWalletMessage" class="tsd-anchor"></a>
+					<h3>unpack<wbr>Display<wbr>Object<wbr>From<wbr>Wallet<wbr>Message</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">unpack<wbr>Display<wbr>Object<wbr>From<wbr>Wallet<wbr>Message<span class="tsd-signature-symbol">(</span>anyMsgBase64<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules.html#MsgExecuteContractDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">MsgExecuteContractDisplay</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>typeName<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#FallbackGenericMessageName" class="tsd-signature-type" data-tsd-kind="Type alias">FallbackGenericMessageName</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>typeName<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#FallbackGenericMessageName" class="tsd-signature-type" data-tsd-kind="Type alias">FallbackGenericMessageName</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="../modules.html#GenericDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">GenericDisplay</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>typeName<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#FallbackGenericMessageName" class="tsd-signature-type" data-tsd-kind="Type alias">FallbackGenericMessageName</a><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/d7c7a50/src/services/message-service.ts#L400">src/services/message-service.ts:400</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>anyMsgBase64: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules.html#MsgExecuteContractDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">MsgExecuteContractDisplay</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>typeName<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#FallbackGenericMessageName" class="tsd-signature-type" data-tsd-kind="Type alias">FallbackGenericMessageName</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>typeName<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#FallbackGenericMessageName" class="tsd-signature-type" data-tsd-kind="Type alias">FallbackGenericMessageName</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="../modules.html#GenericDisplay" class="tsd-signature-type" data-tsd-kind="Type alias">GenericDisplay</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>typeName<span class="tsd-signature-symbol">: </span><a href="../modules.html#ReadableMessageNames" class="tsd-signature-type" data-tsd-kind="Type alias">ReadableMessageNames</a><span class="tsd-signature-symbol"> | </span><a href="../modules.html#FallbackGenericMessageName" class="tsd-signature-type" data-tsd-kind="Type alias">FallbackGenericMessageName</a><span class="tsd-signature-symbol"> }</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
+						<a href="MessageService.html" class="tsd-kind-icon">Message<wbr>Service</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="MessageService.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="MessageService.html#decoder" class="tsd-kind-icon">decoder</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="MessageService.html#encoder" class="tsd-kind-icon">encoder</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#buildAuthInfo" class="tsd-kind-icon">build<wbr>Auth<wbr>Info</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#buildBroadcastTxRequest" class="tsd-kind-icon">build<wbr>Broadcast<wbr>TxRequest</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#buildMessage" class="tsd-kind-icon">build<wbr>Message</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#buildSignDoc" class="tsd-kind-icon">build<wbr>Sign<wbr>Doc</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#buildSignerInfo" class="tsd-kind-icon">build<wbr>Signer<wbr>Info</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#buildSimulateRequest" class="tsd-kind-icon">build<wbr>Simulate<wbr>Request</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#buildTxBody" class="tsd-kind-icon">build<wbr>TxBody</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#createAnyMessageBase64" class="tsd-kind-icon">create<wbr>Any<wbr>Message<wbr>Base64</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#msgAnyB64toAny" class="tsd-kind-icon">msg<wbr>Any<wbr>B64to<wbr>Any</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#sha256" class="tsd-kind-icon">sha256</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#signBytes" class="tsd-kind-icon">sign<wbr>Bytes</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="MessageService.html#unpackDisplayObjectFromWalletMessage" class="tsd-kind-icon">unpack<wbr>Display<wbr>Object<wbr>From<wbr>Wallet<wbr>Message</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
