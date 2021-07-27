@@ -2,6 +2,9 @@ import { WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants/window-message';
 
 export type MessageParams = {
   origin: string;
+  keychainAccountName?: string;
+  isWindow?: string;
+  address?: string;
 };
 
 export type AtsQueryParams = {
@@ -11,22 +14,16 @@ export type AtsQueryParams = {
 export type QueryParams = {
   [key: string]: string | undefined;
   msgAnyB64: string;
-  keychainAccountName?: string;
-  isWindow?: string;
-  address?: string;
   memo?: string;
   estimatedValue?: string;
-};
+} & MessageParams;
 
 export type SignQueryParams = {
   payload: string | Uint8Array;
   description: string;
   title?: string;
-  keychainAccountName?: string;
-  isWindow?: string;
-  address?: string;
   id?: string;
-};
+} & MessageParams;
 
 export type ConnectedMessageData = {
   address: string;

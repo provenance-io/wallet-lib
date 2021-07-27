@@ -1,6 +1,14 @@
 # CHANGELOG
 
-## Unreleased
+## 0.13.0
+
+### Changed
+
+- Query param types reorganized for better readability in functions.
+
+### Fixed
+
+- `WalletService.initialize` now updates `sessionStorage`
 
 ### Added
 
