@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Changed
+
+- Query param types reorganized for better readability in functions.
+
+### Fixed
+
+- `WalletService.initialize` now updates `sessionStorage`
+
 ### Added
 
 - Autogenerate docs whenever code is merged to main [#25](https://github.com/provenance-io/wallet-lib/issues/25)
