@@ -1,4 +1,4 @@
-import { ConnectedMessageData, QueryParams, SignQueryParams, WindowMessage } from '../types';
+import { ConnectedMessageData, MessageParams, QueryParams, SignQueryParams, WindowMessage } from '../types';
 import { WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants';
 
 export type WalletState = Required<ConnectedMessageData> & {
@@ -77,7 +77,7 @@ export class WalletService {
     this.boundMessageListener = this.messageListener.bind(this);
   }
 
-  closeWindow() {
+  private closeWindow() {
     this.state.walletOpen = false;
     this.state.walletWindowActive = false;
     this.walletWindow?.close();
@@ -126,12 +126,24 @@ export class WalletService {
     );
   }
 
+  /**
+   * Initialize the wallet if address and keychainAccountName (optional) is known.
+   *
+   * @remarks
+   * Make sure a {@link WalletService} instance has been created via {@link useWalletService} or the constructor.
+   */
   initialize({ keychainAccountName = '', address }: { keychainAccountName?: string; address: string }): void {
     this.state = {
       ...this.state,
       address,
       keychainAccountName,
     };
+    WALLET_KEYS.forEach((key) => {
+      const val = this.state[key];
+      if (val) {
+        sessionStorage.setItem(key, val);
+      }
+    });
     this.updateState();
   }
 
@@ -144,7 +156,17 @@ export class WalletService {
     this.updateState();
   }
 
-  transaction(tx: QueryParams) {
+  /**
+   * Initiate a transaction, submitting any message to be signed.
+   * Message needs to be a base64 string.
+   * Use {@link MessageService.buildMessage} to build message.
+   * Use {@link MessageService.createAnyMessageBase64} to turn message in a base64 string that is ready to be consumed here.
+   *
+   * @remarks
+   * Requires wallet to be initialized via {@link connect} or {@link initialize}
+   * After signing, the signed payload can be accessed by subscribing to the {@link WINDOW_MESSAGES.TRANSACTION_COMPLETE} event via {@link addEventListener}
+   */
+  transaction(tx: Omit<QueryParams, keyof MessageParams>) {
     this.openWallet(
       `/transaction?${new URLSearchParams({
         ...tx,
@@ -160,10 +182,10 @@ export class WalletService {
    * Send a payload to the wallet to be signed
    *
    * @remarks
-   * After signing, the signed payload can be accessed by subscribing to the {@link WINDOW_MESSAGES.SIGNATURE_COMPLETE} event
-   *
+   * Requires wallet to be initialized via {@link connect} or {@link initialize}
+   * After signing, the signed payload can be accessed by subscribing to the {@link WINDOW_MESSAGES.SIGNATURE_COMPLETE} event via {@link addEventListener}
    */
-  sign({ payload, ...tx }: SignQueryParams) {
+  sign({ payload, ...tx }: Omit<SignQueryParams, keyof MessageParams>) {
     this.openWallet(
       `/sign?${new URLSearchParams({
         ...tx,
@@ -176,7 +198,7 @@ export class WalletService {
     );
   }
 
-  openWallet(url: string, payload?: string | Uint8Array): void {
+  private openWallet(url: string, payload?: string | Uint8Array): void {
     if (!this.walletUrl) throw new Error(`WalletService requires walletUrl to access browser wallet`);
     this.walletWindow?.close();
     const height = window.top.outerHeight < 750 ? window.top.outerHeight : 750;
@@ -211,7 +233,7 @@ export class WalletService {
     }
   }
 
-  pollForOpenWindow(): void {
+  private pollForOpenWindow(): void {
     if (this.state.walletOpen) {
       if (!this.state.walletWindowActive) {
         // have to check for actual open walletWindow here because popup blocker could cause it to be null until actually opened
