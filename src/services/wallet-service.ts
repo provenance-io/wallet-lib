@@ -127,16 +127,15 @@ export class WalletService {
   }
 
   /**
-   * Initialize the wallet if address and keychainAccountName (optional) is known.
+   * Initialize the wallet with the parameters returned from {@link connect}
    *
    * @remarks
    * Make sure a {@link WalletService} instance has been created via {@link useWalletService} or the constructor.
    */
-  initialize({ keychainAccountName = '', address }: { keychainAccountName?: string; address: string }): void {
+  initialize(state: { [key in keyof ConnectedMessageData]: string }): void {
     this.state = {
       ...this.state,
-      address,
-      keychainAccountName,
+      ...state,
     };
     WALLET_KEYS.forEach((key) => {
       const val = this.state[key];
