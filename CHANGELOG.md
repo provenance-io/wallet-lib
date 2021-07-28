@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.13.1
+
+- `WalletService.initialize` now takes all parameters returned from `WalletService.connect`
+
 ## 0.13.0
 
 ### Changed
