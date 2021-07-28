@@ -132,7 +132,7 @@ export class WalletService {
    * @remarks
    * Make sure a {@link WalletService} instance has been created via {@link useWalletService} or the constructor.
    */
-  initialize(state: { [key in keyof ConnectedMessageData]: string }): void {
+  initialize(state: ConnectedMessageData): void {
     this.state = {
       ...this.state,
       ...state,
