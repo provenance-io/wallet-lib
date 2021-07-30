@@ -1,30 +1,31 @@
+import Big from 'big.js';
 import { CoinAsObject, SupportedDenoms } from '../types';
 
 type DenomKeyObj = {
   [key in SupportedDenoms | string]: number;
 };
 
-type CoinDecimal = { denom: SupportedDenoms; decimal: number; decimalPlaces: number };
+type CoinDecimal = { denom: SupportedDenoms; decimal: Big; decimalPlaces: number };
 
 export const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
   nhash: {
     denom: 'hash',
-    decimal: 1e9,
+    decimal: Big(1e9),
     decimalPlaces: 9,
   },
   exchangesc: {
     denom: 'usd',
-    decimal: 1e2,
+    decimal: Big(1e2),
     decimalPlaces: 3,
   },
   cfigureomni: {
     denom: 'usd',
-    decimal: 1e2,
+    decimal: Big(1e2),
     decimalPlaces: 3,
   },
   cfigure: {
     denom: 'usd',
-    decimal: 1e2,
+    decimal: Big(1e2),
     decimalPlaces: 3,
   },
 };
@@ -35,7 +36,7 @@ export const coinDecimalConvert = (coin: CoinAsObject): CoinAsObject => {
   if (map) {
     return {
       denom: map.denom,
-      amount: (Number(amount) / map.decimal).toFixed(map.decimalPlaces),
+      amount: Big(amount).div(map.decimal).toFixed(map.decimalPlaces),
     };
   }
   return coin;
@@ -47,7 +48,7 @@ export const decimalCoinConvert = (coin: CoinAsObject): CoinAsObject => {
   if (map) {
     return {
       denom: map.denom,
-      amount: `${Number(amount) * map.decimal}`,
+      amount: Big(amount).times(map.decimal).toString(),
     };
   }
   return coin;
@@ -57,7 +58,7 @@ export const coinListToDenomKeyObj = (list: CoinAsObject[]) =>
   list.reduce((keyObj, coin) => {
     if (keyObj[coin.denom]) {
       // eslint-disable-next-line
-      keyObj[coin.denom] = Number(coin.amount) + Number(keyObj[coin.denom]);
+      keyObj[coin.denom] = Big(coin.amount).plus(keyObj[coin.denom]).toNumber();
       return keyObj;
     }
     return { ...keyObj, [coin.denom]: Number(coin.amount) };
