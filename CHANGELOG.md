@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.15.0
+
+### Added
+
+- Layout support for DCC smart contract
+- Denom support for DCC denoms
+
 ## 0.14.0
 
 ### Fixed
