@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { GlobalProps, LayoutDisplayTypes } from '../../types';
 import { MSG_SEND_LAYOUT } from './MsgSend';
-import { ATS_LAYOUT } from './MsgExecuteContract';
+import { ATS_LAYOUT, DIGITAL_CURRENCY_CONSORTIUM_LAYOUT } from './MsgExecuteContract';
 import { MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT } from './MsgExecuteContract/generic';
 import { MSG_GENERIC_LAYOUT } from './generic';
 
@@ -10,6 +10,7 @@ const Wrapper = styled.div``;
 
 export const LAYOUTS = {
   ...ATS_LAYOUT,
+  ...DIGITAL_CURRENCY_CONSORTIUM_LAYOUT,
   ...MSG_SEND_LAYOUT,
   ...MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT,
   ...MSG_GENERIC_LAYOUT,

@@ -16,17 +16,32 @@ export const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
   exchangesc: {
     denom: 'usd',
     decimal: Big(1e2),
-    decimalPlaces: 3,
+    decimalPlaces: 2,
   },
   cfigureomni: {
     denom: 'usd',
     decimal: Big(1e2),
-    decimalPlaces: 3,
+    decimalPlaces: 2,
   },
   cfigure: {
     denom: 'usd',
     decimal: Big(1e2),
-    decimalPlaces: 3,
+    decimalPlaces: 2,
+  },
+  'usdf.c': {
+    denom: 'usd',
+    decimal: Big(1e2),
+    decimalPlaces: 2,
+  },
+  'usdf.test': {
+    denom: 'usd',
+    decimal: Big(1e2),
+    decimalPlaces: 2,
+  },
+  'usdf.coin': {
+    denom: 'usd',
+    decimal: Big(1e2),
+    decimalPlaces: 2,
   },
 };
 
