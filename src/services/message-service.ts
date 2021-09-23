@@ -26,6 +26,7 @@ import {
   MsgBeginRedelegateDisplay,
   MsgUndelegateDisplay,
   MsgCreateVestingAccountDisplay,
+  MsgGrantDisplay,
 } from '../types';
 import type { ExecuteMsg as DigitalCurrencyConsortiumExecuteMsg } from '../types/schema/digital-currency-consortium/execute_msg';
 import { AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, Tx, TxBody, TxRaw } from '../proto/cosmos/tx/v1beta1/tx_pb';
@@ -35,7 +36,7 @@ import { Coin } from '../proto/cosmos/base/v1beta1/coin_pb';
 import { SignMode } from '../proto/cosmos/tx/signing/v1beta1/signing_pb';
 import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
 import { PubKey } from '../proto/cosmos/crypto/secp256k1/keys_pb';
-import { MsgExecuteContract } from '../proto/x/wasm/internal/types/tx_pb';
+import { MsgExecuteContract } from '../proto/cosmwasm/wasm/v1/tx_pb';
 import { MsgVerifyInvariant } from '../proto/cosmos/crisis/v1beta1/tx_pb';
 import {
   MsgSetWithdrawAddress,
@@ -57,12 +58,17 @@ import { MsgCreateVestingAccount } from '../proto/cosmos/vesting/v1beta1/tx_pb';
 import { CommissionRates, Description } from '../proto/cosmos/staking/v1beta1/staking_pb';
 import { Evidence, Validator } from '../proto/tendermint/abci/types_pb';
 import { Proposal } from '../proto/cosmos/gov/v1beta1/gov_pb';
+import { MsgGrant } from '../proto/cosmos/authz/v1beta1/tx_pb';
+import { Grant } from '../proto/cosmos/authz/v1beta1/authz_pb';
+import { MarkerTransferAuthorization } from '../proto/provenance/marker/v1/authz_pb';
 
 type SupportedMessageTypeNames =
   | 'tendermint.abci.Evidence'
   | 'cosmos.bank.v1beta1.MsgSend'
   | 'cosmos.gov.v1beta1.Proposal'
-  | 'cosmwasm.wasm.v1beta1.MsgExecuteContract'
+  | 'cosmwasm.wasm.v1.Tx.MsgExecuteContract'
+  | 'cosmos.authz.v1beta1.Tx.MsgGrant'
+  | 'io.provenance.marker.v1.MarkerTransferAuthorization'
   | 'cosmos.crisis.v1beta1.MsgVerifyInvariant'
   | 'cosmos.distribution.v1beta1.MsgSetWithdrawAddress'
   | 'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
@@ -87,6 +93,8 @@ export type ReadableMessageNames =
   | 'Proposal'
   | 'MsgSend'
   | 'MsgExecuteContract'
+  | 'MsgGrant'
+  | 'MarkerTransferAuthorization'
   | 'MsgVerifyInvariant'
   | 'MsgSetWithdrawAddress'
   | 'MsgWithdrawDelegatorReward'
@@ -110,7 +118,9 @@ const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessage
   PubKey: 'cosmos.crypto.secp256k1.PubKey',
   Proposal: 'cosmos.gov.v1beta1.Proposal',
   MsgSend: 'cosmos.bank.v1beta1.MsgSend',
-  MsgExecuteContract: 'cosmwasm.wasm.v1beta1.MsgExecuteContract',
+  MsgExecuteContract: 'cosmwasm.wasm.v1.Tx.MsgExecuteContract',
+  MsgGrant: 'cosmos.authz.v1beta1.Tx.MsgGrant',
+  MarkerTransferAuthorization: 'io.provenance.marker.v1.MarkerTransferAuthorization',
   MsgVerifyInvariant: 'cosmos.crisis.v1beta1.MsgVerifyInvariant',
   MsgSetWithdrawAddress: 'cosmos.distribution.v1beta1.MsgSetWithdrawAddress',
   MsgWithdrawDelegatorReward: 'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
@@ -133,7 +143,9 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.crypto.secp256k1.PubKey': PubKey,
   'cosmos.gov.v1beta1.Proposal': Proposal,
   'cosmos.bank.v1beta1.MsgSend': MsgSend,
-  'cosmwasm.wasm.v1beta1.MsgExecuteContract': MsgExecuteContract,
+  'cosmwasm.wasm.v1.Tx.MsgExecuteContract': MsgExecuteContract,
+  'cosmos.authz.v1beta1.Tx.MsgGrant': MsgGrant,
+  'io.provenance.marker.v1.MarkerTransferAuthorization': MarkerTransferAuthorization,
   'cosmos.crisis.v1beta1.MsgVerifyInvariant': MsgVerifyInvariant,
   'cosmos.distribution.v1beta1.MsgSetWithdrawAddress': MsgSetWithdrawAddress,
   'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward': MsgWithdrawDelegatorReward,
@@ -194,6 +206,7 @@ export class MessageService {
     params:
       | MsgSendDisplay
       | MsgExecuteContractParams
+      | MsgGrantDisplay
       | MsgVerifyInvariantDisplay
       | MsgSetWithdrawAddressDisplay
       | MsgWithdrawDelegatorRewardDisplay
@@ -219,6 +232,25 @@ export class MessageService {
           msgSend.addAmount(new Coin().setAmount(`${amount}`).setDenom(denom));
         });
         return msgSend;
+      }
+      case 'MsgGrant': {
+        const {
+          granter,
+          grantee,
+          transferLimit: { amount, denom },
+        } = params as MsgGrantDisplay;
+        log(`Building MsgGrant: ${granter} to ${grantee}`);
+        const authorization = new MarkerTransferAuthorization().addTransferLimit(new Coin().setAmount(`${amount}`).setDenom(denom));
+        const authorizationAny = new google_protobuf_any_pb.Any();
+        authorizationAny.pack(authorization.serializeBinary(), TYPE_NAMES_READABLE_MAP.MarkerTransferAuthorization, '/');
+        const date = new Date(Date.now());
+        date.setDate(date.getDate() + 1);
+        const timestamp = new Timestamp();
+        timestamp.fromDate(date);
+        return new MsgGrant()
+          .setGranter(granter)
+          .setGrantee(grantee)
+          .setGrant(new Grant().setExpiration(timestamp).setAuthorization(authorizationAny));
       }
       case 'MsgExecuteContract': {
         const { sender, contract, msg, fundsList } = params as MsgExecuteContractParams;
@@ -412,7 +444,7 @@ export class MessageService {
             typeName: 'MsgSend',
             ...(message as MsgSend).toObject(),
           };
-        case 'cosmwasm.wasm.v1beta1.MsgExecuteContract':
+        case 'cosmwasm.wasm.v1.Tx.MsgExecuteContract':
           return {
             typeName: 'MsgExecuteContractGeneric',
             sender: (message as MsgExecuteContract).getSender(),
@@ -433,7 +465,7 @@ export class MessageService {
   }
 
   buildSimulateRequest(
-    msgAny: google_protobuf_any_pb.Any,
+    msgAny: google_protobuf_any_pb.Any | google_protobuf_any_pb.Any[],
     account: BaseAccount,
     chainId: string,
     wallet: Wallet,
@@ -460,7 +492,7 @@ export class MessageService {
   }
 
   buildBroadcastTxRequest(
-    msgAny: google_protobuf_any_pb.Any,
+    msgAny: google_protobuf_any_pb.Any | google_protobuf_any_pb.Any[],
     account: BaseAccount,
     chainId: string,
     wallet: Wallet,
@@ -520,10 +552,11 @@ export class MessageService {
     return authInfo;
   }
 
-  buildTxBody(msgAny: google_protobuf_any_pb.Any, memo: string): TxBody {
+  buildTxBody(msgAny: google_protobuf_any_pb.Any | google_protobuf_any_pb.Any[], memo: string): TxBody {
     log('Build TxBody');
     const txBody = new TxBody();
-    txBody.addMessages(msgAny);
+    if (Array.isArray(msgAny)) txBody.setMessagesList(msgAny);
+    else txBody.addMessages(msgAny);
     txBody.setMemo(memo);
     // txBody.setTimeoutHeight();
     return txBody;
