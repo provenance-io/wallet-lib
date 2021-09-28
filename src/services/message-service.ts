@@ -482,12 +482,12 @@ export class MessageService {
     const signDoc = this.buildSignDoc(account.getAccountNumber(), chainId, txRaw);
     const signature = this.signBytes(signDoc.serializeBinary(), wallet.privateKey);
     txRaw.setSignaturesList([signature]);
-    const tx = new Tx();
-    tx.setBody(txBody);
-    tx.setAuthInfo(authInfo);
-    tx.setSignaturesList([signature]);
+    // const tx = new Tx();
+    // tx.setBody(txBody);
+    // tx.setAuthInfo(authInfo);
+    // tx.setSignaturesList([signature, signature]);
     const simulateRequest = new SimulateRequest();
-    simulateRequest.setTx(tx);
+    simulateRequest.setTxBytes(txRaw.serializeBinary());
     return simulateRequest;
   }
 

@@ -11,6 +11,13 @@ export type AtsQueryParams = {
   atsVersion?: string;
 };
 
+export type TransactionParams = {
+  [key: string]: string | string[] | undefined;
+  msgAnyB64: string | string[];
+  memo?: string;
+  estimatedValue?: string;
+};
+
 export type QueryParams = {
   [key: string]: string | undefined;
   msgAnyB64: string;
