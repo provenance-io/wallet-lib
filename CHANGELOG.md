@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.0.0
+
+### This is a breaking change for provenance 1.7
+
+### Changed
+
+- Updated protos
+
+### Added
+
+- Multiple message support. `WalletService.transaction` now supports an array of message strings
+- Support for `MsgGrant`
+
 ## 0.15.0
 
 ### Added
