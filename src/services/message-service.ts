@@ -61,14 +61,18 @@ import { Proposal } from '../proto/cosmos/gov/v1beta1/gov_pb';
 import { MsgGrant } from '../proto/cosmos/authz/v1beta1/tx_pb';
 import { Grant } from '../proto/cosmos/authz/v1beta1/authz_pb';
 import { MarkerTransferAuthorization } from '../proto/provenance/marker/v1/authz_pb';
+import { MsgWriteScopeRequest, MsgWriteSessionRequest, MsgWriteRecordRequest } from '../proto/provenance/metadata/v1/tx_pb';
 
 type SupportedMessageTypeNames =
   | 'tendermint.abci.Evidence'
   | 'cosmos.bank.v1beta1.MsgSend'
   | 'cosmos.gov.v1beta1.Proposal'
-  | 'cosmwasm.wasm.v1.Tx.MsgExecuteContract'
-  | 'cosmos.authz.v1beta1.Tx.MsgGrant'
-  | 'io.provenance.marker.v1.MarkerTransferAuthorization'
+  | 'cosmwasm.wasm.v1.MsgExecuteContract'
+  | 'cosmos.authz.v1beta1.MsgGrant'
+  | 'provenance.marker.v1.MarkerTransferAuthorization'
+  | 'provenance.metadata.v1.MsgWriteScopeRequest'
+  | 'provenance.metadata.v1.MsgWriteSessionRequest'
+  | 'provenance.metadata.v1.MsgWriteRecordRequest'
   | 'cosmos.crisis.v1beta1.MsgVerifyInvariant'
   | 'cosmos.distribution.v1beta1.MsgSetWithdrawAddress'
   | 'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
@@ -95,6 +99,9 @@ export type ReadableMessageNames =
   | 'MsgExecuteContract'
   | 'MsgGrant'
   | 'MarkerTransferAuthorization'
+  | 'MsgWriteScopeRequest'
+  | 'MsgWriteSessionRequest'
+  | 'MsgWriteRecordRequest'
   | 'MsgVerifyInvariant'
   | 'MsgSetWithdrawAddress'
   | 'MsgWithdrawDelegatorReward'
@@ -118,9 +125,12 @@ const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessage
   PubKey: 'cosmos.crypto.secp256k1.PubKey',
   Proposal: 'cosmos.gov.v1beta1.Proposal',
   MsgSend: 'cosmos.bank.v1beta1.MsgSend',
-  MsgExecuteContract: 'cosmwasm.wasm.v1.Tx.MsgExecuteContract',
-  MsgGrant: 'cosmos.authz.v1beta1.Tx.MsgGrant',
-  MarkerTransferAuthorization: 'io.provenance.marker.v1.MarkerTransferAuthorization',
+  MsgExecuteContract: 'cosmwasm.wasm.v1.MsgExecuteContract',
+  MsgGrant: 'cosmos.authz.v1beta1.MsgGrant',
+  MarkerTransferAuthorization: 'provenance.marker.v1.MarkerTransferAuthorization',
+  MsgWriteRecordRequest: 'provenance.metadata.v1.MsgWriteRecordRequest',
+  MsgWriteScopeRequest: 'provenance.metadata.v1.MsgWriteScopeRequest',
+  MsgWriteSessionRequest: 'provenance.metadata.v1.MsgWriteSessionRequest',
   MsgVerifyInvariant: 'cosmos.crisis.v1beta1.MsgVerifyInvariant',
   MsgSetWithdrawAddress: 'cosmos.distribution.v1beta1.MsgSetWithdrawAddress',
   MsgWithdrawDelegatorReward: 'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward',
@@ -143,9 +153,12 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.crypto.secp256k1.PubKey': PubKey,
   'cosmos.gov.v1beta1.Proposal': Proposal,
   'cosmos.bank.v1beta1.MsgSend': MsgSend,
-  'cosmwasm.wasm.v1.Tx.MsgExecuteContract': MsgExecuteContract,
-  'cosmos.authz.v1beta1.Tx.MsgGrant': MsgGrant,
-  'io.provenance.marker.v1.MarkerTransferAuthorization': MarkerTransferAuthorization,
+  'cosmwasm.wasm.v1.MsgExecuteContract': MsgExecuteContract,
+  'cosmos.authz.v1beta1.MsgGrant': MsgGrant,
+  'provenance.marker.v1.MarkerTransferAuthorization': MarkerTransferAuthorization,
+  'provenance.metadata.v1.MsgWriteSessionRequest': MsgWriteSessionRequest,
+  'provenance.metadata.v1.MsgWriteScopeRequest': MsgWriteScopeRequest,
+  'provenance.metadata.v1.MsgWriteRecordRequest': MsgWriteRecordRequest,
   'cosmos.crisis.v1beta1.MsgVerifyInvariant': MsgVerifyInvariant,
   'cosmos.distribution.v1beta1.MsgSetWithdrawAddress': MsgSetWithdrawAddress,
   'cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward': MsgWithdrawDelegatorReward,
@@ -240,10 +253,11 @@ export class MessageService {
           transferLimit: { amount, denom },
         } = params as MsgGrantDisplay;
         log(`Building MsgGrant: ${granter} to ${grantee}`);
-        const authorization = new MarkerTransferAuthorization().addTransferLimit(new Coin().setAmount(`${amount}`).setDenom(denom));
+        const authorization = new MarkerTransferAuthorization();
+        authorization.addTransferLimit(new Coin().setAmount(`${amount}`).setDenom(denom));
         const authorizationAny = new google_protobuf_any_pb.Any();
         authorizationAny.pack(authorization.serializeBinary(), TYPE_NAMES_READABLE_MAP.MarkerTransferAuthorization, '/');
-        const date = new Date(Date.now());
+        const date = new Date();
         date.setDate(date.getDate() + 1);
         const timestamp = new Timestamp();
         timestamp.fromDate(date);
@@ -444,7 +458,7 @@ export class MessageService {
             typeName: 'MsgSend',
             ...(message as MsgSend).toObject(),
           };
-        case 'cosmwasm.wasm.v1.Tx.MsgExecuteContract':
+        case 'cosmwasm.wasm.v1.MsgExecuteContract':
           return {
             typeName: 'MsgExecuteContractGeneric',
             sender: (message as MsgExecuteContract).getSender(),
