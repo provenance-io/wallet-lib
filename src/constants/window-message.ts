@@ -11,3 +11,5 @@ export enum WINDOW_MESSAGES {
 export enum WALLET_MESSAGES {
   PAYLOAD = 'PAYLOAD',
 }
+
+export const MULTIPLE_MESSAGE_DELIMITER = '_';

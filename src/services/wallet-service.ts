@@ -1,5 +1,5 @@
-import { ConnectedMessageData, MessageParams, QueryParams, SignQueryParams, WindowMessage } from '../types';
-import { WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants';
+import { ConnectedMessageData, MessageParams, QueryParams, SignQueryParams, TransactionParams, WindowMessage } from '../types';
+import { MULTIPLE_MESSAGE_DELIMITER, WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants';
 
 export type WalletState = Required<ConnectedMessageData> & {
   walletOpen: boolean;
@@ -165,10 +165,15 @@ export class WalletService {
    * Requires wallet to be initialized via {@link connect} or {@link initialize}
    * After signing, the signed payload can be accessed by subscribing to the {@link WINDOW_MESSAGES.TRANSACTION_COMPLETE} event via {@link addEventListener}
    */
-  transaction(tx: Omit<QueryParams, keyof MessageParams>) {
+  transaction({ msgAnyB64, ...rest }: TransactionParams) {
+    let msg: string;
+    if (Array.isArray(msgAnyB64)) {
+      msg = msgAnyB64.join(MULTIPLE_MESSAGE_DELIMITER);
+    } else msg = msgAnyB64;
     this.openWallet(
       `/transaction?${new URLSearchParams({
-        ...tx,
+        ...rest,
+        msgAnyB64: msg,
         keychainAccountName: this.state.keychainAccountName,
         address: this.state.address,
         isWindow: 'true',
