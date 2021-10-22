@@ -5,7 +5,7 @@ type DenomKeyObj = {
   [key in SupportedDenoms | string]: number;
 };
 
-type CoinDecimal = { denom: SupportedDenoms; decimal: Big; decimalPlaces: number };
+type CoinDecimal = { denom: SupportedDenoms; decimal: Big; decimalPlaces: number; fractionalDecimalPlaces?: number };
 
 export const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
   nhash: {
@@ -17,41 +17,49 @@ export const COIN_DECIMAL_MAP: { [key in SupportedDenoms]?: CoinDecimal } = {
     denom: 'usd',
     decimal: Big(1e2),
     decimalPlaces: 2,
+    fractionalDecimalPlaces: 3,
   },
   cfigureomni: {
     denom: 'usd',
     decimal: Big(1e2),
     decimalPlaces: 2,
+    fractionalDecimalPlaces: 3,
   },
   cfigure: {
     denom: 'usd',
     decimal: Big(1e2),
     decimalPlaces: 2,
+    fractionalDecimalPlaces: 3,
   },
   'usdf.c': {
     denom: 'usd',
     decimal: Big(1e2),
     decimalPlaces: 2,
+    fractionalDecimalPlaces: 3,
   },
   'usdf.test': {
     denom: 'usd',
     decimal: Big(1e2),
     decimalPlaces: 2,
+    fractionalDecimalPlaces: 3,
   },
   'usdf.coin': {
     denom: 'usd',
     decimal: Big(1e2),
     decimalPlaces: 2,
+    fractionalDecimalPlaces: 3,
   },
 };
 
-export const coinDecimalConvert = (coin: CoinAsObject): CoinAsObject => {
+export const coinDecimalConvert = (coin: CoinAsObject, showFractional = false): CoinAsObject => {
   const { denom, amount } = coin;
   const map = COIN_DECIMAL_MAP[denom as keyof typeof COIN_DECIMAL_MAP];
   if (map) {
     return {
       denom: map.denom,
-      amount: Big(amount).div(map.decimal).toFixed(map.decimalPlaces),
+      amount: Big(amount)
+        .div(map.decimal)
+        .toFixed(showFractional ? map.fractionalDecimalPlaces || map.decimalPlaces : map.decimalPlaces),
     };
   }
   return coin;
