@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.1
+
+### Changed
+
+- `coinDecimalConvert` now has `showFractional` param to display optional fractional decimal values
+
 ## 1.0.0
 
 ### This is a breaking change for provenance 1.7
