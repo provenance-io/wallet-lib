@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.2
+
+### Changed
+
+- `MsgExecuteContract` layout now supports `Disclaimer`
+
 ## 1.0.1
 
 ### Changed

@@ -18,6 +18,9 @@ export type LayoutDisplayComponentProps = {
   Coins: {
     data: CoinAsObject[];
   } & SharedComponentProps;
+  Disclaimer: {
+    data: string;
+  } & SharedComponentProps;
 };
 
 export type LayoutDisplayTypes = keyof LayoutDisplayComponentProps;
@@ -26,6 +29,7 @@ export type GlobalDisplay = {
   '*': any;
   status: string;
   memo: string;
+  disclaimer?: string;
   fee: CoinAsObject;
   balance: CoinAsObject;
   estimatedValue: CoinAsObject;
