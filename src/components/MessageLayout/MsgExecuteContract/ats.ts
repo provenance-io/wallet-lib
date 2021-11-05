@@ -135,6 +135,10 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       displayType: 'Coin',
       label: 'Fee',
     },
+    {
+      dataKey: 'disclaimer',
+      displayType: 'Disclaimer',
+    },
   ],
   'MsgExecuteContract.ExecuteMsg.create_bid': [
     {
@@ -177,6 +181,10 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       displayType: 'Coin',
       label: 'Fee',
     },
+    {
+      dataKey: 'disclaimer',
+      displayType: 'Disclaimer',
+    },
   ],
   'MsgExecuteContract.ExecuteMsg.cancel_bid': [
     {
@@ -204,6 +212,10 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       displayType: 'Coin',
       label: 'Fee',
     },
+    {
+      dataKey: 'disclaimer',
+      displayType: 'Disclaimer',
+    },
   ],
   'MsgExecuteContract.ExecuteMsg.cancel_ask': [
     {
@@ -230,6 +242,10 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       dataKey: 'fee',
       displayType: 'Coin',
       label: 'Fee',
+    },
+    {
+      dataKey: 'disclaimer',
+      displayType: 'Disclaimer',
     },
   ],
 };
