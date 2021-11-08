@@ -61,6 +61,7 @@ import { Proposal } from '../proto/cosmos/gov/v1beta1/gov_pb';
 import { MsgGrant } from '../proto/cosmos/authz/v1beta1/tx_pb';
 import { Grant } from '../proto/cosmos/authz/v1beta1/authz_pb';
 import { MarkerTransferAuthorization } from '../proto/provenance/marker/v1/authz_pb';
+import { MsgAddMarkerRequest, MsgFinalizeRequest, MsgActivateRequest } from '../proto/provenance/marker/v1/tx_pb';
 import { MsgWriteScopeRequest, MsgWriteSessionRequest, MsgWriteRecordRequest } from '../proto/provenance/metadata/v1/tx_pb';
 
 type SupportedMessageTypeNames =
@@ -70,6 +71,9 @@ type SupportedMessageTypeNames =
   | 'cosmwasm.wasm.v1.MsgExecuteContract'
   | 'cosmos.authz.v1beta1.MsgGrant'
   | 'provenance.marker.v1.MarkerTransferAuthorization'
+  | 'provenance.marker.v1.MsgAddMarkerRequest'
+  | 'provenance.marker.v1.MsgFinalizeRequest'
+  | 'provenance.marker.v1.MsgActivateRequest'
   | 'provenance.metadata.v1.MsgWriteScopeRequest'
   | 'provenance.metadata.v1.MsgWriteSessionRequest'
   | 'provenance.metadata.v1.MsgWriteRecordRequest'
@@ -99,6 +103,9 @@ export type ReadableMessageNames =
   | 'MsgExecuteContract'
   | 'MsgGrant'
   | 'MarkerTransferAuthorization'
+  | 'MsgAddMarkerRequest'
+  | 'MsgFinalizeRequest'
+  | 'MsgActivateRequest'
   | 'MsgWriteScopeRequest'
   | 'MsgWriteSessionRequest'
   | 'MsgWriteRecordRequest'
@@ -128,6 +135,9 @@ const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessage
   MsgExecuteContract: 'cosmwasm.wasm.v1.MsgExecuteContract',
   MsgGrant: 'cosmos.authz.v1beta1.MsgGrant',
   MarkerTransferAuthorization: 'provenance.marker.v1.MarkerTransferAuthorization',
+  MsgAddMarkerRequest: 'provenance.marker.v1.MsgAddMarkerRequest',
+  MsgFinalizeRequest: 'provenance.marker.v1.MsgFinalizeRequest',
+  MsgActivateRequest: 'provenance.marker.v1.MsgActivateRequest',
   MsgWriteRecordRequest: 'provenance.metadata.v1.MsgWriteRecordRequest',
   MsgWriteScopeRequest: 'provenance.metadata.v1.MsgWriteScopeRequest',
   MsgWriteSessionRequest: 'provenance.metadata.v1.MsgWriteSessionRequest',
@@ -156,6 +166,9 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmwasm.wasm.v1.MsgExecuteContract': MsgExecuteContract,
   'cosmos.authz.v1beta1.MsgGrant': MsgGrant,
   'provenance.marker.v1.MarkerTransferAuthorization': MarkerTransferAuthorization,
+  'provenance.marker.v1.MsgAddMarkerRequest': MsgAddMarkerRequest,
+  'provenance.marker.v1.MsgFinalizeRequest': MsgFinalizeRequest,
+  'provenance.marker.v1.MsgActivateRequest': MsgActivateRequest,
   'provenance.metadata.v1.MsgWriteSessionRequest': MsgWriteSessionRequest,
   'provenance.metadata.v1.MsgWriteScopeRequest': MsgWriteScopeRequest,
   'provenance.metadata.v1.MsgWriteRecordRequest': MsgWriteRecordRequest,
