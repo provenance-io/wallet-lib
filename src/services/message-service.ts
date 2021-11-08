@@ -446,7 +446,7 @@ export class MessageService {
         return msgCreateVestingAccount;
       }
       default:
-        throw new Error(`Message type: ${type} is not supported.`);
+        throw new Error(`Message type: ${type} is not supported for build.`);
     }
   }
 
@@ -488,7 +488,7 @@ export class MessageService {
           };
       }
     }
-    throw new Error(`Message type: ${typeName} is not supported.`);
+    throw new Error(`Message type: ${typeName} is not supported for display.`);
   }
 
   buildSimulateRequest(
