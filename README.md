@@ -16,7 +16,7 @@ For more information about [Provenance Inc](https://provenance.io) visit https:/
 Import the dependency
 
 ```bash
-npm install @provenaceio/wallet-lib --save
+npm install @provenanceio/wallet-lib --save
 ```
 
 ## Watch for changes and run build
