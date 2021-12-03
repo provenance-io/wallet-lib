@@ -151,7 +151,7 @@ export class WalletService {
     WALLET_KEYS.forEach((key) => {
       sessionStorage.removeItem(key);
     });
-    window.addEventListener('message', this.boundMessageListener, false);
+    window.removeEventListener('message', this.boundMessageListener, false);
     this.updateState();
   }
 
