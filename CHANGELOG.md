@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.1
+
+### Fixed
+
+`WalletService.disconnect` was incorrectly using `window.addEventListener`
+
 ## 1.0.2
 
 ### Changed
