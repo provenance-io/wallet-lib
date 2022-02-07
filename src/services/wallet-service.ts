@@ -1,4 +1,4 @@
-import { ConnectedMessageData, MessageParams, QueryParams, SignQueryParams, TransactionParams, WindowMessage } from '../types';
+import { ConnectedMessageData, MessageParams, SignQueryParams, TransactionParams, WindowMessage } from '../types';
 import { MULTIPLE_MESSAGE_DELIMITER, WALLET_MESSAGES, WINDOW_MESSAGES } from '../constants';
 
 export type WalletState = Required<ConnectedMessageData> & {

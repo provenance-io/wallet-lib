@@ -76,6 +76,36 @@ export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay, vers
         totalPriceRaw,
       };
     }
+    case 3: {
+      const baseDenom: SupportedDenoms = msgData.base;
+      const quoteDenom: SupportedDenoms = msgData.quote;
+      const quantityRaw = isBid ? { amount: msgData.size, denom: baseDenom } : { amount: msgData.size, denom: baseDenom };
+      const pricePerDisplayedUnitRaw = isBid
+        ? { amount: msgData.price, denom: quoteDenom }
+        : { amount: msgData.price, denom: quoteDenom };
+      const totalPriceRaw =
+        isBid && msgData.fee?.amount
+          ? { amount: Number(msgData.size) * Number(msgData.price) + Number(msgData.fee.amount), denom: quoteDenom }
+          : { amount: Number(msgData.size) * Number(msgData.price), denom: quoteDenom };
+      const bidFeeRate = (Number(totalPriceRaw.amount) - Number(msgData.size) * Number(msgData.price)) / Number(totalPriceRaw.amount);
+
+      return {
+        baseDenom,
+        quoteDenom,
+        orderType,
+        quantityRaw,
+        pricePerDisplayedUnitRaw,
+        totalPriceRaw,
+        ...(isBid &&
+          msgData.fee && {
+            fee: {
+              ...(msgData.fee.amount && { amount: msgData.fee.amount }),
+              ...(msgData.fee.denom && { denom: msgData.fee.denom }),
+              ...(bidFeeRate && { rate: bidFeeRate }),
+            },
+          }),
+      };
+    }
     default:
       return {};
   }
@@ -133,7 +163,7 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
     {
       dataKey: 'fee',
       displayType: 'Coin',
-      label: 'Fee',
+      label: 'Hash Fee',
     },
     {
       dataKey: 'disclaimer',
@@ -167,6 +197,16 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       label: 'Price Per Unit', // Price base
     },
     {
+      dataKey: 'transactionFee',
+      displayType: 'Coin',
+      label: 'Transaction Fee',
+    },
+    {
+      dataKey: 'fee',
+      displayType: 'Coin',
+      label: 'Hash Fee',
+    },
+    {
       dataKey: 'totalPriceRaw',
       displayType: 'Coin',
       label: 'Total Purchase Price', // Total base
@@ -175,11 +215,6 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
       dataKey: 'memo',
       displayType: 'String',
       label: 'Memo',
-    },
-    {
-      dataKey: 'fee',
-      displayType: 'Coin',
-      label: 'Fee',
     },
     {
       dataKey: 'disclaimer',
@@ -210,7 +245,7 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
     {
       dataKey: 'fee',
       displayType: 'Coin',
-      label: 'Fee',
+      label: 'Hash Fee',
     },
     {
       dataKey: 'disclaimer',
@@ -241,7 +276,7 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
     {
       dataKey: 'fee',
       displayType: 'Coin',
-      label: 'Fee',
+      label: 'Hash Fee',
     },
     {
       dataKey: 'disclaimer',
