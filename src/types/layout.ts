@@ -21,6 +21,9 @@ export type LayoutDisplayComponentProps = {
   Disclaimer: {
     data: string;
   } & SharedComponentProps;
+  TransactionFee: {
+    data: string;
+  };
 };
 
 export type LayoutDisplayTypes = keyof LayoutDisplayComponentProps;

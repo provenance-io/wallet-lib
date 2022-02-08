@@ -88,7 +88,6 @@ export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay, vers
           ? { amount: Number(msgData.size) * Number(msgData.price) + Number(msgData.fee.amount), denom: quoteDenom }
           : { amount: Number(msgData.size) * Number(msgData.price), denom: quoteDenom };
       const bidFeeRate = (Number(totalPriceRaw.amount) - Number(msgData.size) * Number(msgData.price)) / Number(totalPriceRaw.amount);
-
       return {
         baseDenom,
         quoteDenom,
@@ -98,7 +97,7 @@ export const parseAtsData = ({ msg, fundsList }: MsgExecuteContractDisplay, vers
         totalPriceRaw,
         ...(isBid &&
           msgData.fee && {
-            fee: {
+            transactionFee: {
               ...(msgData.fee.amount && { amount: msgData.fee.amount }),
               ...(msgData.fee.denom && { denom: msgData.fee.denom }),
               ...(bidFeeRate && { rate: bidFeeRate }),
@@ -198,7 +197,7 @@ export const ATS_LAYOUT: { [key in AtsLayoutNames]: CreateAskLayout | CreateBidL
     },
     {
       dataKey: 'transactionFee',
-      displayType: 'Coin',
+      displayType: 'TransactionFee',
       label: 'Transaction Fee',
     },
     {
