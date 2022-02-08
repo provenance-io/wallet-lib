@@ -22,8 +22,10 @@ export type LayoutDisplayComponentProps = {
     data: string;
   } & SharedComponentProps;
   TransactionFee: {
-    data: string;
-  };
+    data: CoinAsObject & {
+      rate: number;
+    };
+  } & SharedComponentProps;
 };
 
 export type LayoutDisplayTypes = keyof LayoutDisplayComponentProps;
