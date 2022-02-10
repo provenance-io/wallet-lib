@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.2
+
+### Changed
+
+- `ats` layout updated to show the buyer side fees as a Transaction Fee
+
 ## 1.1.1
 
 ### Fixed
