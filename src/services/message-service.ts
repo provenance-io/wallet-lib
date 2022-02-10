@@ -29,7 +29,7 @@ import {
   MsgGrantDisplay,
 } from '../types';
 import type { ExecuteMsg as DigitalCurrencyConsortiumExecuteMsg } from '../types/schema/digital-currency-consortium/execute_msg';
-import { AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, Tx, TxBody, TxRaw } from '../proto/cosmos/tx/v1beta1/tx_pb';
+import { AuthInfo, Fee, ModeInfo, SignDoc, SignerInfo, TxBody, TxRaw } from '../proto/cosmos/tx/v1beta1/tx_pb';
 import { BroadcastMode, BroadcastTxRequest, SimulateRequest } from '../proto/cosmos/tx/v1beta1/service_pb';
 import { MsgSend } from '../proto/cosmos/bank/v1beta1/tx_pb';
 import { Coin } from '../proto/cosmos/base/v1beta1/coin_pb';
