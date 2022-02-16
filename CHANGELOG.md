@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.3
+
+### Fixed
+
+- Renames provenance.marker.v1.authz.MarkerTransferAuthorization to provenance.marker.v1 MarkerTransferAuthorization for msgGrant. Fixes #37.
+
 ## 1.1.2
 
 ### Changed
