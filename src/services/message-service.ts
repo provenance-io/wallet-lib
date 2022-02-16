@@ -137,7 +137,7 @@ type SupportedMessageTypeNames =
   | 'provenance.attribute.v1.MsgDeleteAttributeRequest'
   | 'provenance.attribute.v1.MsgDeleteDistinctAttributeRequest'
   | 'provenance.attribute.v1.MsgUpdateAttributeRequest'
-  | 'provenance.marker.v1.authz.MarkerTransferAuthorization'
+  | 'provenance.marker.v1.MarkerTransferAuthorization'
   | 'provenance.marker.v1.MsgActivateRequest'
   | 'provenance.marker.v1.MsgAddAccessRequest'
   | 'provenance.marker.v1.MsgAddMarkerRequest'
@@ -269,7 +269,7 @@ const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessage
   MsgDeleteAttributeRequest: 'provenance.attribute.v1.MsgDeleteAttributeRequest',
   MsgDeleteDistinctAttributeRequest: 'provenance.attribute.v1.MsgDeleteDistinctAttributeRequest',
   MsgUpdateAttributeRequest: 'provenance.attribute.v1.MsgUpdateAttributeRequest',
-  MarkerTransferAuthorization: 'provenance.marker.v1.authz.MarkerTransferAuthorization',
+  MarkerTransferAuthorization: 'provenance.marker.v1.MarkerTransferAuthorization',
   MsgActivateRequest: 'provenance.marker.v1.MsgActivateRequest',
   MsgAddAccessRequest: 'provenance.marker.v1.MsgAddAccessRequest',
   MsgAddMarkerRequest: 'provenance.marker.v1.MsgAddMarkerRequest',
@@ -335,7 +335,7 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'provenance.attribute.v1.MsgDeleteAttributeRequest': MsgDeleteAttributeRequest,
   'provenance.attribute.v1.MsgDeleteDistinctAttributeRequest': MsgDeleteDistinctAttributeRequest,
   'provenance.attribute.v1.MsgUpdateAttributeRequest': MsgUpdateAttributeRequest,
-  'provenance.marker.v1.authz.MarkerTransferAuthorization': MarkerTransferAuthorization,
+  'provenance.marker.v1.MarkerTransferAuthorization': MarkerTransferAuthorization,
   'provenance.marker.v1.MsgActivateRequest': MsgActivateRequest,
   'provenance.marker.v1.MsgAddAccessRequest': MsgAddAccessRequest,
   'provenance.marker.v1.MsgAddMarkerRequest': MsgAddMarkerRequest,
