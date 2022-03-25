@@ -751,7 +751,6 @@ export class MessageService {
 
   buildAuthInfo(signerInfo: SignerInfo, feeDenom: SupportedDenoms, feeAmount = 0, feeAdjustment = 1.25, gasPrice: number): AuthInfo {
     log('Building AuthInfo');
-    log(`${gasPrice} ${feeDenom}`);
     const feeCoin = new Coin();
     feeCoin.setDenom(feeDenom);
     feeCoin.setAmount(`${Math.ceil(feeAmount * feeAdjustment * gasPrice)}`);
