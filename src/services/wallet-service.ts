@@ -164,6 +164,8 @@ export class WalletService {
    * @remarks
    * Requires wallet to be initialized via {@link connect} or {@link initialize}
    * After signing, the signed payload can be accessed by subscribing to the {@link WINDOW_MESSAGES.TRANSACTION_COMPLETE} event via {@link addEventListener}
+   * @remarks
+   * Custom Gas Price and Denom can be used when passing `gasPrice` and `denom` in the object to transaction (both values are required or the default price and denom will be used)
    */
   transaction({ msgAnyB64, ...rest }: TransactionParams) {
     let msg: string;

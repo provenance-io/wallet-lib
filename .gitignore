@@ -31,3 +31,5 @@ yarn-error.log*
 .eslintcache
 *.swp
 *.swo
+
+provenanceio-wallet-lib-*.tgz
