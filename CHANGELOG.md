@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Added weighted votes to message-service #42
+## 2.1.0
+
+- Added weighted votes to message-service [#42] (https://github.com/provenance-io/wallet-lib/issues/42)
 
 ## 2.0.0
 
