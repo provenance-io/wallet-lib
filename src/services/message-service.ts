@@ -18,6 +18,7 @@ import {
   MsgUnjailDisplay,
   MsgVerifyInvariantDisplay,
   MsgVoteDisplay,
+  MsgVoteWeightedDisplay,
   MsgWithdrawDelegatorRewardDisplay,
   MsgWithdrawValidatorCommissionDisplay,
   SupportedDenoms,
@@ -45,7 +46,7 @@ import {
   MsgFundCommunityPool,
 } from '../proto/cosmos/distribution/v1beta1/tx_pb';
 import { MsgSubmitEvidence } from '../proto/cosmos/evidence/v1beta1/tx_pb';
-import { MsgSubmitProposal, MsgVote, MsgDeposit } from '../proto/cosmos/gov/v1beta1/tx_pb';
+import { MsgSubmitProposal, MsgVote, MsgVoteWeighted, MsgDeposit } from '../proto/cosmos/gov/v1beta1/tx_pb';
 import { MsgUnjail } from '../proto/cosmos/slashing/v1beta1/tx_pb';
 import {
   MsgCreateValidator,
@@ -57,7 +58,7 @@ import {
 import { MsgCreateVestingAccount } from '../proto/cosmos/vesting/v1beta1/tx_pb';
 import { CommissionRates, Description } from '../proto/cosmos/staking/v1beta1/staking_pb';
 import { Evidence, Validator } from '../proto/tendermint/abci/types_pb';
-import { Proposal } from '../proto/cosmos/gov/v1beta1/gov_pb';
+import { Proposal, WeightedVoteOption } from '../proto/cosmos/gov/v1beta1/gov_pb';
 import { MsgGrant } from '../proto/cosmos/authz/v1beta1/tx_pb';
 import { Grant } from '../proto/cosmos/authz/v1beta1/authz_pb';
 import { MarkerTransferAuthorization } from '../proto/provenance/marker/v1/authz_pb';
@@ -124,6 +125,7 @@ type SupportedMessageTypeNames =
   | 'cosmos.gov.v1beta1.MsgDeposit'
   | 'cosmos.gov.v1beta1.MsgSubmitProposal'
   | 'cosmos.gov.v1beta1.MsgVote'
+  | 'cosmos.gov.v1beta1.MsgVoteWeighted'
   | 'cosmos.gov.v1beta1.Proposal'
   | 'cosmos.slashing.v1beta1.MsgUnjail'
   | 'cosmos.staking.v1beta1.MsgBeginRedelegate'
@@ -189,6 +191,7 @@ export type ReadableMessageNames =
   | 'MsgDeposit'
   | 'MsgSubmitProposal'
   | 'MsgVote'
+  | 'MsgVoteWeighted'
   | 'Proposal'
   | 'MsgUnjail'
   | 'MsgBeginRedelegate'
@@ -256,6 +259,7 @@ const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessage
   MsgDeposit: 'cosmos.gov.v1beta1.MsgDeposit',
   MsgSubmitProposal: 'cosmos.gov.v1beta1.MsgSubmitProposal',
   MsgVote: 'cosmos.gov.v1beta1.MsgVote',
+  MsgVoteWeighted: 'cosmos.gov.v1beta1.MsgVoteWeighted',
   Proposal: 'cosmos.gov.v1beta1.Proposal',
   MsgUnjail: 'cosmos.slashing.v1beta1.MsgUnjail',
   MsgBeginRedelegate: 'cosmos.staking.v1beta1.MsgBeginRedelegate',
@@ -322,6 +326,7 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.gov.v1beta1.MsgDeposit': MsgDeposit,
   'cosmos.gov.v1beta1.MsgSubmitProposal': MsgSubmitProposal,
   'cosmos.gov.v1beta1.MsgVote': MsgVote,
+  'cosmos.gov.v1beta1.MsgVoteWeighted': MsgVoteWeighted,
   'cosmos.gov.v1beta1.Proposal': Proposal,
   'cosmos.slashing.v1beta1.MsgUnjail': MsgUnjail,
   'cosmos.staking.v1beta1.MsgBeginRedelegate': MsgBeginRedelegate,
@@ -425,6 +430,7 @@ export class MessageService {
       | MsgFundCommunityPoolDisplay
       | MsgSubmitEvidenceDisplay
       | MsgVoteDisplay
+      | MsgVoteWeightedDisplay
       | MsgDepositDisplay
       | MsgUnjailDisplay
       | MsgCreateValidatorDisplay
@@ -525,6 +531,14 @@ export class MessageService {
       case 'MsgVote': {
         const { proposalId, voter, option } = params as MsgVoteDisplay;
         return new MsgVote().setProposalId(proposalId).setVoter(voter).setOption(option);
+      }
+      case 'MsgVoteWeighted': {
+        const { proposalId, voter, optionsList } = params as MsgVoteWeightedDisplay;
+        const msgVoteWeighted = new MsgVoteWeighted().setProposalId(proposalId).setVoter(voter);
+        optionsList.forEach(item => {
+          msgVoteWeighted.addOptions(new WeightedVoteOption().setOption(item.option).setWeight(item.weight));
+        });
+        return msgVoteWeighted;
       }
       case 'MsgDeposit': {
         const { proposalId, depositor, amountList } = params as MsgDepositDisplay;
@@ -642,7 +656,7 @@ export class MessageService {
     return bytesToBase64(msgAny.serializeBinary());
   }
 
-  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
+  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgVoteWeightedDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
     typeName: ReadableMessageNames | FallbackGenericMessageName;
   } {
     const msgBytes = base64ToBytes(anyMsgBase64);
