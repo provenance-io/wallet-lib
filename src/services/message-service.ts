@@ -682,11 +682,12 @@ export class MessageService {
     chainId: string,
     wallet: Wallet,
     memo = '',
-    feeDenom: SupportedDenoms = 'nhash'
+    feeDenom: SupportedDenoms = 'nhash',
+    gasPrice: number
   ): SimulateRequest {
     log(`Building simulated request.`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
-    const authInfo = this.buildAuthInfo(signerInfo, feeDenom);
+    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, undefined, undefined, gasPrice);
     const txBody = this.buildTxBody(msgAny, memo);
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
@@ -710,11 +711,12 @@ export class MessageService {
     wallet: Wallet,
     feeEstimate: number,
     memo = '',
-    feeDenom: SupportedDenoms = 'nhash'
+    feeDenom: SupportedDenoms = 'nhash',
+    gasPrice: number
   ): BroadcastTxRequest {
     log(`Building tx request for broadcast`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
-    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, feeEstimate);
+    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, feeEstimate, undefined, gasPrice);
     const txBody = this.buildTxBody(msgAny, memo);
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
@@ -747,8 +749,9 @@ export class MessageService {
     return signerInfo;
   }
 
-  buildAuthInfo(signerInfo: SignerInfo, feeDenom: SupportedDenoms, feeAmount = 0, feeAdjustment = 1.25, gasPrice = 1905.0): AuthInfo {
+  buildAuthInfo(signerInfo: SignerInfo, feeDenom: SupportedDenoms, feeAmount = 0, feeAdjustment = 1.25, gasPrice: number): AuthInfo {
     log('Building AuthInfo');
+    log(`${gasPrice} ${feeDenom}`);
     const feeCoin = new Coin();
     feeCoin.setDenom(feeDenom);
     feeCoin.setAmount(`${Math.ceil(feeAmount * feeAdjustment * gasPrice)}`);
