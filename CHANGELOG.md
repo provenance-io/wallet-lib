@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added weighted votes to message-service #42
+
 ## 2.0.0
 
 ### Changed
