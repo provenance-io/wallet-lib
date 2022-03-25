@@ -6,7 +6,7 @@ import type {
   MsgWithdrawValidatorCommission,
   MsgFundCommunityPool,
 } from '../proto/cosmos/distribution/v1beta1/tx_pb';
-import { MsgVote, MsgDeposit } from '../proto/cosmos/gov/v1beta1/tx_pb';
+import { MsgVote, MsgVoteWeighted, MsgDeposit } from '../proto/cosmos/gov/v1beta1/tx_pb';
 import { MsgUnjail } from '../proto/cosmos/slashing/v1beta1/tx_pb';
 import { MsgEditValidator, MsgDelegate, MsgBeginRedelegate, MsgUndelegate } from '../proto/cosmos/staking/v1beta1/tx_pb';
 import { MsgCreateVestingAccount } from '../proto/cosmos/vesting/v1beta1/tx_pb';
@@ -22,6 +22,7 @@ export type MsgWithdrawValidatorCommissionDisplay = MsgWithdrawValidatorCommissi
 export type MsgFundCommunityPoolDisplay = MsgFundCommunityPool.AsObject;
 export type ProposalDisplay = Proposal.AsObject;
 export type MsgVoteDisplay = MsgVote.AsObject;
+export type MsgVoteWeightedDisplay = MsgVoteWeighted.AsObject;
 export type MsgDepositDisplay = MsgDeposit.AsObject;
 export type MsgUnjailDisplay = MsgUnjail.AsObject;
 export type MsgEditValidatorDisplay = MsgEditValidator.AsObject;
