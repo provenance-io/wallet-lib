@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.0.0
+
 ### Changed
 
 - BREAKING CHANGE: Allow for custom gasPrice and denom to be used for calculations. If none is supplied default to use the figure gasPrice service [#40](https://github.com/provenance-io/wallet-lib/issues/40)
