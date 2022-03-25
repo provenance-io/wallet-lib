@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changed
+
+- BREAKING CHANGE: Allow for custom gasPrice and denom to be used for calculations. If none is supplied default to use the figure gasPrice service [#40](https://github.com/provenance-io/wallet-lib/issues/40)
+  - `gasPrice` and `feeDenom` are now REQUIRED to be passed into:
+    - `MessageService.buildAuthInfo`
+    - `MessageService.buildBroadcastTxRequest`
+    - `MessageService.buildSimulateRequest`
+  - `WalletService.transaction` now takes optional keys `gasPrice` and `denom` to set a custom gas price and denom to be used on a transaction.
+
 ## 1.1.3
 
 ### Fixed
