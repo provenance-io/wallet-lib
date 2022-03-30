@@ -11,7 +11,7 @@ option go_package = "github.com/CosmWasm/wasmd/x/wasm/types";
 message GenesisState {
   Params params = 1 [ (gogoproto.nullable) = false ];
   repeated Code codes = 2
-      [ (gogoproto.nullable) = false, (gogoproto.jsontag) = "codes,omitempty" ];
+  [ (gogoproto.nullable) = false, (gogoproto.jsontag) = "codes,omitempty" ];
   repeated Contract contracts = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.jsontag) = "contracts,omitempty"
