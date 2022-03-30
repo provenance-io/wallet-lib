@@ -53,6 +53,11 @@ service Query {
   rpc Codes(QueryCodesRequest) returns (QueryCodesResponse) {
     option (google.api.http).get = "/cosmwasm/wasm/v1/code";
   }
+
+  // PinnedCodes gets the pinned code ids
+  rpc PinnedCodes(QueryPinnedCodesRequest) returns (QueryPinnedCodesResponse) {
+    option (google.api.http).get = "/cosmwasm/wasm/v1/codes/pinned";
+  }
 }
 
 // QueryContractInfoRequest is the request type for the Query/ContractInfo RPC
@@ -88,7 +93,7 @@ message QueryContractHistoryRequest {
 // Query/ContractHistory RPC method
 message QueryContractHistoryResponse {
   repeated ContractCodeHistoryEntry entries = 1
-      [ (gogoproto.nullable) = false ];
+  [ (gogoproto.nullable) = false ];
   // pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
@@ -149,14 +154,14 @@ message QuerySmartContractStateRequest {
   // address is the address of the contract
   string address = 1;
   // QueryData contains the query data passed to the contract
-  bytes query_data = 2;
+  bytes query_data = 2 [ (gogoproto.casttype) = "RawContractMessage" ];
 }
 
 // QuerySmartContractStateResponse is the response type for the
 // Query/SmartContractState RPC method
 message QuerySmartContractStateResponse {
   // Data contains the json data returned from the smart contract
-  bytes data = 1 [ (gogoproto.casttype) = "encoding/json.RawMessage" ];
+  bytes data = 1 [ (gogoproto.casttype) = "RawContractMessage" ];
 }
 
 // QueryCodeRequest is the request type for the Query/Code RPC method
@@ -174,8 +179,8 @@ message CodeInfoResponse {
   ]; // id for legacy support
   string creator = 2;
   bytes data_hash = 3
-      [ (gogoproto.casttype) =
-            "github.com/tendermint/tendermint/libs/bytes.HexBytes" ];
+  [ (gogoproto.casttype) =
+      "github.com/tendermint/tendermint/libs/bytes.HexBytes" ];
   // Used in v1beta1
   reserved 4, 5;
 }
@@ -184,7 +189,7 @@ message CodeInfoResponse {
 message QueryCodeResponse {
   option (gogoproto.equal) = true;
   CodeInfoResponse code_info = 1
-      [ (gogoproto.embed) = true, (gogoproto.jsontag) = "" ];
+  [ (gogoproto.embed) = true, (gogoproto.jsontag) = "" ];
   bytes data = 2 [ (gogoproto.jsontag) = "data" ];
 }
 
@@ -197,6 +202,22 @@ message QueryCodesRequest {
 // QueryCodesResponse is the response type for the Query/Codes RPC method
 message QueryCodesResponse {
   repeated CodeInfoResponse code_infos = 1 [ (gogoproto.nullable) = false ];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryPinnedCodesRequest is the request type for the Query/PinnedCodes
+// RPC method
+message QueryPinnedCodesRequest {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryPinnedCodesResponse is the response type for the
+// Query/PinnedCodes RPC method
+message QueryPinnedCodesResponse {
+  repeated uint64 code_ids = 1
+  [ (gogoproto.nullable) = false, (gogoproto.customname) = "CodeIDs" ];
   // pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
