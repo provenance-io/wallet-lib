@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.2.0
+
 ### Changed
 
 - Updated protos for proposal types
