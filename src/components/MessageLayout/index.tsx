@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { GlobalProps, LayoutDisplayTypes } from '../../types';
 import { MSG_SEND_LAYOUT } from './MsgSend';
+import { MSG_SUBMIT_PROPOSAL_LAYOUT } from './MsgSubmitProposal';
 import { ATS_LAYOUT, DIGITAL_CURRENCY_CONSORTIUM_LAYOUT } from './MsgExecuteContract';
 import { MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT } from './MsgExecuteContract/generic';
 import { MSG_GENERIC_LAYOUT } from './generic';
@@ -12,6 +13,7 @@ export const LAYOUTS = {
   ...ATS_LAYOUT,
   ...DIGITAL_CURRENCY_CONSORTIUM_LAYOUT,
   ...MSG_SEND_LAYOUT,
+  ...MSG_SUBMIT_PROPOSAL_LAYOUT,
   ...MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT,
   ...MSG_GENERIC_LAYOUT,
 };

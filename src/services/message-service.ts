@@ -15,6 +15,8 @@ import {
   MsgFundCommunityPoolDisplay,
   MsgSendDisplay,
   MsgSetWithdrawAddressDisplay,
+  MsgSubmitProposalDisplay,
+  TextProposalDisplay,
   MsgUnjailDisplay,
   MsgVerifyInvariantDisplay,
   MsgVoteDisplay,
@@ -58,7 +60,7 @@ import {
 import { MsgCreateVestingAccount } from '../proto/cosmos/vesting/v1beta1/tx_pb';
 import { CommissionRates, Description } from '../proto/cosmos/staking/v1beta1/staking_pb';
 import { Evidence, Validator } from '../proto/tendermint/abci/types_pb';
-import { Proposal, WeightedVoteOption } from '../proto/cosmos/gov/v1beta1/gov_pb';
+import { Proposal, WeightedVoteOption, TextProposal } from '../proto/cosmos/gov/v1beta1/gov_pb';
 import { MsgGrant } from '../proto/cosmos/authz/v1beta1/tx_pb';
 import { Grant } from '../proto/cosmos/authz/v1beta1/authz_pb';
 import { MarkerTransferAuthorization } from '../proto/provenance/marker/v1/authz_pb';
@@ -127,6 +129,7 @@ type SupportedMessageTypeNames =
   | 'cosmos.gov.v1beta1.MsgVote'
   | 'cosmos.gov.v1beta1.MsgVoteWeighted'
   | 'cosmos.gov.v1beta1.Proposal'
+  | 'cosmos.gov.v1beta1.TextProposal'
   | 'cosmos.slashing.v1beta1.MsgUnjail'
   | 'cosmos.staking.v1beta1.MsgBeginRedelegate'
   | 'cosmos.staking.v1beta1.MsgCreateValidator'
@@ -190,6 +193,7 @@ export type ReadableMessageNames =
   | 'MsgSubmitEvidence'
   | 'MsgDeposit'
   | 'MsgSubmitProposal'
+  | 'TextProposal'
   | 'MsgVote'
   | 'MsgVoteWeighted'
   | 'Proposal'
@@ -258,6 +262,7 @@ const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessage
   MsgSubmitEvidence: 'cosmos.evidence.v1beta1.MsgSubmitEvidence',
   MsgDeposit: 'cosmos.gov.v1beta1.MsgDeposit',
   MsgSubmitProposal: 'cosmos.gov.v1beta1.MsgSubmitProposal',
+  TextProposal: 'cosmos.gov.v1beta1.TextProposal',
   MsgVote: 'cosmos.gov.v1beta1.MsgVote',
   MsgVoteWeighted: 'cosmos.gov.v1beta1.MsgVoteWeighted',
   Proposal: 'cosmos.gov.v1beta1.Proposal',
@@ -325,6 +330,7 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.evidence.v1beta1.MsgSubmitEvidence': MsgSubmitEvidence,
   'cosmos.gov.v1beta1.MsgDeposit': MsgDeposit,
   'cosmos.gov.v1beta1.MsgSubmitProposal': MsgSubmitProposal,
+  'cosmos.gov.v1beta1.TextProposal': TextProposal,
   'cosmos.gov.v1beta1.MsgVote': MsgVote,
   'cosmos.gov.v1beta1.MsgVoteWeighted': MsgVoteWeighted,
   'cosmos.gov.v1beta1.Proposal': Proposal,
@@ -429,6 +435,7 @@ export class MessageService {
       | MsgWithdrawValidatorCommissionDisplay
       | MsgFundCommunityPoolDisplay
       | MsgSubmitEvidenceDisplay
+      | MsgSubmitProposalDisplay
       | MsgVoteDisplay
       | MsgVoteWeightedDisplay
       | MsgDepositDisplay
@@ -441,6 +448,29 @@ export class MessageService {
       | MsgCreateVestingAccountDisplay
   ): Message {
     switch (type) {
+      case 'MsgSubmitProposal': {
+        const { content, initialDepositList, proposer, proposalType } = params as MsgSubmitProposalDisplay;
+        const msgSubmitProposal = new MsgSubmitProposal().setProposer(proposer);
+        if (content) {
+          const contentAny = new google_protobuf_any_pb.Any();
+          switch (proposalType) {
+            // All proposal types are housed here
+            case 'TextProposal': {
+              const { title, description } = content as unknown as TextProposalDisplay;
+              const myContent = new TextProposal().setTitle(title).setDescription(description);
+              contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.TextProposal, '/');
+              break;
+            }
+          }
+          msgSubmitProposal.setContent(contentAny);
+        }
+        if (initialDepositList) {
+          initialDepositList.forEach(({ denom, amount }) => {
+            msgSubmitProposal.addInitialDeposit(new Coin().setAmount(`${amount}`).setDenom(denom));
+          });
+        };
+        return msgSubmitProposal;
+      }
       case 'MsgSend': {
         const { fromAddress, toAddress, amountList } = params as MsgSendDisplay;
         log(`Building MsgSend: ${fromAddress} to ${toAddress}`);
@@ -656,7 +686,7 @@ export class MessageService {
     return bytesToBase64(msgAny.serializeBinary());
   }
 
-  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgVoteWeightedDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
+  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgSubmitProposalDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
     typeName: ReadableMessageNames | FallbackGenericMessageName;
   } {
     const msgBytes = base64ToBytes(anyMsgBase64);
@@ -680,6 +710,33 @@ export class MessageService {
               amount: Number(coin.getAmount()),
             })),
           };
+        case 'cosmos.gov.v1beta1.MsgSubmitProposal': {
+          const msgContent = (message as MsgSubmitProposal).getContent();
+          const proposalType = msgContent?.getTypeUrl();
+          console.log('Here I am!');
+          console.log(proposalType);
+          let content;
+          switch(proposalType) {
+            case '/cosmos.gov.v1beta1.TextProposal': {
+              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.gov.v1beta1.TextProposal'].deserializeBinary, 'cosmos.gov.v1beta1.TextProposal');
+              const title = (content as TextProposal).getTitle();
+              const description = (content as TextProposal).getDescription();
+              console.log(content);
+            }
+          }
+          return {
+            typeName: 'MsgSubmitProposal',
+            initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+              denom: coin.getDenom(),
+              amount: Number(coin.getAmount()),
+            })),
+            proposer: (message as MsgSubmitProposal).getProposer(),
+            content: {
+              title: (content as TextProposal).getTitle(),
+              description: (content as TextProposal).getDescription(),
+            },
+          };
+        };
         default:
           return {
             typeName: 'MsgGeneric',
