@@ -32,7 +32,7 @@ message MarkerAccount {
 
   // base cosmos account information including address and coin holdings.
   cosmos.auth.v1beta1.BaseAccount base_account = 1
-      [(gogoproto.embed) = true, (gogoproto.moretags) = "yaml:\"base_account\""];
+  [(gogoproto.embed) = true, (gogoproto.moretags) = "yaml:\"base_account\""];
   // Address that owns the marker configuration.  This account must sign any requests
   // to change marker config (only valid for statuses prior to finalization)
   string manager = 2 [(gogoproto.moretags) = "json:\"manager,omitempty\""];

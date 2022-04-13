@@ -14,14 +14,15 @@ message MsgIBCSend {
   // Timeout height relative to the current block height.
   // The timeout is disabled when set to 0.
   uint64 timeout_height = 4
-      [ (gogoproto.moretags) = "yaml:\"timeout_height\"" ];
+  [ (gogoproto.moretags) = "yaml:\"timeout_height\"" ];
   // Timeout timestamp (in nanoseconds) relative to the current block timestamp.
   // The timeout is disabled when set to 0.
   uint64 timeout_timestamp = 5
-      [ (gogoproto.moretags) = "yaml:\"timeout_timestamp\"" ];
+  [ (gogoproto.moretags) = "yaml:\"timeout_timestamp\"" ];
 
-  // data is the payload to transfer
-  bytes data = 6 [ (gogoproto.casttype) = "encoding/json.RawMessage" ];
+  // Data is the payload to transfer. We must not make assumption what format or
+  // content is in here.
+  bytes data = 6;
 }
 
 // MsgIBCCloseChannel port and channel need to be owned by the contract

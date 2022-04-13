@@ -15,16 +15,16 @@ enum AccessType {
   option (gogoproto.goproto_enum_stringer) = false;
   // AccessTypeUnspecified placeholder for empty value
   ACCESS_TYPE_UNSPECIFIED = 0
-      [ (gogoproto.enumvalue_customname) = "AccessTypeUnspecified" ];
+  [ (gogoproto.enumvalue_customname) = "AccessTypeUnspecified" ];
   // AccessTypeNobody forbidden
   ACCESS_TYPE_NOBODY = 1
-      [ (gogoproto.enumvalue_customname) = "AccessTypeNobody" ];
+  [ (gogoproto.enumvalue_customname) = "AccessTypeNobody" ];
   // AccessTypeOnlyAddress restricted to an address
   ACCESS_TYPE_ONLY_ADDRESS = 2
-      [ (gogoproto.enumvalue_customname) = "AccessTypeOnlyAddress" ];
+  [ (gogoproto.enumvalue_customname) = "AccessTypeOnlyAddress" ];
   // AccessTypeEverybody unrestricted
   ACCESS_TYPE_EVERYBODY = 3
-      [ (gogoproto.enumvalue_customname) = "AccessTypeEverybody" ];
+  [ (gogoproto.enumvalue_customname) = "AccessTypeEverybody" ];
 }
 
 // AccessTypeParam
@@ -48,9 +48,9 @@ message Params {
     (gogoproto.moretags) = "yaml:\"code_upload_access\""
   ];
   AccessType instantiate_default_permission = 2
-      [ (gogoproto.moretags) = "yaml:\"instantiate_default_permission\"" ];
+  [ (gogoproto.moretags) = "yaml:\"instantiate_default_permission\"" ];
   uint64 max_wasm_code_size = 3
-      [ (gogoproto.moretags) = "yaml:\"max_wasm_code_size\"" ];
+  [ (gogoproto.moretags) = "yaml:\"max_wasm_code_size\"" ];
 }
 
 // CodeInfo is data for the uploaded contract WASM code
@@ -86,7 +86,7 @@ message ContractInfo {
   // Extension is an extension point to store custom metadata within the
   // persistence model.
   google.protobuf.Any extension = 7
-      [ (cosmos_proto.accepts_interface) = "ContractInfoExtension" ];
+  [ (cosmos_proto.accepts_interface) = "ContractInfoExtension" ];
 }
 
 // ContractCodeHistoryOperationType actions that caused a code change
@@ -94,20 +94,20 @@ enum ContractCodeHistoryOperationType {
   option (gogoproto.goproto_enum_prefix) = false;
   // ContractCodeHistoryOperationTypeUnspecified placeholder for empty value
   CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED = 0
-      [ (gogoproto.enumvalue_customname) =
-            "ContractCodeHistoryOperationTypeUnspecified" ];
+  [ (gogoproto.enumvalue_customname) =
+      "ContractCodeHistoryOperationTypeUnspecified" ];
   // ContractCodeHistoryOperationTypeInit on chain contract instantiation
   CONTRACT_CODE_HISTORY_OPERATION_TYPE_INIT = 1
-      [ (gogoproto.enumvalue_customname) =
-            "ContractCodeHistoryOperationTypeInit" ];
+  [ (gogoproto.enumvalue_customname) =
+      "ContractCodeHistoryOperationTypeInit" ];
   // ContractCodeHistoryOperationTypeMigrate code migration
   CONTRACT_CODE_HISTORY_OPERATION_TYPE_MIGRATE = 2
-      [ (gogoproto.enumvalue_customname) =
-            "ContractCodeHistoryOperationTypeMigrate" ];
+  [ (gogoproto.enumvalue_customname) =
+      "ContractCodeHistoryOperationTypeMigrate" ];
   // ContractCodeHistoryOperationTypeGenesis based on genesis data
   CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS = 3
-      [ (gogoproto.enumvalue_customname) =
-            "ContractCodeHistoryOperationTypeGenesis" ];
+  [ (gogoproto.enumvalue_customname) =
+      "ContractCodeHistoryOperationTypeGenesis" ];
 }
 
 // ContractCodeHistoryEntry metadata to a contract.
@@ -117,7 +117,7 @@ message ContractCodeHistoryEntry {
   uint64 code_id = 2 [ (gogoproto.customname) = "CodeID" ];
   // Updated Tx position when the operation was executed.
   AbsoluteTxPosition updated = 3;
-  bytes msg = 4 [ (gogoproto.casttype) = "encoding/json.RawMessage" ];
+  bytes msg = 4 [ (gogoproto.casttype) = "RawContractMessage" ];
 }
 
 // AbsoluteTxPosition is a unique transaction position that allows for global
@@ -134,7 +134,7 @@ message AbsoluteTxPosition {
 message Model {
   // hex-encode key to read it better (this is often ascii)
   bytes key = 1 [ (gogoproto.casttype) =
-                      "github.com/tendermint/tendermint/libs/bytes.HexBytes" ];
+      "github.com/tendermint/tendermint/libs/bytes.HexBytes" ];
   // base64-encode raw value
   bytes value = 2;
 }

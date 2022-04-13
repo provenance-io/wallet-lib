@@ -43,7 +43,7 @@ service Msg {
 // MsgAddMarkerRequest defines the Msg/AddMarker request type
 message MsgAddMarkerRequest {
   cosmos.base.v1beta1.Coin amount = 1
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
   string               manager                  = 3;
   string               from_address             = 4;
   MarkerStatus         status                   = 5;
@@ -110,7 +110,7 @@ message MsgDeleteResponse {}
 // MsgMintRequest defines the Msg/Mint request type
 message MsgMintRequest {
   cosmos.base.v1beta1.Coin amount = 1
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
   string administrator = 2;
 }
 // MsgMintResponse defines the Msg/Mint response type
@@ -119,7 +119,7 @@ message MsgMintResponse {}
 // MsgBurnRequest defines the Msg/Burn request type
 message MsgBurnRequest {
   cosmos.base.v1beta1.Coin amount = 1
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
   string administrator = 2;
 }
 // MsgBurnResponse defines the Msg/Burn response type
@@ -131,7 +131,7 @@ message MsgWithdrawRequest {
   string   administrator                   = 2;
   string   to_address                      = 3;
   repeated cosmos.base.v1beta1.Coin amount = 4
-      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
 }
 // MsgWithdrawResponse defines the Msg/Withdraw response type
 message MsgWithdrawResponse {}
@@ -139,7 +139,7 @@ message MsgWithdrawResponse {}
 // MsgTransferRequest defines the Msg/Transfer request type
 message MsgTransferRequest {
   cosmos.base.v1beta1.Coin amount = 1
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
   string administrator = 3;
   string from_address  = 4;
   string to_address    = 5;
@@ -151,7 +151,7 @@ message MsgTransferResponse {}
 // MsgSetDenomMetadataRequest defines the Msg/SetDenomMetadata request type
 message MsgSetDenomMetadataRequest {
   cosmos.bank.v1beta1.Metadata metadata = 1
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/x/bank/types.Metadata"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/x/bank/types.Metadata"];
   string administrator = 2;
 }
 

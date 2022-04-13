@@ -21,7 +21,7 @@ message AddMarkerProposal {
   string description = 2;
 
   cosmos.base.v1beta1.Coin amount = 3
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
   string               manager                  = 4;
   MarkerStatus         status                   = 5;
   MarkerType           marker_type              = 6;
@@ -39,7 +39,7 @@ message SupplyIncreaseProposal {
   string                   title       = 1;
   string                   description = 2;
   cosmos.base.v1beta1.Coin amount      = 3
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
   string target_address = 4; // an optional target address for the minted coin from this request
 }
 
@@ -52,7 +52,7 @@ message SupplyDecreaseProposal {
   string                   title       = 1;
   string                   description = 2;
   cosmos.base.v1beta1.Coin amount      = 3
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Coin"];
 }
 
 // SetAdministratorProposal defines a governance proposal to administer a marker and set administrators with specific
@@ -99,7 +99,7 @@ message WithdrawEscrowProposal {
   string   description                     = 2;
   string   denom                           = 3;
   repeated cosmos.base.v1beta1.Coin amount = 4
-      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   string target_address = 5;
 }
 
@@ -110,5 +110,5 @@ message SetDenomMetadataProposal {
   string                       title       = 1;
   string                       description = 2;
   cosmos.bank.v1beta1.Metadata metadata    = 3
-      [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/x/bank/types.Metadata"];
+  [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/x/bank/types.Metadata"];
 }
