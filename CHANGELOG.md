@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 2.3.0
+
+### Changed
+
 - Add MsgSubmitProposal to message-service [#43] (https://github.com/provenance-io/wallet-lib/issues/45)
 
 ## 2.2.0
