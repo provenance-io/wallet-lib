@@ -15,6 +15,15 @@ import {
   MsgFundCommunityPoolDisplay,
   MsgSendDisplay,
   MsgSetWithdrawAddressDisplay,
+  MsgSubmitProposalDisplay,
+  TextProposalDisplay,
+  SoftwareUpgradeProposalDisplay,
+  CancelSoftwareUpgradeProposalDisplay,
+  PlanDisplay,
+  StoreCodeProposalDisplay,
+  InstantiateContractProposalDisplay,
+  AccessConfigDisplay,
+  ParameterChangeProposalDisplay,
   MsgUnjailDisplay,
   MsgVerifyInvariantDisplay,
   MsgVoteDisplay,
@@ -58,7 +67,7 @@ import {
 import { MsgCreateVestingAccount } from '../proto/cosmos/vesting/v1beta1/tx_pb';
 import { CommissionRates, Description } from '../proto/cosmos/staking/v1beta1/staking_pb';
 import { Evidence, Validator } from '../proto/tendermint/abci/types_pb';
-import { Proposal, WeightedVoteOption } from '../proto/cosmos/gov/v1beta1/gov_pb';
+import { Proposal, WeightedVoteOption, TextProposal } from '../proto/cosmos/gov/v1beta1/gov_pb';
 import { MsgGrant } from '../proto/cosmos/authz/v1beta1/tx_pb';
 import { Grant } from '../proto/cosmos/authz/v1beta1/authz_pb';
 import { MarkerTransferAuthorization } from '../proto/provenance/marker/v1/authz_pb';
@@ -111,6 +120,10 @@ import {
 } from '../proto/provenance/metadata/v1/tx_pb';
 
 import { MsgBindNameRequest, MsgDeleteNameRequest } from '../proto/provenance/name/v1/tx_pb';
+import { SoftwareUpgradeProposal, CancelSoftwareUpgradeProposal, Plan } from '../proto/cosmos/upgrade/v1beta1/upgrade_pb';
+import { StoreCodeProposal, InstantiateContractProposal } from '../proto/cosmwasm/wasm/v1/proposal_pb';
+import { AccessConfig } from '../proto/cosmwasm/wasm/v1/types_pb';
+import { ParameterChangeProposal, ParamChange } from '../proto/cosmos/params/v1beta1/params_pb';
 
 type SupportedMessageTypeNames =
   | 'cosmos.authz.v1beta1.MsgGrant'
@@ -127,6 +140,15 @@ type SupportedMessageTypeNames =
   | 'cosmos.gov.v1beta1.MsgVote'
   | 'cosmos.gov.v1beta1.MsgVoteWeighted'
   | 'cosmos.gov.v1beta1.Proposal'
+  | 'cosmos.gov.v1beta1.TextProposal'
+  | 'cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'
+  | 'cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal'
+  | 'cosmos.upgrade.v1beta1.Plan'
+  | 'cosmwasm.wasm.v1.StoreCodeProposal'
+  | 'cosmwasm.wasm.v1.InstantiateCodeProposal'
+  | 'cosmwasm.wasm.v1.AccessConfig'
+  | 'cosmos.params.v1beta1.ParameterChangeProposal'
+  | 'cosmos.params.v1beta1.ParamChange'
   | 'cosmos.slashing.v1beta1.MsgUnjail'
   | 'cosmos.staking.v1beta1.MsgBeginRedelegate'
   | 'cosmos.staking.v1beta1.MsgCreateValidator'
@@ -190,6 +212,15 @@ export type ReadableMessageNames =
   | 'MsgSubmitEvidence'
   | 'MsgDeposit'
   | 'MsgSubmitProposal'
+  | 'TextProposal'
+  | 'SoftwareUpgradeProposal'
+  | 'CancelSoftwareUpgradeProposal'
+  | 'Plan'
+  | 'StoreCodeProposal'
+  | 'InstantiateCodeProposal'
+  | 'AccessConfig'
+  | 'ParameterChangeProposal'
+  | 'ParamChange'
   | 'MsgVote'
   | 'MsgVoteWeighted'
   | 'Proposal'
@@ -258,6 +289,15 @@ const TYPE_NAMES_READABLE_MAP: { [key in ReadableMessageNames]: SupportedMessage
   MsgSubmitEvidence: 'cosmos.evidence.v1beta1.MsgSubmitEvidence',
   MsgDeposit: 'cosmos.gov.v1beta1.MsgDeposit',
   MsgSubmitProposal: 'cosmos.gov.v1beta1.MsgSubmitProposal',
+  TextProposal: 'cosmos.gov.v1beta1.TextProposal',
+  SoftwareUpgradeProposal: 'cosmos.upgrade.v1beta1.SoftwareUpgradeProposal',
+  CancelSoftwareUpgradeProposal: 'cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal',
+  Plan: 'cosmos.upgrade.v1beta1.Plan',
+  StoreCodeProposal: 'cosmwasm.wasm.v1.StoreCodeProposal',
+  InstantiateCodeProposal: 'cosmwasm.wasm.v1.InstantiateCodeProposal',
+  AccessConfig: 'cosmwasm.wasm.v1.AccessConfig',
+  ParameterChangeProposal: 'cosmos.params.v1beta1.ParameterChangeProposal',
+  ParamChange: 'cosmos.params.v1beta1.ParamChange',
   MsgVote: 'cosmos.gov.v1beta1.MsgVote',
   MsgVoteWeighted: 'cosmos.gov.v1beta1.MsgVoteWeighted',
   Proposal: 'cosmos.gov.v1beta1.Proposal',
@@ -324,10 +364,22 @@ const MESSAGE_PROTOS: { [key in SupportedMessageTypeNames]: typeof Message } = {
   'cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission': MsgWithdrawValidatorCommission,
   'cosmos.evidence.v1beta1.MsgSubmitEvidence': MsgSubmitEvidence,
   'cosmos.gov.v1beta1.MsgDeposit': MsgDeposit,
+  // Proposals
   'cosmos.gov.v1beta1.MsgSubmitProposal': MsgSubmitProposal,
+  'cosmos.gov.v1beta1.TextProposal': TextProposal,
+  'cosmos.upgrade.v1beta1.SoftwareUpgradeProposal': SoftwareUpgradeProposal,
+  'cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal': CancelSoftwareUpgradeProposal,
+  'cosmos.upgrade.v1beta1.Plan': Plan,
+  'cosmwasm.wasm.v1.StoreCodeProposal': StoreCodeProposal,
+  'cosmwasm.wasm.v1.InstantiateCodeProposal': InstantiateContractProposal,
+  'cosmwasm.wasm.v1.AccessConfig': AccessConfig,
+  'cosmos.params.v1beta1.ParameterChangeProposal': ParameterChangeProposal,
+  'cosmos.params.v1beta1.ParamChange': ParamChange,
+  // Voting
   'cosmos.gov.v1beta1.MsgVote': MsgVote,
   'cosmos.gov.v1beta1.MsgVoteWeighted': MsgVoteWeighted,
   'cosmos.gov.v1beta1.Proposal': Proposal,
+
   'cosmos.slashing.v1beta1.MsgUnjail': MsgUnjail,
   'cosmos.staking.v1beta1.MsgBeginRedelegate': MsgBeginRedelegate,
   'cosmos.staking.v1beta1.MsgCreateValidator': MsgCreateValidator,
@@ -429,6 +481,7 @@ export class MessageService {
       | MsgWithdrawValidatorCommissionDisplay
       | MsgFundCommunityPoolDisplay
       | MsgSubmitEvidenceDisplay
+      | MsgSubmitProposalDisplay
       | MsgVoteDisplay
       | MsgVoteWeightedDisplay
       | MsgDepositDisplay
@@ -441,6 +494,99 @@ export class MessageService {
       | MsgCreateVestingAccountDisplay
   ): Message {
     switch (type) {
+      case 'MsgSubmitProposal': {
+        const { content, initialDepositList, proposer, proposalType } = params as MsgSubmitProposalDisplay;
+        const msgSubmitProposal = new MsgSubmitProposal().setProposer(proposer);
+        if (content) {
+          const contentAny = new google_protobuf_any_pb.Any();
+          switch (proposalType) {
+            // All proposal types are housed here
+            case 'TextProposal': {
+              const { title, description } = content as unknown as TextProposalDisplay;
+              const myContent = new TextProposal().setTitle(title).setDescription(description);
+              contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.TextProposal, '/');
+              break;
+            }
+            case 'SoftwareUpgradeProposal': {
+              const { title, description, plan } = content as unknown as SoftwareUpgradeProposalDisplay;
+              const myContent = new SoftwareUpgradeProposal().setTitle(title).setDescription(description);
+              // time and upgradeClientState are deprecated
+              const { name, height, info } = plan as unknown as PlanDisplay;
+              const myPlan = new Plan().setName(name).setHeight(height).setInfo(info);
+              myContent.setPlan(myPlan);
+              contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.SoftwareUpgradeProposal, '/');
+              break;
+            }
+            case 'CancelSoftwareUpgradeProposal': {
+              const { title, description } = content as unknown as CancelSoftwareUpgradeProposalDisplay;
+              const myContent = new CancelSoftwareUpgradeProposal().setTitle(title).setDescription(description);
+              contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.CancelSoftwareUpgradeProposal, '/');
+              break;
+            }
+            case 'StoreCodeProposal': {
+              const { 
+                title, 
+                description, 
+                runAs, 
+                wasmByteCode, 
+                instantiatePermission 
+              } = content as unknown as StoreCodeProposalDisplay;
+              const myContent = new StoreCodeProposal()
+                .setTitle(title)
+                .setDescription(description)
+                .setRunAs(runAs)
+                .setWasmByteCode(wasmByteCode)
+              const { permission, address } = instantiatePermission as unknown as AccessConfigDisplay;
+              myContent.setInstantiatePermission(new AccessConfig().setPermission(permission).setAddress(address));
+              contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.StoreCodeProposal, '/');
+              break;
+            }
+            case 'InstantiateCodeProposal': {
+              const {
+                title,
+                description,
+                runAs,
+                admin,
+                codeId,
+                label,
+                msg,
+                fundsList,
+              } = content as unknown as InstantiateContractProposalDisplay;
+              const myContent = new InstantiateContractProposal()
+                .setTitle(title)
+                .setDescription(description)
+                .setRunAs(runAs)
+                .setAdmin(admin)
+                .setCodeId(codeId)
+                .setLabel(label)
+                .setMsg(msg);
+              fundsList.forEach(({ denom, amount }) => {
+                myContent.addFunds(new Coin().setAmount(`${amount}`).setDenom(denom));
+              });
+              contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.InstantiateCodeProposal, '/');
+              break;
+            }
+            case 'ParameterChangeProposal': {
+              const { title, description, changesList } = content as unknown as ParameterChangeProposalDisplay;
+              const myContent = new ParameterChangeProposal()
+                .setTitle(title)
+                .setDescription(description);
+              changesList.forEach(item => {
+                myContent.addChanges(new ParamChange().setSubspace(item.subspace).setKey(item.key).setValue(item.value));
+              });
+              contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.ParameterChangeProposal, '/');
+              break;
+            }
+          }
+          msgSubmitProposal.setContent(contentAny);
+        }
+        if (initialDepositList) {
+          initialDepositList.forEach(({ denom, amount }) => {
+            msgSubmitProposal.addInitialDeposit(new Coin().setAmount(`${amount}`).setDenom(denom));
+          });
+        };
+        return msgSubmitProposal;
+      }
       case 'MsgSend': {
         const { fromAddress, toAddress, amountList } = params as MsgSendDisplay;
         log(`Building MsgSend: ${fromAddress} to ${toAddress}`);
@@ -656,7 +802,7 @@ export class MessageService {
     return bytesToBase64(msgAny.serializeBinary());
   }
 
-  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgVoteWeightedDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
+  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgVoteWeighted | MsgSubmitProposalDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
     typeName: ReadableMessageNames | FallbackGenericMessageName;
   } {
     const msgBytes = base64ToBytes(anyMsgBase64);
@@ -670,6 +816,23 @@ export class MessageService {
             typeName: 'MsgSend',
             ...(message as MsgSend).toObject(),
           };
+        case 'cosmos.gov.v1beta1.MsgVoteWeighted': {
+          const myOptionReadable = (option: number) => {
+            if (option === 1) return "OptionYes"
+            else if (option === 2) return "OptionAbstain"
+            else if (option === 3) return "OptionNo"
+            else return "OptionNoWithVeto"
+          };
+          return {
+            typeName: 'MsgVoteWeighted',
+            proposalId: (message as MsgVoteWeighted).getProposalId(),
+            voter: (message as MsgVoteWeighted).getVoter(),
+            optionsList: (message as MsgVoteWeighted).getOptionsList().map(item => ({
+              option: myOptionReadable((item as WeightedVoteOption).getOption()),
+              weight: `${Number((item as WeightedVoteOption).getWeight())*100}%`,
+            }))
+          };
+        }
         case 'cosmwasm.wasm.v1.MsgExecuteContract':
           return {
             typeName: 'MsgExecuteContractGeneric',
@@ -680,6 +843,142 @@ export class MessageService {
               amount: Number(coin.getAmount()),
             })),
           };
+        case 'cosmos.gov.v1beta1.MsgSubmitProposal': {
+          const msgContent = (message as MsgSubmitProposal).getContent();
+          const proposalType = msgContent?.getTypeUrl();
+          console.log('Here I am!');
+          console.log(proposalType);
+          let content;
+          switch(proposalType) {
+            case '/cosmos.gov.v1beta1.TextProposal': {
+              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.gov.v1beta1.TextProposal'].deserializeBinary, 'cosmos.gov.v1beta1.TextProposal');
+              return {
+                typeName: 'MsgSubmitProposal',
+                proposalType: 'Text Proposal',
+                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                  denom: coin.getDenom(),
+                  amount: Number(coin.getAmount()),
+                })),
+                proposer: (message as MsgSubmitProposal).getProposer(),
+                content: {
+                  title: (content as TextProposal).getTitle(),
+                  description: (content as TextProposal).getDescription(),
+                },
+              };
+            }
+            case '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal': {
+              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'].deserializeBinary, 'cosmos.upgrade.v1beta1.SoftwareUpgradeProposal');
+              return {
+                typeName: 'MsgSubmitProposal',
+                proposalType: 'Software Upgrade Proposal',
+                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                  denom: coin.getDenom(),
+                  amount: Number(coin.getAmount()),
+                })),
+                proposer: (message as MsgSubmitProposal).getProposer(),
+                content: {
+                  title: (content as SoftwareUpgradeProposal).getTitle(),
+                  description: (content as SoftwareUpgradeProposal).getDescription(),
+                  plan: {
+                    name: (content as SoftwareUpgradeProposal).getPlan()?.getName(),
+                    height: (content as SoftwareUpgradeProposal).getPlan()?.getHeight(),
+                    info: (content as SoftwareUpgradeProposal).getPlan()?.getInfo(),
+                  },
+                },
+              };
+            }
+            case '/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal': {
+              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal'].deserializeBinary, 'cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal');
+              return {
+                typeName: 'MsgSubmitProposal',
+                proposalType: 'Cancel Software Upgrade Proposal',
+                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                  denom: coin.getDenom(),
+                  amount: Number(coin.getAmount()),
+                })),
+                proposer: (message as MsgSubmitProposal).getProposer(),
+                content: {
+                  title: (content as CancelSoftwareUpgradeProposal).getTitle(),
+                  description: (content as CancelSoftwareUpgradeProposal).getDescription(),
+                },
+              };
+            }
+            case '/cosmwasm.wasm.v1.StoreCodeProposal': {
+              const myPermissionReadable = (option: number | undefined) => {
+                if (option === 1) return "Nobody"
+                else if (option === 2) return "Only Address"
+                else return "Everybody"
+              };
+              content = msgContent?.unpack(MESSAGE_PROTOS['cosmwasm.wasm.v1.StoreCodeProposal'].deserializeBinary, 'cosmwasm.wasm.v1.StoreCodeProposal');
+              return {
+                typeName: 'MsgSubmitProposal',
+                proposalType: 'Store Code Proposal',
+                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                  denom: coin.getDenom(),
+                  amount: Number(coin.getAmount()),
+                })),
+                proposer: (message as MsgSubmitProposal).getProposer(),
+                content: {
+                  title: (content as StoreCodeProposal).getTitle(),
+                  description: (content as StoreCodeProposal).getDescription(),
+                  runAs: (content as StoreCodeProposal).getRunAs(),
+                  wasmByteCode: (content as StoreCodeProposal).getWasmByteCode_asB64(),
+                  instantiatePermission: {
+                    address: (content as StoreCodeProposal).getInstantiatePermission()?.getAddress(),
+                    permission: myPermissionReadable((content as StoreCodeProposal).getInstantiatePermission()?.getPermission()),
+                  },
+                },
+              };
+            }
+            case '/cosmwasm.wasm.v1.InstantiateCodeProposal': {
+              content = msgContent?.unpack(MESSAGE_PROTOS['cosmwasm.wasm.v1.InstantiateCodeProposal'].deserializeBinary, 'cosmwasm.wasm.v1.InstantiateCodeProposal');
+              return {
+                typeName: 'MsgSubmitProposal',
+                proposalType: 'Instantiate Code Proposal',
+                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                  denom: coin.getDenom(),
+                  amount: Number(coin.getAmount()),
+                })),
+                proposer: (message as MsgSubmitProposal).getProposer(),
+                content: {
+                  title: (content as InstantiateContractProposal).getTitle(),
+                  description: (content as InstantiateContractProposal).getDescription(),
+                  runAs: (content as InstantiateContractProposal).getRunAs(),
+                  admin: (content as InstantiateContractProposal).getAdmin(),
+                  codeId: (content as InstantiateContractProposal).getCodeId(),
+                  label: (content as InstantiateContractProposal).getLabel(),
+                  msg: (content as InstantiateContractProposal).getMsg_asB64(),
+                  fundsList: (content as InstantiateContractProposal).getFundsList().map(coin => ({
+                    denom: coin.getDenom(),
+                    amount: Number(coin.getAmount()),
+                  })),
+                },
+              };
+            }
+            case '/cosmos.params.v1beta1.ParameterChangeProposal': {
+              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.params.v1beta1.ParameterChangeProposal'].deserializeBinary, 'cosmos.params.v1beta1.ParameterChangeProposal');
+              return {
+                typeName: 'MsgSubmitProposal',
+                proposalType: 'Parameter Change Proposal',
+                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                  denom: coin.getDenom(),
+                  amount: Number(coin.getAmount()),
+                })),
+                proposer: (message as MsgSubmitProposal).getProposer(),
+                content: {
+                  title: (content as ParameterChangeProposal).getTitle(),
+                  description: (content as ParameterChangeProposal).getDescription(),
+                  changesList: (content as ParameterChangeProposal).getChangesList().map(change => ({
+                    subspace: change.getSubspace(),
+                    key: change.getKey(),
+                    value: change.getValue(),
+                  })),
+                },
+              };
+            }
+          }
+          break;
+        };
         default:
           return {
             typeName: 'MsgGeneric',
