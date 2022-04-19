@@ -10,6 +10,11 @@ export type MsgSubmitProposalLayout = {
 export const MSG_SUBMIT_PROPOSAL_LAYOUT: { MsgSubmitProposal: MsgSubmitProposalLayout } = {
   MsgSubmitProposal: [
     {
+      dataKey: 'proposalType',
+      displayType: 'String',
+      label: 'Proposal Type',
+    },
+    {
       dataKey: 'proposer',
       displayType: 'String',
       label: 'Proposer Address',
@@ -23,21 +28,6 @@ export const MSG_SUBMIT_PROPOSAL_LAYOUT: { MsgSubmitProposal: MsgSubmitProposalL
       dataKey: 'initialDepositList',
       displayType: 'Coins',
       label: 'Initial Deposit',
-    },
-    {
-      dataKey: 'estimatedValue',
-      displayType: 'Coin',
-      label: 'Estimated Value',
-    },
-    {
-      dataKey: 'memo',
-      displayType: 'String',
-      label: 'Memo',
-    },
-    {
-      dataKey: 'fee',
-      displayType: 'Coin',
-      label: 'Fee',
     },
     {
       dataKey: 'balance',
