@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 2.4.0
+
+### Changed
+
+- Add Msg Based Fees[#49] (https://github.com/provenance-io/wallet-lib/issues/49)
+
 ## 2.3.0
 
 ### Changed

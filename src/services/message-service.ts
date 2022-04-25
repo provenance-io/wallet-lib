@@ -124,6 +124,7 @@ import { SoftwareUpgradeProposal, CancelSoftwareUpgradeProposal, Plan } from '..
 import { StoreCodeProposal, InstantiateContractProposal } from '../proto/cosmwasm/wasm/v1/proposal_pb';
 import { AccessConfig } from '../proto/cosmwasm/wasm/v1/types_pb';
 import { ParameterChangeProposal, ParamChange } from '../proto/cosmos/params/v1beta1/params_pb';
+import { CalculateTxFeesRequest } from '../proto/provenance/msgfees/v1/query_pb';
 
 type SupportedMessageTypeNames =
   | 'cosmos.authz.v1beta1.MsgGrant'
@@ -524,34 +525,21 @@ export class MessageService {
               break;
             }
             case 'StoreCodeProposal': {
-              const { 
-                title, 
-                description, 
-                runAs, 
-                wasmByteCode, 
-                instantiatePermission 
-              } = content as unknown as StoreCodeProposalDisplay;
+              const { title, description, runAs, wasmByteCode, instantiatePermission } =
+                content as unknown as StoreCodeProposalDisplay;
               const myContent = new StoreCodeProposal()
                 .setTitle(title)
                 .setDescription(description)
                 .setRunAs(runAs)
-                .setWasmByteCode(wasmByteCode)
+                .setWasmByteCode(wasmByteCode);
               const { permission, address } = instantiatePermission as unknown as AccessConfigDisplay;
               myContent.setInstantiatePermission(new AccessConfig().setPermission(permission).setAddress(address));
               contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.StoreCodeProposal, '/');
               break;
             }
             case 'InstantiateCodeProposal': {
-              const {
-                title,
-                description,
-                runAs,
-                admin,
-                codeId,
-                label,
-                msg,
-                fundsList,
-              } = content as unknown as InstantiateContractProposalDisplay;
+              const { title, description, runAs, admin, codeId, label, msg, fundsList } =
+                content as unknown as InstantiateContractProposalDisplay;
               const myContent = new InstantiateContractProposal()
                 .setTitle(title)
                 .setDescription(description)
@@ -568,10 +556,8 @@ export class MessageService {
             }
             case 'ParameterChangeProposal': {
               const { title, description, changesList } = content as unknown as ParameterChangeProposalDisplay;
-              const myContent = new ParameterChangeProposal()
-                .setTitle(title)
-                .setDescription(description);
-              changesList.forEach(item => {
+              const myContent = new ParameterChangeProposal().setTitle(title).setDescription(description);
+              changesList.forEach((item) => {
                 myContent.addChanges(new ParamChange().setSubspace(item.subspace).setKey(item.key).setValue(item.value));
               });
               contentAny.pack(myContent.serializeBinary(), TYPE_NAMES_READABLE_MAP.ParameterChangeProposal, '/');
@@ -584,7 +570,7 @@ export class MessageService {
           initialDepositList.forEach(({ denom, amount }) => {
             msgSubmitProposal.addInitialDeposit(new Coin().setAmount(`${amount}`).setDenom(denom));
           });
-        };
+        }
         return msgSubmitProposal;
       }
       case 'MsgSend': {
@@ -681,7 +667,7 @@ export class MessageService {
       case 'MsgVoteWeighted': {
         const { proposalId, voter, optionsList } = params as MsgVoteWeightedDisplay;
         const msgVoteWeighted = new MsgVoteWeighted().setProposalId(proposalId).setVoter(voter);
-        optionsList.forEach(item => {
+        optionsList.forEach((item) => {
           msgVoteWeighted.addOptions(new WeightedVoteOption().setOption(item.option).setWeight(item.weight));
         });
         return msgVoteWeighted;
@@ -802,7 +788,13 @@ export class MessageService {
     return bytesToBase64(msgAny.serializeBinary());
   }
 
-  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (MsgSendDisplay | MsgVoteWeighted | MsgSubmitProposalDisplay | MsgExecuteContractDisplay | GenericDisplay) & {
+  unpackDisplayObjectFromWalletMessage(anyMsgBase64: string): (
+    | MsgSendDisplay
+    | MsgVoteWeighted
+    | MsgSubmitProposalDisplay
+    | MsgExecuteContractDisplay
+    | GenericDisplay
+  ) & {
     typeName: ReadableMessageNames | FallbackGenericMessageName;
   } {
     const msgBytes = base64ToBytes(anyMsgBase64);
@@ -818,19 +810,19 @@ export class MessageService {
           };
         case 'cosmos.gov.v1beta1.MsgVoteWeighted': {
           const myOptionReadable = (option: number) => {
-            if (option === 1) return "OptionYes"
-            else if (option === 2) return "OptionAbstain"
-            else if (option === 3) return "OptionNo"
-            else return "OptionNoWithVeto"
+            if (option === 1) return 'OptionYes';
+            else if (option === 2) return 'OptionAbstain';
+            else if (option === 3) return 'OptionNo';
+            else return 'OptionNoWithVeto';
           };
           return {
             typeName: 'MsgVoteWeighted',
             proposalId: (message as MsgVoteWeighted).getProposalId(),
             voter: (message as MsgVoteWeighted).getVoter(),
-            optionsList: (message as MsgVoteWeighted).getOptionsList().map(item => ({
+            optionsList: (message as MsgVoteWeighted).getOptionsList().map((item) => ({
               option: myOptionReadable((item as WeightedVoteOption).getOption()),
-              weight: `${Number((item as WeightedVoteOption).getWeight())*100}%`,
-            }))
+              weight: `${Number((item as WeightedVoteOption).getWeight()) * 100}%`,
+            })),
           };
         }
         case 'cosmwasm.wasm.v1.MsgExecuteContract':
@@ -849,9 +841,12 @@ export class MessageService {
           console.log('Here I am!');
           console.log(proposalType);
           let content;
-          switch(proposalType) {
+          switch (proposalType) {
             case '/cosmos.gov.v1beta1.TextProposal': {
-              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.gov.v1beta1.TextProposal'].deserializeBinary, 'cosmos.gov.v1beta1.TextProposal');
+              content = msgContent?.unpack(
+                MESSAGE_PROTOS['cosmos.gov.v1beta1.TextProposal'].deserializeBinary,
+                'cosmos.gov.v1beta1.TextProposal'
+              );
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Text Proposal',
@@ -867,7 +862,10 @@ export class MessageService {
               };
             }
             case '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal': {
-              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'].deserializeBinary, 'cosmos.upgrade.v1beta1.SoftwareUpgradeProposal');
+              content = msgContent?.unpack(
+                MESSAGE_PROTOS['cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'].deserializeBinary,
+                'cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'
+              );
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Software Upgrade Proposal',
@@ -888,7 +886,10 @@ export class MessageService {
               };
             }
             case '/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal': {
-              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal'].deserializeBinary, 'cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal');
+              content = msgContent?.unpack(
+                MESSAGE_PROTOS['cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal'].deserializeBinary,
+                'cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal'
+              );
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Cancel Software Upgrade Proposal',
@@ -905,11 +906,14 @@ export class MessageService {
             }
             case '/cosmwasm.wasm.v1.StoreCodeProposal': {
               const myPermissionReadable = (option: number | undefined) => {
-                if (option === 1) return "Nobody"
-                else if (option === 2) return "Only Address"
-                else return "Everybody"
+                if (option === 1) return 'Nobody';
+                else if (option === 2) return 'Only Address';
+                else return 'Everybody';
               };
-              content = msgContent?.unpack(MESSAGE_PROTOS['cosmwasm.wasm.v1.StoreCodeProposal'].deserializeBinary, 'cosmwasm.wasm.v1.StoreCodeProposal');
+              content = msgContent?.unpack(
+                MESSAGE_PROTOS['cosmwasm.wasm.v1.StoreCodeProposal'].deserializeBinary,
+                'cosmwasm.wasm.v1.StoreCodeProposal'
+              );
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Store Code Proposal',
@@ -931,7 +935,10 @@ export class MessageService {
               };
             }
             case '/cosmwasm.wasm.v1.InstantiateCodeProposal': {
-              content = msgContent?.unpack(MESSAGE_PROTOS['cosmwasm.wasm.v1.InstantiateCodeProposal'].deserializeBinary, 'cosmwasm.wasm.v1.InstantiateCodeProposal');
+              content = msgContent?.unpack(
+                MESSAGE_PROTOS['cosmwasm.wasm.v1.InstantiateCodeProposal'].deserializeBinary,
+                'cosmwasm.wasm.v1.InstantiateCodeProposal'
+              );
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Instantiate Code Proposal',
@@ -948,7 +955,7 @@ export class MessageService {
                   codeId: (content as InstantiateContractProposal).getCodeId(),
                   label: (content as InstantiateContractProposal).getLabel(),
                   msg: (content as InstantiateContractProposal).getMsg_asB64(),
-                  fundsList: (content as InstantiateContractProposal).getFundsList().map(coin => ({
+                  fundsList: (content as InstantiateContractProposal).getFundsList().map((coin) => ({
                     denom: coin.getDenom(),
                     amount: Number(coin.getAmount()),
                   })),
@@ -956,7 +963,10 @@ export class MessageService {
               };
             }
             case '/cosmos.params.v1beta1.ParameterChangeProposal': {
-              content = msgContent?.unpack(MESSAGE_PROTOS['cosmos.params.v1beta1.ParameterChangeProposal'].deserializeBinary, 'cosmos.params.v1beta1.ParameterChangeProposal');
+              content = msgContent?.unpack(
+                MESSAGE_PROTOS['cosmos.params.v1beta1.ParameterChangeProposal'].deserializeBinary,
+                'cosmos.params.v1beta1.ParameterChangeProposal'
+              );
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Parameter Change Proposal',
@@ -968,7 +978,7 @@ export class MessageService {
                 content: {
                   title: (content as ParameterChangeProposal).getTitle(),
                   description: (content as ParameterChangeProposal).getDescription(),
-                  changesList: (content as ParameterChangeProposal).getChangesList().map(change => ({
+                  changesList: (content as ParameterChangeProposal).getChangesList().map((change) => ({
                     subspace: change.getSubspace(),
                     key: change.getKey(),
                     value: change.getValue(),
@@ -978,7 +988,7 @@ export class MessageService {
             }
           }
           break;
-        };
+        }
         default:
           return {
             typeName: 'MsgGeneric',
@@ -987,6 +997,33 @@ export class MessageService {
       }
     }
     throw new Error(`Message type: ${typeName} is not supported for display.`);
+  }
+
+  buildCalculateTxFeeRequest(
+    msgAny: google_protobuf_any_pb.Any | google_protobuf_any_pb.Any[],
+    account: BaseAccount,
+    chainId: string,
+    wallet: Wallet,
+    memo = '',
+    feeDenom: SupportedDenoms = 'nhash',
+    gasPrice: number
+  ): CalculateTxFeesRequest {
+    log('Building tx request for calculate');
+    const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
+    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, undefined, gasPrice);
+    const txBody = this.buildTxBody(msgAny, memo);
+    const txRaw = new TxRaw();
+    txRaw.setBodyBytes(txBody.serializeBinary());
+    txRaw.setAuthInfoBytes(authInfo.serializeBinary());
+    const signDoc = this.buildSignDoc(account.getAccountNumber(), chainId, txRaw);
+    const signature = this.signBytes(signDoc.serializeBinary(), wallet.privateKey);
+    txRaw.setSignaturesList([signature]);
+
+    const calculateTxFeeRequest = new CalculateTxFeesRequest();
+    calculateTxFeeRequest.setTxBytes(txRaw.serializeBinary());
+    calculateTxFeeRequest.setDefaultBaseDenom(feeDenom);
+    calculateTxFeeRequest.setGasAdjustment(1.25);
+    return calculateTxFeeRequest;
   }
 
   buildSimulateRequest(
@@ -1000,7 +1037,7 @@ export class MessageService {
   ): SimulateRequest {
     log(`Building simulated request.`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
-    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, undefined, undefined, gasPrice);
+    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, undefined, gasPrice);
     const txBody = this.buildTxBody(msgAny, memo);
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
@@ -1025,11 +1062,11 @@ export class MessageService {
     feeEstimate: number,
     memo = '',
     feeDenom: SupportedDenoms = 'nhash',
-    gasPrice: number
+    gasEstimate: number
   ): BroadcastTxRequest {
     log(`Building tx request for broadcast`);
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
-    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, feeEstimate, undefined, gasPrice);
+    const authInfo = this.buildAuthInfo(signerInfo, feeDenom, feeEstimate, gasEstimate);
     const txBody = this.buildTxBody(msgAny, memo);
     const txRaw = new TxRaw();
     txRaw.setBodyBytes(txBody.serializeBinary());
@@ -1062,20 +1099,18 @@ export class MessageService {
     return signerInfo;
   }
 
-  buildAuthInfo(signerInfo: SignerInfo, feeDenom: SupportedDenoms, feeAmount = 0, feeAdjustment = 1.25, gasPrice: number): AuthInfo {
+  buildAuthInfo(signerInfo: SignerInfo, feeDenom: SupportedDenoms, feeEstimate = 0, gasEstimate: number): AuthInfo {
     log('Building AuthInfo');
     const feeCoin = new Coin();
     feeCoin.setDenom(feeDenom);
-    feeCoin.setAmount(`${Math.ceil(feeAmount * feeAdjustment * gasPrice)}`);
+    feeCoin.setAmount(feeEstimate.toString());
     const fee = new Fee();
     fee.setAmountList([feeCoin]);
-    const feeLimit = Math.floor(feeAmount * feeAdjustment);
-    fee.setGasLimit(feeLimit);
-    log(`feeLimit string: ${feeLimit.toString()} - number: ${feeLimit.valueOf()}`);
+    fee.setGasLimit(gasEstimate);
     const authInfo = new AuthInfo();
     authInfo.setFee(fee);
     authInfo.setSignerInfosList([signerInfo]);
-    log(`feeAmount string: ${feeAmount.toString()} - number: ${feeAmount}`);
+    log(`feeAmount string: ${feeEstimate.toString()} - number: ${feeEstimate}`);
     return authInfo;
   }
 
