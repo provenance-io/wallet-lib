@@ -88,6 +88,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="GrpcService.html#authQuery" class="tsd-kind-icon">auth<wbr>Query</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="GrpcService.html#bankQuery" class="tsd-kind-icon">bank<wbr>Query</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="GrpcService.html#msgFeeQuery" class="tsd-kind-icon">msg<wbr>Fee<wbr>Query</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="GrpcService.html#txClient" class="tsd-kind-icon">tx<wbr>Client</a></li>
 							</ul>
 						</section>
@@ -95,6 +96,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="GrpcService.html#broadcastTx" class="tsd-kind-icon">broadcast<wbr>Tx</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="GrpcService.html#calculateTxFees" class="tsd-kind-icon">calculate<wbr>TxFees</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="GrpcService.html#getAccountInfo" class="tsd-kind-icon">get<wbr>Account<wbr>Info</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="GrpcService.html#getBalancesList" class="tsd-kind-icon">get<wbr>Balances<wbr>List</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="GrpcService.html#getTx" class="tsd-kind-icon">get<wbr>Tx</a></li>
@@ -116,7 +118,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L24">src/services/grpc-service.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L27">src/services/grpc-service.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -138,7 +140,7 @@
 					<div class="tsd-signature tsd-kind-icon">auth<wbr>Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QueryClient</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L21">src/services/grpc-service.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L23">src/services/grpc-service.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -148,7 +150,17 @@
 					<div class="tsd-signature tsd-kind-icon">bank<wbr>Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QueryClient</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L22">src/services/grpc-service.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L24">src/services/grpc-service.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="msgFeeQuery" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> msg<wbr>Fee<wbr>Query</h3>
+					<div class="tsd-signature tsd-kind-icon">msg<wbr>Fee<wbr>Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">QueryClient</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L25">src/services/grpc-service.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -158,7 +170,7 @@
 					<div class="tsd-signature tsd-kind-icon">tx<wbr>Client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ServiceClient</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L20">src/services/grpc-service.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L22">src/services/grpc-service.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -175,13 +187,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L45">src/services/grpc-service.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L49">src/services/grpc-service.ts:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="BroadcastTxRequest.html" class="tsd-signature-type" data-tsd-kind="Class">BroadcastTxRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="calculateTxFees" class="tsd-anchor"></a>
+					<h3>calculate<wbr>TxFees</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">calculate<wbr>TxFees<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CalculateTxFeesRequest</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L62">src/services/grpc-service.ts:62</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>request: <span class="tsd-signature-type">CalculateTxFeesRequest</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">AsObject</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -198,7 +233,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L91">src/services/grpc-service.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L110">src/services/grpc-service.ts:110</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -221,7 +256,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L71">src/services/grpc-service.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L90">src/services/grpc-service.ts:90</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -244,7 +279,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L31">src/services/grpc-service.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L35">src/services/grpc-service.ts:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -267,7 +302,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/17d0741/src/services/grpc-service.ts#L58">src/services/grpc-service.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/provenance-io/wallet-lib/blob/2326d25/src/services/grpc-service.ts#L77">src/services/grpc-service.ts:77</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -307,10 +342,16 @@
 								<a href="GrpcService.html#bankQuery" class="tsd-kind-icon">bank<wbr>Query</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="GrpcService.html#msgFeeQuery" class="tsd-kind-icon">msg<wbr>Fee<wbr>Query</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="GrpcService.html#txClient" class="tsd-kind-icon">tx<wbr>Client</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="GrpcService.html#broadcastTx" class="tsd-kind-icon">broadcast<wbr>Tx</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="GrpcService.html#calculateTxFees" class="tsd-kind-icon">calculate<wbr>TxFees</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="GrpcService.html#getAccountInfo" class="tsd-kind-icon">get<wbr>Account<wbr>Info</a>
