@@ -2,10 +2,12 @@ import { Error as ServerError } from 'grpc-web';
 import { ServiceClient as TxServiceClient } from '../proto/cosmos/tx/v1beta1/service_grpc_web_pb';
 import { QueryClient as AuthQueryClient } from '../proto/cosmos/auth/v1beta1/query_grpc_web_pb';
 import { QueryClient as BankQueryClient } from '../proto/cosmos/bank/v1beta1/query_grpc_web_pb';
+import { QueryClient as MsgFeeQueryClient } from '../proto/provenance/msgfees/v1/query_grpc_web_pb';
 import { QueryAccountRequest, QueryAccountResponse } from '../proto/cosmos/auth/v1beta1/query_pb';
 import { BaseAccount } from '../proto/cosmos/auth/v1beta1/auth_pb';
 import { QueryAllBalancesRequest, QueryAllBalancesResponse } from '../proto/cosmos/bank/v1beta1/query_pb';
 import { PageRequest } from '../proto/cosmos/base/query/v1beta1/pagination_pb';
+import { CalculateTxFeesRequest, CalculateTxFeesResponse } from '../proto/provenance/msgfees/v1/query_pb';
 import {
   BroadcastTxRequest,
   BroadcastTxResponse,
@@ -20,12 +22,14 @@ export class GrpcService {
   private txClient: TxServiceClient;
   private authQuery: AuthQueryClient;
   private bankQuery: BankQueryClient;
+  private msgFeeQuery: MsgFeeQueryClient;
 
   constructor(serviceAddress: string) {
     if (!serviceAddress) throw new Error('GrpcService requires serviceAddress');
     this.txClient = new TxServiceClient(serviceAddress, null);
     this.authQuery = new AuthQueryClient(serviceAddress, null);
     this.bankQuery = new BankQueryClient(serviceAddress, null);
+    this.msgFeeQuery = new MsgFeeQueryClient(serviceAddress, null);
   }
 
   getTx(txHash: string): Promise<GetTxResponse.AsObject> {
@@ -48,6 +52,21 @@ export class GrpcService {
       this.txClient.broadcastTx(request, null, (error: ServerError, response: BroadcastTxResponse) => {
         if (error) reject(new Error(`txClient.broadcastTx error: Code: ${error.code} Message: ${error.message}`));
         else {
+          log(JSON.stringify(response.toObject()));
+          resolve(response.toObject());
+        }
+      });
+    });
+  }
+
+  calculateTxFees(request: CalculateTxFeesRequest): Promise<CalculateTxFeesResponse.AsObject> {
+    log('Initiating msgFeeQuery.calculateTxFees');
+    return new Promise((resolve, reject) => {
+      this.msgFeeQuery.calculateTxFees(request, null, (error: ServerError, response: CalculateTxFeesResponse) => {
+        if (error) {
+          reject(new Error(`msgFeeQuery.calculateTxFees error: Code: ${error.code} Message: ${error.message}`));
+        } else {
+          log('Finished msgFeeQuery.calculateTxFees');
           log(JSON.stringify(response.toObject()));
           resolve(response.toObject());
         }
