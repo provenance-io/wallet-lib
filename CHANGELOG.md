@@ -2,11 +2,17 @@
 
 ## Unreleased
 
+## 2.4.1
+
+### Changed
+
+- Allow gas adjustment to be passed in [#51] (https://github.com/provenance-io/wallet-lib/issues/51)
+
 ## 2.4.0
 
 ### Changed
 
-- Add Msg Based Fees[#49] (https://github.com/provenance-io/wallet-lib/issues/49)
+- Add Msg Based Fees [#49] (https://github.com/provenance-io/wallet-lib/issues/49)
 
 ## 2.3.0
 
