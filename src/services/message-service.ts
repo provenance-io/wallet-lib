@@ -1006,7 +1006,8 @@ export class MessageService {
     wallet: Wallet,
     memo = '',
     feeDenom: SupportedDenoms = 'nhash',
-    gasPrice: number
+    gasPrice: number,
+    gasAdjustment = 1.25
   ): CalculateTxFeesRequest {
     log('Building tx request for calculate');
     const signerInfo = this.buildSignerInfo(account, wallet.publicKey);
@@ -1022,10 +1023,13 @@ export class MessageService {
     const calculateTxFeeRequest = new CalculateTxFeesRequest();
     calculateTxFeeRequest.setTxBytes(txRaw.serializeBinary());
     calculateTxFeeRequest.setDefaultBaseDenom(feeDenom);
-    calculateTxFeeRequest.setGasAdjustment(1.25);
+    calculateTxFeeRequest.setGasAdjustment(gasAdjustment);
     return calculateTxFeeRequest;
   }
 
+  /**
+   * @deprecated use buildCalculateTxFeeRequest instead
+   */
   buildSimulateRequest(
     msgAny: google_protobuf_any_pb.Any | google_protobuf_any_pb.Any[],
     account: BaseAccount,
