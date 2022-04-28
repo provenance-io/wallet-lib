@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Update message displays for voting [#52] (https://github.com/provenance-io/wallet-lib/issues/52)
+
 ## 2.4.1
 
 ### Changed
