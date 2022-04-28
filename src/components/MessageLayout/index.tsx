@@ -5,7 +5,8 @@ import { MSG_SEND_LAYOUT } from './MsgSend';
 import { MSG_SUBMIT_PROPOSAL_LAYOUT } from './MsgSubmitProposal';
 import { ATS_LAYOUT, DIGITAL_CURRENCY_CONSORTIUM_LAYOUT } from './MsgExecuteContract';
 import { MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT } from './MsgExecuteContract/generic';
-import { MSG_VOTE_WEIGHTED_PROPOSAL_LAYOUT } from './MsgVoteWeighted';
+import { MSG_VOTE_WEIGHTED_LAYOUT } from './MsgVoteWeighted';
+import { MSG_VOTE_LAYOUT } from './MsgVote';
 import { MSG_GENERIC_LAYOUT } from './generic';
 
 const Wrapper = styled.div``;
@@ -16,7 +17,8 @@ export const LAYOUTS = {
   ...MSG_SEND_LAYOUT,
   ...MSG_SUBMIT_PROPOSAL_LAYOUT,
   ...MSG_EXECUTE_CONTRACT_GENERIC_LAYOUT,
-  ...MSG_VOTE_WEIGHTED_PROPOSAL_LAYOUT,
+  ...MSG_VOTE_WEIGHTED_LAYOUT,
+  ...MSG_VOTE_LAYOUT,
   ...MSG_GENERIC_LAYOUT,
 };
 

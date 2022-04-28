@@ -1,18 +1,18 @@
 import { GlobalDisplay, LayoutDisplayTypes } from '../../types';
-import { MsgVoteWeightedDisplay } from '../../types/messages';
+import { MsgVoteDisplay } from '../../types/messages';
 
-export type MsgVoteWeightedLayout = {
-  dataKey: keyof (MsgVoteWeightedDisplay & GlobalDisplay);
+export type MsgVoteLayout = {
+  dataKey: keyof (MsgVoteDisplay & GlobalDisplay);
   displayType: LayoutDisplayTypes;
   label?: string;
 }[];
 
-export const MSG_VOTE_WEIGHTED_LAYOUT: { MsgVoteWeighted: MsgVoteWeightedLayout } = {
-  MsgVoteWeighted: [
+export const MSG_VOTE_LAYOUT: { MsgVote: MsgVoteLayout } = {
+  MsgVote: [
     {
       dataKey: 'proposalId',
       displayType: 'String',
-      label: 'Proposal ID',
+      label: 'Proposer Address',
     },
     {
       dataKey: 'voter',
@@ -20,9 +20,9 @@ export const MSG_VOTE_WEIGHTED_LAYOUT: { MsgVoteWeighted: MsgVoteWeightedLayout 
       label: 'Voter Address',
     },
     {
-      dataKey: 'optionsList',
-      displayType: 'Json',
-      label: 'Voting Options',
+      dataKey: 'option',
+      displayType: 'String',
+      label: 'Vote Option',
     },
     {
       dataKey: 'fee',

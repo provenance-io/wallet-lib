@@ -1,6 +1,6 @@
 {
   "name": "@provenanceio/wallet-lib",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Provenance wallet interface library",
   "main": "lib/index.js",
   "module": "esm/index.js",

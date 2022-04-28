@@ -797,6 +797,13 @@ export class MessageService {
   ) & {
     typeName: ReadableMessageNames | FallbackGenericMessageName;
   } {
+    // For voting
+    const myOptionReadable = (option: number) => {
+      if (option === 1) return "OptionYes"
+      else if (option === 2) return "OptionAbstain"
+      else if (option === 3) return "OptionNo"
+      else return "OptionNoWithVeto"
+    };
     const msgBytes = base64ToBytes(anyMsgBase64);
     const msgAny = google_protobuf_any_pb.Any.deserializeBinary(msgBytes);
     const typeName = msgAny.getTypeName() as SupportedMessageTypeNames;
@@ -808,21 +815,23 @@ export class MessageService {
             typeName: 'MsgSend',
             ...(message as MsgSend).toObject(),
           };
-        case 'cosmos.gov.v1beta1.MsgVoteWeighted': {
-          const myOptionReadable = (option: number) => {
-            if (option === 1) return 'OptionYes';
-            else if (option === 2) return 'OptionAbstain';
-            else if (option === 3) return 'OptionNo';
-            else return 'OptionNoWithVeto';
+        case 'cosmos.gov.v1beta1.MsgVote': {
+          return {
+            typeName: 'MsgVote',
+            proposalId: (message as MsgVote).getProposalId(),
+            voter: (message as MsgVote).getVoter(),
+            option: myOptionReadable((message as MsgVote).getOption()),
           };
+        }
+        case 'cosmos.gov.v1beta1.MsgVoteWeighted': {
           return {
             typeName: 'MsgVoteWeighted',
             proposalId: (message as MsgVoteWeighted).getProposalId(),
             voter: (message as MsgVoteWeighted).getVoter(),
             optionsList: (message as MsgVoteWeighted).getOptionsList().map((item) => ({
               option: myOptionReadable((item as WeightedVoteOption).getOption()),
-              weight: `${Number((item as WeightedVoteOption).getWeight()) * 100}%`,
-            })),
+              weight: `${Number((item as WeightedVoteOption).getWeight())/1e16}%`,
+            }))
           };
         }
         case 'cosmwasm.wasm.v1.MsgExecuteContract':

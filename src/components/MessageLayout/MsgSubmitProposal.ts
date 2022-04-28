@@ -30,6 +30,11 @@ export const MSG_SUBMIT_PROPOSAL_LAYOUT: { MsgSubmitProposal: MsgSubmitProposalL
       label: 'Initial Deposit',
     },
     {
+      dataKey: 'fee',
+      displayType: 'Coin',
+      label: 'Fee',
+    },
+    {
       dataKey: 'balance',
       displayType: 'Coins',
       label: 'Account Balance',
