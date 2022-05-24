@@ -847,8 +847,6 @@ export class MessageService {
         case 'cosmos.gov.v1beta1.MsgSubmitProposal': {
           const msgContent = (message as MsgSubmitProposal).getContent();
           const proposalType = msgContent?.getTypeUrl();
-          console.log('Here I am!');
-          console.log(proposalType);
           let content;
           switch (proposalType) {
             case '/cosmos.gov.v1beta1.TextProposal': {
@@ -859,10 +857,11 @@ export class MessageService {
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Text Proposal',
-                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                initialDepositList: ((message as MsgSubmitProposal).getInitialDepositList().length > 0 ? 
+                (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
                   denom: coin.getDenom(),
                   amount: Number(coin.getAmount()),
-                })),
+                })) : [{ denom: 'nhash', amount: '0' }]),
                 proposer: (message as MsgSubmitProposal).getProposer(),
                 content: {
                   title: (content as TextProposal).getTitle(),
@@ -878,10 +877,11 @@ export class MessageService {
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Software Upgrade Proposal',
-                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                initialDepositList: ((message as MsgSubmitProposal).getInitialDepositList().length > 0 ? 
+                (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
                   denom: coin.getDenom(),
                   amount: Number(coin.getAmount()),
-                })),
+                })) : [{ denom: 'nhash', amount: '0' }]),
                 proposer: (message as MsgSubmitProposal).getProposer(),
                 content: {
                   title: (content as SoftwareUpgradeProposal).getTitle(),
@@ -902,10 +902,11 @@ export class MessageService {
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Cancel Software Upgrade Proposal',
-                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                initialDepositList: ((message as MsgSubmitProposal).getInitialDepositList().length > 0 ? 
+                (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
                   denom: coin.getDenom(),
                   amount: Number(coin.getAmount()),
-                })),
+                })) : [{ denom: 'nhash', amount: '0' }]),
                 proposer: (message as MsgSubmitProposal).getProposer(),
                 content: {
                   title: (content as CancelSoftwareUpgradeProposal).getTitle(),
@@ -926,10 +927,11 @@ export class MessageService {
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Store Code Proposal',
-                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                initialDepositList: ((message as MsgSubmitProposal).getInitialDepositList().length > 0 ? 
+                (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
                   denom: coin.getDenom(),
                   amount: Number(coin.getAmount()),
-                })),
+                })) : [{ denom: 'nhash', amount: '0' }]),
                 proposer: (message as MsgSubmitProposal).getProposer(),
                 content: {
                   title: (content as StoreCodeProposal).getTitle(),
@@ -951,10 +953,11 @@ export class MessageService {
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Instantiate Code Proposal',
-                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                initialDepositList: ((message as MsgSubmitProposal).getInitialDepositList().length > 0 ? 
+                (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
                   denom: coin.getDenom(),
                   amount: Number(coin.getAmount()),
-                })),
+                })) : [{ denom: 'nhash', amount: '0' }]),
                 proposer: (message as MsgSubmitProposal).getProposer(),
                 content: {
                   title: (content as InstantiateContractProposal).getTitle(),
@@ -979,10 +982,11 @@ export class MessageService {
               return {
                 typeName: 'MsgSubmitProposal',
                 proposalType: 'Parameter Change Proposal',
-                initialDepositList: (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
+                initialDepositList: ((message as MsgSubmitProposal).getInitialDepositList().length > 0 ? 
+                (message as MsgSubmitProposal).getInitialDepositList().map((coin) => ({
                   denom: coin.getDenom(),
                   amount: Number(coin.getAmount()),
-                })),
+                })) : [{ denom: 'nhash', amount: '0' }]),
                 proposer: (message as MsgSubmitProposal).getProposer(),
                 content: {
                   title: (content as ParameterChangeProposal).getTitle(),

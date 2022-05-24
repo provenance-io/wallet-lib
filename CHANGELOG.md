@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 2.4.3
+
+- Fix initial deposits messages for proposals when empty [#54] (https://github.com/provenance-io/wallet-lib/issues/54)
+
 ## 2.4.2
 
 - Update message displays for voting [#52] (https://github.com/provenance-io/wallet-lib/issues/52)
