@@ -86,7 +86,7 @@
     "json-schema-to-typescript": "10.1.4",
     "madge": "4.0.2",
     "prettier": "2.3.0",
-    "protoc-gen-grpc-web": "1.2.1",
+    "protoc-gen-grpc-web": "1.4.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-router-dom": "5.2.0",
@@ -101,7 +101,7 @@
     "@types/secp256k1": "4.0.2",
     "big.js": "6.1.1",
     "google-protobuf": "3.16.0",
-    "grpc-tools": "1.11.1",
+    "grpc-tools": "1.11.3",
     "grpc-web": "1.2.1",
     "secp256k1": "4.0.2",
     "typedoc": "0.21.4"
