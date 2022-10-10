@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Upgrade grpc-tools and protoc-gen-grpc-web to clear M1 node_modules installation errors
+- Upgrade grpc-tools and protoc-gen-grpc-web to clear M1 node_modules installation errors (https://github.com/grpc/grpc-node/issues/1405#issuecomment-1270404451)
 
 ## 2.4.3
 
