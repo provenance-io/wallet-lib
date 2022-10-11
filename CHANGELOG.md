@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Upgrade grpc-tools and protoc-gen-grpc-web to clear M1 node_modules installation errors (https://github.com/grpc/grpc-node/issues/1405#issuecomment-1270404451)
+
 ## 2.4.3
 
 - Fix initial deposits messages for proposals when empty [#54] (https://github.com/provenance-io/wallet-lib/issues/54)
