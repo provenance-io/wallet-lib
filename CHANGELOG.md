@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 2.5.0
 
 - Upgrade grpc-tools and protoc-gen-grpc-web to clear M1 node_modules installation errors (https://github.com/grpc/grpc-node/issues/1405#issuecomment-1270404451)
 
