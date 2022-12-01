@@ -1,3 +1,6 @@
+**This project is no longer being maintained and will be archived on December 31, 2022. Feel free to browse the code, but please use other Provenance Blockchain JavaScript libraries in development like [Wallet Utils](https://github.com/provenance-io/wallet-utils) and [Provenance.js](https://github.com/provenance-io/provenance.js).**
+
+<br/><br/>
 <div align="center">
   <img src="./src/logo.svg" alt="Provenance Wallet Lib"/>
 </div>
